@@ -1,0 +1,6 @@
+node_modules/
+bower_components/
+package-lock.json
+.vscode/
+server/config/envar.js
+server/public
