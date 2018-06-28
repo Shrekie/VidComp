@@ -6,7 +6,7 @@
 <v-layout align-center>
 	<v-flex xs12 text-xs-center>
 		<div>
-			<router-link to="/" tag="v-btn">Edit</router-link>
+			<router-link to="/" tag="v-btn">Home</router-link>
 		</div>
 		<div>
 			<router-link to="/upload" tag="v-btn">Upload</router-link>
