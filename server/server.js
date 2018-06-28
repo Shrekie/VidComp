@@ -1,3 +1,7 @@
+/*
+    Node express entry point
+*/
+
 const env_config = require('./config/env_config.js');
 
 // Service package imports

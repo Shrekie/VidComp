@@ -1,3 +1,7 @@
+<!-- 
+	Main user interaction section
+-->
+
 <template>
 	<v-layout row wrap>
 		<router-view></router-view>

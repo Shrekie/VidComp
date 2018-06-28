@@ -1,6 +1,10 @@
+<!-- 
+	App window container
+-->
+
 <template>
 <v-app>
-<v-navigation-drawer app>
+<v-navigation-drawer permanent="true" app>
 	<router-view name="sidebar"></router-view>
 </v-navigation-drawer>
 <v-toolbar app></v-toolbar>

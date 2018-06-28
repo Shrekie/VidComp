@@ -1,4 +1,9 @@
+/*
+    Entry point of webpack builder
+*/
+
 import Vue from 'vue';
+Vue.config.devtools = true;
 
 // Vue libraries
 import Vuetify from 'vuetify'
@@ -38,16 +43,14 @@ const routes = [
     }
 ];
 
-
 // Route init conig
 const router = new VueRouter({
     mode: 'history',
     routes
 });
 
-
 // Vue execution
-import appHook from './appHook.vue';
+import appHook from './appHook/appHook.vue';
 
 new Vue({
     render: h => h(appHook),

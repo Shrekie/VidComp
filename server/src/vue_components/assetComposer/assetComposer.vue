@@ -1,3 +1,7 @@
+<!-- 
+	Composition of project, editing control
+-->
+
 <template>
 <v-btn small color="primary">Edit</v-btn>
 </template>

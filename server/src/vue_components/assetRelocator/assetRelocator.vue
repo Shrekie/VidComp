@@ -1,3 +1,7 @@
+<!-- 
+	Uploader and manager of assets loaded into the project
+-->
+
 <template>
 <v-btn small color="primary">Upload</v-btn>
 </template>
