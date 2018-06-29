@@ -10,16 +10,16 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css';
 import VueRouter from 'vue-router';
 
+// Middleware binding
+Vue.use(Vuetify);
+Vue.use(VueRouter)
+
 // Components
 import appWindow from './appWindow/appWindow.vue';
 import workspaceContent from './workspaceContent/workspaceContent.vue';
 import sidebarContent from './sidebarContent/sidebarContent.vue';
 import assetComposer from './assetComposer/assetComposer.vue';
 import assetRelocator from './assetRelocator/assetRelocator.vue';
-
-// Middleware binding
-Vue.use(Vuetify);
-Vue.use(VueRouter)
 
 // Routes
 const routes = [

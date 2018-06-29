@@ -4,10 +4,12 @@
 
 <template>
 <v-app>
-<v-navigation-drawer permanent="true" app>
+<v-navigation-drawer app permanent="true" width="120">
 	<router-view name="sidebar"></router-view>
 </v-navigation-drawer>
-<v-toolbar app></v-toolbar>
+<v-toolbar app dense>
+	<v-toolbar-title>Progressive Video Editor</v-toolbar-title>
+</v-toolbar>
 <v-content>
 	<v-container grid-list-md text-xs-center>
 		<router-view name="workspace"></router-view>

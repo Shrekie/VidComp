@@ -3,9 +3,11 @@
 -->
 
 <template>
-	<v-layout row wrap>
+<v-layout align-center>
+	<v-flex xs12 text-xs-center>
 		<router-view></router-view>
-	</v-layout>
+	</v-flex>
+</v-layout>
 </template>
 
 <script>
