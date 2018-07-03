@@ -3,7 +3,9 @@
 -->
 
 <template>
-<v-btn small color="primary">Upload</v-btn>
+<v-flex xs12 text-xs-center>
+	<v-btn small color="primary">Upload</v-btn>
+</v-flex>
 </template>
 
 <script>

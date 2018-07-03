@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "build": "poi build server/src/vue_components/vue_components.js",
+    "build": "poi build server/src/vue_components/main.js",
     "start": "node server/server.js",
     "postinstall": "bower install"
   },
@@ -20,7 +20,8 @@
     "express": "^4.16.3",
     "poi": "^10.2.9",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.0.19"
+    "vuetify": "^1.0.19",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {}
 }

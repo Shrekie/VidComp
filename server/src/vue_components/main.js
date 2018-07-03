@@ -6,22 +6,30 @@ import Vue from 'vue';
 Vue.config.devtools = true;
 
 // Vue libraries
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css';
+
+import Vuex from 'vuex';
 import VueRouter from 'vue-router';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 
 // Middleware binding
+Vue.use(Vuex);
+Vue.use(VueRouter);
 Vue.use(Vuetify);
-Vue.use(VueRouter)
 
-// Components
-import appWindow from './appWindow/appWindow.vue';
-import workspaceContent from './workspaceContent/workspaceContent.vue';
-import sidebarContent from './sidebarContent/sidebarContent.vue';
-import assetComposer from './assetComposer/assetComposer.vue';
-import assetRelocator from './assetRelocator/assetRelocator.vue';
+// Top level route components
+import appHook from './integralFundament/appHook/appHook.vue';
+import appWindow from './integralFundament/appWindow/appWindow.vue';
+import workspaceContent from './pageSection/workspaceContent/workspaceContent.vue';
+import sidebarContent from './pageSection/sidebarContent/sidebarContent.vue';
+import assetComposer from './pageContent/assetComposer/assetComposer.vue';
+import assetRelocator from './pageContent/assetRelocator/assetRelocator.vue';
+
+// Stores
+import pve_store from './stores/pve_store.js';
 
 // Routes
+// TODO: Add to file
 const routes = [
     { 
         path: '/', component:appWindow,
@@ -39,9 +47,11 @@ const routes = [
                 component:assetRelocator
             }]
         }]
-
     }
 ];
+
+// Store init config
+const store = new Vuex.Store(pve_store);
 
 // Route init conig
 const router = new VueRouter({
@@ -50,11 +60,10 @@ const router = new VueRouter({
 });
 
 // Vue execution
-import appHook from './appHook/appHook.vue';
-
 new Vue({
     render: h => h(appHook),
     el: '#app',
+    store,
     router
 }).$mount('#app');
 

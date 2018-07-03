@@ -4,9 +4,7 @@
 
 <template>
 <v-layout align-center>
-	<v-flex xs12 text-xs-center>
-		<router-view></router-view>
-	</v-flex>
+	<router-view></router-view>
 </v-layout>
 </template>
 
