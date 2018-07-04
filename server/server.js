@@ -2,12 +2,14 @@
     Node express entry point
 */
 
+// Config imports
 const env_config = require('./config/env_config.js');
+require('./config/db_connect.js');
 
 // Service package imports
-const express = require('express')
-const path = require('path')
-const bodyParser = require('body-parser')
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
 
 // Route imports
 const application = require('./routes/application');

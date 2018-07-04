@@ -4,7 +4,9 @@
 
 <template>
 <v-flex xs12 text-xs-center>
-	<p>{{user}}</p>
+	<v-text-field label="name" v-model="userName"></v-text-field>
+	<v-btn small color="primary" @click="newUser">Create User</v-btn>
+	<p v-for="user in users" :key="user.id">{{user.name}}</p>
 	<v-btn small color="primary" @click="increment">Increment</v-btn>
 	<p>{{count}}</p>
 </v-flex>
@@ -22,18 +24,21 @@ export default {
 	methods: {
 		increment () {
 			this.$store.commit('incrementCount');
+		},
+		newUser () {
+			this.$store.dispatch('createUser', { name: this.userName });
 		}
 	},
 	computed: {
 		count () {
-			return this.$store.state.count;
+			return this.$store.getters.getTotalCount;
 		},
-		user () {
-			return this.$store.state.user;
+		users () {
+			return this.$store.getters.getAllUsers;
 		}
 	},
 	created: function(){
-    	this.$store.dispatch('getUser');
+    	this.$store.dispatch('getUsers');
   	}
 };
 </script>

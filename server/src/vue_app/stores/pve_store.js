@@ -1,25 +1,42 @@
-// Vuex store for entire app
-// TODO: Remove and split this file up.
+/*
+    Vuex store for entire app
+    #TODO: Remove and split this file up.
+*/
+
 import Appapi from './../../api/application_api.js';
 
 export default {
     state: {
-        user: '',
+        users: [],
         count: 0
     },
     actions:{
-        getUser ({ commit }) {
-            Appapi.getUser(user => {
-                commit('setuser', user);
+        getUsers ({ commit }) {
+            Appapi.getUsers(users => {
+                commit('setusers', users);
             });
         },
+        createUser (context, payload) {
+            Appapi.createUser(payload.name, (response) => {
+                console.log(response);
+                context.dispatch('getUsers');
+            });
+        }
     },
     mutations: {
-        setuser (state, user) {
-            state.user = user;
+        setusers (state, users) {
+            state.users = users;
         },
         incrementCount (state) {
             state.count++;
+        }
+    },
+    getters: {
+        getAllUsers (state) {
+            return state.users;
+        },
+        getTotalCount (state) {
+            return state.count;
         }
     }
 };
