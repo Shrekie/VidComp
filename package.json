@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "build": "poi build server/src/vue_components/main.js",
+    "build": "poi build server/src/vue_app/main.js",
     "start": "node server/server.js",
     "postinstall": "bower install"
   },
@@ -15,6 +15,7 @@
   "author": "Thomas Lindauer",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "bower": "^1.8.4",
     "express": "^4.16.3",

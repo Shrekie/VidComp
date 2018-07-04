@@ -6,16 +6,17 @@ import Vue from 'vue';
 Vue.config.devtools = true;
 
 // Vue libraries
-
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
+import VideoComp from './../videoComp/videoComp.js';
 import 'vuetify/dist/vuetify.min.css';
 
 // Middleware binding
 Vue.use(Vuex);
 Vue.use(VueRouter);
 Vue.use(Vuetify);
+Vue.use(VideoComp);
 
 // Top level route components
 import appHook from './integralFundament/appHook/appHook.vue';
