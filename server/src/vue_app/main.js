@@ -52,8 +52,14 @@ const routes = [
 ];
 
 // VideoComposer init
+console.log(VidComp);
 VidComp.newProject('test');
-VidComp.addLayer('test', 'https://i.imgur.com/tXFceR7.jpg', 'coolImage');
+
+VidComp.addLayer('test', { 
+    resourceName: 'imgurImageOne',
+    resourceLink: 'https://i.imgur.com/tXFceR7.jpg',
+    time: [0,0]
+});
 
 // Store init config
 const store = new Vuex.Store(pve_store);

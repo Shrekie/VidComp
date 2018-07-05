@@ -1,16 +1,24 @@
 export default function () {
 
     var store = {
-        layers: new Map()
+        layers: []
     };
 
+    this.getLayer = function (index) {
+        return store.layers[index];
+    }
+
+    this.setLayer = function (layer, index) {
+        store.layers[index] = layer;
+    }
+
     this.addLayer = function (layer) {
-        store.layers.set(layer.name, layer);
+        store.layers.push(layer);
     };
 
     this.eachLayer = function (cb) {
-        store.layers.forEach(function(value, key, map){
-            cb({data:value.data, name:value.name});
+        store.layers.forEach(function(layer){
+            cb(layer);
         });
     };
 

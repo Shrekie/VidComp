@@ -6,51 +6,54 @@
 import VideoProjection from './modules/videoProjection.js';
 import Timeline from './modules/timeline.js';
 import ResourceImporter from './modules/resourceImporter.js';
+import ResourceLoader from './modules/resourceLoader.js';
 import Layer from './modules/layer.js';
 
-var VideoComposer = function () {
-    this.videoProjection = new VideoProjection();
-    this.timeline = new Timeline();
-    this.resourceImporter = new ResourceImporter();
-};
+export default function () {
 
-var store = {
-    projects: new Map()
-};
+    var videoProjection = new VideoProjection();
+    var timeline = new Timeline();
+    var resourceImporter = new ResourceImporter();
+    var resourceLoader = new ResourceLoader();
 
-// Bind each canvas element to corresponding project object
-var setTarget = function(projectName, canvas){
-    getProject(projectName).videoProjection.setTarget(canvas);
-}
+    this.createLayer = function (newLayer, withMedia) {
+        if(withMedia){
+            resourceImporter.importResource
+            (newLayer.resourceLink, newLayer.resourceName, function(resource){
+                var layer = new Layer(resource, newLayer.time);
+                timeline.addLayer(layer);
+                resourceLoader.loadResources(timeline);
+            });
+        }else{
+            var layer = new Layer();
+            timeline.addLayer(layer);
+        }
+    };
 
-var newProject = function(projectName){
-    store.projects.set(projectName, {project: new VideoComposer()});
-}
+    this.editLayer = function(layerChange){
 
-var getProject = function (projectName) {
-    return store.projects.get(projectName).project;
-};
+        var layer = timeline.getLayer(layerChange.layerIndex);
 
-var addLayer = function (projectName, resourceLink, name) {
+        if(layerChange.resourceLink){
+            resourceImporter.importResource
+            (layerChange.resourceLink, layerChange.resourceName, function(resource){
+                layer.changeMedia(layerChange, resource);
+                timeline.setLayer(layer, layerChange.layerIndex);
+                resourceLoader.loadResources(timeline);
+            });
+        }else{
+            layer.changeMedia(layerChange);
+            timeline.setLayer(layer, layerChange.layerIndex);
+        }
 
-    getProject(projectName).resourceImporter.importResource
-    (resourceLink, name, function(resource){
-        var layer = new Layer(name, resource);
-        getProject(projectName).timeline.addLayer(layer);
-    });
+    };
 
-};
+    this.setTarget = function (canvas) {
+        videoProjection.setTarget(canvas);
+    };
 
-var play = function(projectName){
+    this.startDraw = function () {
+        videoProjection.drawTimeline(resourceLoader);
+    };
 
-    getProject(projectName).videoProjection
-    .drawTimeline(getProject(projectName).timeline);
-
-};
-        
-export default {
-    setTarget,
-    newProject,
-    addLayer,
-    play
 };

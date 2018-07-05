@@ -1,9 +1,5 @@
 export default function () {
 
-    var store = {
-        resources: new Map()
-    }
-
     var fetchResource = function (resourceLink, cb) {
         fetch(resourceLink)
         .then(res => res.blob())
@@ -14,18 +10,9 @@ export default function () {
 
     this.importResource = function (resourceLink, name, cb) { 
         fetchResource(resourceLink, function(url){
-            var rawResource = {url:url, type:'image'};
-            store.resources.set(name, rawResource);
-            cb({name, rawResource});
+            var resource = {name:name, url:url, type:'image'};
+            cb(resource);
         });
-    };
-
-    this.removeImport = function (name) {
-        return store.resources.delete(name);
-    };
-
-    this.getImport = function (name) {
-        return {name:name, data:store.resources.get(name)};
     };
 
 };
