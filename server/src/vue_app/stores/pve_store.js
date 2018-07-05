@@ -3,7 +3,7 @@
     #TODO: Remove and split this file up.
 */
 
-import Appapi from './../../api/application_api.js';
+import Appapi from './../../vue_api/application_api.js';
 
 export default {
     state: {

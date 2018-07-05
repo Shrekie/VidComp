@@ -9,14 +9,14 @@ Vue.config.devtools = true;
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
-import VideoComp from './../videoComp/videoComp.js';
+import VidComp from './../vue_plugin/main.js';
 import 'vuetify/dist/vuetify.min.css';
 
 // Middleware binding
 Vue.use(Vuex);
 Vue.use(VueRouter);
 Vue.use(Vuetify);
-Vue.use(VideoComp);
+Vue.use(VidComp);
 
 // Top level route components
 import appHook from './integralFundament/appHook/appHook.vue';
@@ -50,6 +50,10 @@ const routes = [
         }]
     }
 ];
+
+// VideoComposer init
+VidComp.newProject('test');
+VidComp.addLayer('test', 'https://i.imgur.com/tXFceR7.jpg', 'coolImage');
 
 // Store init config
 const store = new Vuex.Store(pve_store);
