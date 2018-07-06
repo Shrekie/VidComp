@@ -28,6 +28,10 @@ var addLayer = function (projectName, newLayer) {
     getProject(projectName).createLayer(newLayer);
 };
 
+var addMedia = function (projectName, mediaChange) {
+    getProject(projectName).addMedia(mediaChange);
+};
+
 var changeLayer = function (projectName, layerChange) {
     getProject(projectName).editLayer(layerChange);
 };
@@ -37,12 +41,13 @@ var changeResource = function (projectName, resourceChange){
 };
 
 var play = function(projectName){
-    getProject(projectName).startDraw();
+    getProject(projectName).startPlaying();
 };
         
 export default {
     setTarget,
     changeResource,
+    addMedia,
     changeLayer,
     newProject,
     addLayer,

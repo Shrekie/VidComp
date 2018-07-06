@@ -17,16 +17,20 @@ export default {
         Vue.prototype.$vcomp = function (projectName) {
 
             var addLayer = function () {
-                VideoComposerManager.addLayer(projectName);
+                VideoComposerManager.addLayer(projectName, newLayer);
+            };
+
+            var addMedia = function () {
+                VideoComposerManager.addMedia(projectName, newMedia);
             };
 
             var changeResource = function (resourceChange){
                 VideoComposerManager.changeResource(projectName, resourceChange);
-            }
+            };
 
             var changeLayer = function (layerChange){
                 VideoComposerManager.changeLayer(projectName, layerChange);
-            }
+            };
 
             var play = function () {
                 VideoComposerManager.play(projectName);
@@ -34,6 +38,7 @@ export default {
 
             return {
                 addLayer,
+                addMedia,
                 changeResource,
                 changeLayer,
                 play
@@ -42,6 +47,7 @@ export default {
         };
 
     },
-    newProject:VideoComposerManager.newProject,
-    addLayer:VideoComposerManager.addLayer
+    newProject: VideoComposerManager.newProject,
+    addLayer: VideoComposerManager.addLayer,
+    addMedia: VideoComposerManager.addMedia
 };

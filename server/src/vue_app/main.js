@@ -59,7 +59,16 @@ VidComp.addLayer('test', {
     resourceName: 'ImgurImage',
     resourceLink: 'https://i.imgur.com/tXFceR7.jpg',
     resourceType: 'image',
-    time: [0,0]
+    time: [5,10]
+});
+
+VidComp.addMedia('test', {
+    mediaName: 'SecondImage',
+    layerIndex: 0,
+    resourceName: 'ImgurImageTwo',
+    resourceLink: 'https://i.imgur.com/8cHhLiS.jpg',
+    resourceType: 'image',
+    time: [20, 30]
 });
 
 // Store init config
