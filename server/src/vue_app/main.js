@@ -52,12 +52,13 @@ const routes = [
 ];
 
 // VideoComposer init
-console.log(VidComp);
 VidComp.newProject('test');
 
-VidComp.addLayer('test', { 
-    resourceName: 'imgurImageOne',
+VidComp.addLayer('test', {
+    mediaName: 'FirstImage', 
+    resourceName: 'ImgurImage',
     resourceLink: 'https://i.imgur.com/tXFceR7.jpg',
+    resourceType: 'image',
     time: [0,0]
 });
 

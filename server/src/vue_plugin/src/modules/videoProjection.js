@@ -11,13 +11,12 @@ export default function () {
         // TODO: put this in drawer module
         var loop = function () {
 
-            resourceLoader.eachResource(function(source){
+            resourceLoader.eachSource(function(source){
                 if(source.type == 'image'){
-                    videoOutput.drawImage(source.resource, 0, 0);
+                    videoOutput.drawImage(source.cast, 0, 0);
                 }
-                requestAnimationFrame(loop);
             });
-
+            requestAnimationFrame(loop);
         };
 
         requestAnimationFrame(loop);

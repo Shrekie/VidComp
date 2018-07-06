@@ -23,10 +23,9 @@ export default {
 			this.$vcomp('test').play();
 		},
 		newImage () {
-			this.$vcomp('test').changeLayer({
-				layerIndex: 0, 
-				resourceLink: 'https://i.imgur.com/71t58N9.jpg',
-				resourceName: 'imgurImageOne'
+			this.$vcomp('test').changeResource({
+				resourceName: 'ImgurImage',
+				resourceLink: 'https://i.imgur.com/71t58N9.jpg'
 			});
 		}
 	}

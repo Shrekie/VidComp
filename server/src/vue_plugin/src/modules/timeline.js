@@ -4,12 +4,8 @@ export default function () {
         layers: []
     };
 
-    this.getLayer = function (index) {
-        return store.layers[index];
-    }
-
-    this.setLayer = function (layer, index) {
-        store.layers[index] = layer;
+    this.getLayers = function (index) {
+        return store.layers;
     }
 
     this.addLayer = function (layer) {

@@ -2,36 +2,39 @@
     API for VideoComposer project plugin.
 */
 
+// TODO: change name of this file. 
+
 import VideoComposer from './videoComposer.js';
 
 var store = {
-    projects: new Map()
+    projects: []
 };
 
 // Bind each canvas element to corresponding project
 var setTarget = function(projectName, canvas){
     getProject(projectName).setTarget(canvas);
-}
+};
 
 var newProject = function(projectName){
-    store.projects.set(projectName, {project: new VideoComposer()});
-}
+    store.projects.push({name: projectName, project: new VideoComposer()});
+};
 
 var getProject = function (projectName) {
-    return store.projects.get(projectName).project;
+    return store.projects.find(function(element) 
+    {return element.name == projectName;}).project;
 };
 
 var addLayer = function (projectName, newLayer) {
-    if(newLayer.resourceName){
-        getProject(projectName).createLayer(newLayer, true);
-    }else{
-        getProject(projectName).createLayer(newLayer, false);
-    }
+    getProject(projectName).createLayer(newLayer);
 };
 
 var changeLayer = function (projectName, layerChange) {
     getProject(projectName).editLayer(layerChange);
-}
+};
+
+var changeResource = function (projectName, resourceChange){
+    getProject(projectName).editResource(resourceChange);
+};
 
 var play = function(projectName){
     getProject(projectName).startDraw();
@@ -39,6 +42,7 @@ var play = function(projectName){
         
 export default {
     setTarget,
+    changeResource,
     changeLayer,
     newProject,
     addLayer,

@@ -1,6 +1,3 @@
-/*
-    API for VideoComposer project plugin.
-*/
 
 // Modules
 import VideoProjection from './modules/videoProjection.js';
@@ -16,36 +13,47 @@ export default function () {
     var resourceImporter = new ResourceImporter();
     var resourceLoader = new ResourceLoader();
 
-    this.createLayer = function (newLayer, withMedia) {
-        if(withMedia){
+    this.createLayer = function (newLayer) {
+
+        if(newLayer.resourceLink && newLayer.mediaName){
+
+            // create layer with media and resource
             resourceImporter.importResource
-            (newLayer.resourceLink, newLayer.resourceName, function(resource){
-                var layer = new Layer(resource, newLayer.time);
+            (newLayer, function(resource){
+                var layer = new Layer({mediaName: newLayer.mediaName, time: newLayer.time, resource});
                 timeline.addLayer(layer);
-                resourceLoader.loadResources(timeline);
+                resourceLoader.loadMedia(layer.getMedia(newLayer.mediaName));
             });
+
+        }else if (newLayer.mediaName) {
+
+            // create layer with empty media
+            var layer = new Layer({mediaName: newLayer.mediaName, time: newLayer.time});
+            timeline.addLayer(layer);
+            resourceLoader.loadMedia(layer.getMedia(newLayer.resourceName));
+
         }else{
+
+            // create layer with no media
             var layer = new Layer();
             timeline.addLayer(layer);
+
         }
+
+    };
+
+    this.editResource = function(resourceChange){
+
+        resourceImporter.changeResource(resourceChange, function(resource){
+            // recast media
+            resourceLoader.loadSelectedMedia(resource);
+        });
+
     };
 
     this.editLayer = function(layerChange){
-
         var layer = timeline.getLayer(layerChange.layerIndex);
-
-        if(layerChange.resourceLink){
-            resourceImporter.importResource
-            (layerChange.resourceLink, layerChange.resourceName, function(resource){
-                layer.changeMedia(layerChange, resource);
-                timeline.setLayer(layer, layerChange.layerIndex);
-                resourceLoader.loadResources(timeline);
-            });
-        }else{
-            layer.changeMedia(layerChange);
-            timeline.setLayer(layer, layerChange.layerIndex);
-        }
-
+        layer.changeMedia(layerChange);
     };
 
     this.setTarget = function (canvas) {

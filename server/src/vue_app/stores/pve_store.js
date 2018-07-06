@@ -1,6 +1,6 @@
 /*
     Vuex store for entire app
-    #TODO: Remove and split this file up.
+    TODO: Remove and split this file up.
 */
 
 import Appapi from './../../vue_api/application_api.js';

@@ -2,33 +2,39 @@
     Entry point of plugin, install to vue app space.
 */
 
-import VidCompMan from './src/projectManager.js';
+import VideoComposerManager from './src/videoComposerManager.js';
 
 export default {
+
     install(Vue, options) {
 
         Vue.directive('project-composition', {
             bind (el, binding, vnode, oldVnode) {
-                VidCompMan.setTarget(binding.expression, el);
+                VideoComposerManager.setTarget(binding.expression, el);
             }
         });
 
         Vue.prototype.$vcomp = function (projectName) {
 
             var addLayer = function () {
-                VidCompMan.addLayer(projectName);
+                VideoComposerManager.addLayer(projectName);
             };
 
+            var changeResource = function (resourceChange){
+                VideoComposerManager.changeResource(projectName, resourceChange);
+            }
+
             var changeLayer = function (layerChange){
-                VidCompMan.changeLayer(projectName, layerChange);
+                VideoComposerManager.changeLayer(projectName, layerChange);
             }
 
             var play = function () {
-                VidCompMan.play(projectName);
+                VideoComposerManager.play(projectName);
             };
 
             return {
                 addLayer,
+                changeResource,
                 changeLayer,
                 play
             }
@@ -36,6 +42,6 @@ export default {
         };
 
     },
-    newProject:VidCompMan.newProject,
-    addLayer:VidCompMan.addLayer
+    newProject:VideoComposerManager.newProject,
+    addLayer:VideoComposerManager.addLayer
 };
