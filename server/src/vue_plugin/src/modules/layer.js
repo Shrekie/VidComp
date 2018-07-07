@@ -4,10 +4,19 @@ export default function (newMedia) {
         media: []
     }
 
-    var Media = function (newMedia){
-        this.time = newMedia.time;
-        this.name = newMedia.mediaName;
+    var Media = function (newMedia){ 
+
+        this.name = newMedia.name;
         this.resource = newMedia.resource;
+        this.timelineTime = newMedia.timelineTime;
+
+        if (newMedia.videoStartTime) this.videoStartTime = newMedia.videoStartTime;
+        else this.videoStartTime = 0;
+        if (newMedia.position) this.position = newMedia.position;
+        else this.position = [0, 0];
+        if (newMedia.size) this.size = newMedia.size;
+        else this.size = [100, 100];
+
     };
 
     this.getMedia = function (name){
@@ -15,17 +24,15 @@ export default function (newMedia) {
         {return element.name == name;});
     };
 
-    this.getMedias = function () {
-        return store.media;
-    }
+    var getMediaIndex = function (name){
+        return store.media.findIndex(function(element) 
+        {return element.name == name;});
+    };
 
-    var setMedia = function (mediaChange) {
+    this.changeMedia = function (mediaChange) {
 
-        var mediaResource = this.getMedia(mediaChange.mediaName);
-        
-        if(mediaChange.time){
-            mediaResource.time = mediaChange.time;
-        }
+        var mediaIndex = getMediaIndex(mediaChange.name);
+        store.media[mediaIndex] = mediaChange;
 
     };
 
@@ -35,14 +42,11 @@ export default function (newMedia) {
 
     
     this.eachMedia = function (cb) {
+
         store.media.forEach(function(resource){
             cb(resource);
         });
-    };
-    
-
-    this.changeMedia = function(mediaChange){
-        setMedia(mediaChange);
+        
     };
 
     if(newMedia)this.addMedia(newMedia);

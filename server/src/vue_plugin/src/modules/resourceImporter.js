@@ -3,16 +3,17 @@ export default function () {
     var store = {
         resources: []
     };
-
+    
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxy
     var fetchResource = function (resourceLink, cb) {
-        fetch(resourceLink)
+        fetch(proxyurl + resourceLink)
         .then(res => res.blob())
         .then(blob => {
-            cb(URL.createObjectURL(blob))
+            cb(URL.createObjectURL(blob));
         });
     };
 
-    var existingResource = function (name) {
+    this.existingResource = function (name) {
         return store.resources.find(function(element){
             return element.name == name;
         });
@@ -20,9 +21,9 @@ export default function () {
 
     this.changeResource = function(resourceChange, cb){
 
-        var resource = existingResource(resourceChange.resourceName);
+        var resource = this.existingResource(resourceChange.name);
 
-        if(resourceChange.newResourceName) resource.name = resourceChange.newResourceName;
+        if(resourceChange.name) resource.name = resourceChange.name;
         if(resourceChange.resourceType) resource.type = resourceChange.resourceType;
 
         if(resourceChange.resourceLink){
@@ -39,7 +40,7 @@ export default function () {
 
     this.importResource = function (newResource, cb) { 
 
-        var resourceExists = existingResource(newResource.resourceName);
+        var resourceExists =  this.existingResource(newResource.name);
 
         if(resourceExists){
             cb(resourceExists);
@@ -47,11 +48,12 @@ export default function () {
         else{
             fetchResource(newResource.resourceLink, function(url){
                 var resource = {
-                    name:newResource.resourceName,
+                    name:newResource.name,
                     url:url,
                     type: newResource.resourceType
                 };
                 store.resources.push(resource);
+                console.log(store.resources);
                 cb(resource);
             });
         }

@@ -9,7 +9,7 @@ export default function () {
     }
 
     this.addLayer = function (layer) {
-        store.layers.push(layer);
+        return store.layers.push(layer);
     };
 
     this.eachLayer = function (cb) {

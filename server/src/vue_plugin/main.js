@@ -10,17 +10,23 @@ export default {
 
         Vue.directive('project-composition', {
             bind (el, binding, vnode, oldVnode) {
+                console.log('bound');
                 VideoComposerManager.setTarget(binding.expression, el);
+            },
+            unbind (el, binding, vnode, oldVnode) {
+                console.log('unbound');
+                // Cleanup for new instance of canvas
+                VideoComposerManager.stop(binding.expression);
             }
         });
 
         Vue.prototype.$vcomp = function (projectName) {
 
-            var addLayer = function () {
+            var addLayer = function (newLayer) {
                 VideoComposerManager.addLayer(projectName, newLayer);
             };
 
-            var addMedia = function () {
+            var addMedia = function (newMedia) {
                 VideoComposerManager.addMedia(projectName, newMedia);
             };
 

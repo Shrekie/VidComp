@@ -7,13 +7,20 @@
 	<canvas v-project-composition="test"></canvas>
 	<v-btn small color="primary" @click="playVideo">Play</v-btn>
 	<v-btn small color="primary" @click="newImage">Change Image</v-btn>
+	<!--
+	<ImageInserter/>
+	-->
 </v-flex>
 </template>
 
 <script>
+import ImageInserter from './../../vidCompManipulation/resourceImport/imageInserter.vue';
 
 export default {
 	name: "assetComposer",
+	components: {
+		ImageInserter
+	},
 	data() {
 		return {
 		}
@@ -24,8 +31,9 @@ export default {
 		},
 		newImage () {
 			this.$vcomp('test').changeResource({
-				resourceName: 'ImgurImage',
-				resourceLink: 'https://i.imgur.com/71t58N9.jpg'
+				name: 'BunnyVideo',
+				resourceLink: 'https://i.imgur.com/71t58N9.jpg',
+				resourceType: 'image'
 			});
 		}
 	}

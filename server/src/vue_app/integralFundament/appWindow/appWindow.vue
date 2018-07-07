@@ -5,7 +5,7 @@
 <template>
 <v-app>
 <v-navigation-drawer app permanent="true" width="120">
-	<router-view name="sidebar"></router-view>
+	<router-view name="sidebar"></router-view> <!-- #TODO: add this as component -->
 </v-navigation-drawer>
 <v-toolbar app dense>
 	<v-toolbar-title>Progressive Video Editor</v-toolbar-title>

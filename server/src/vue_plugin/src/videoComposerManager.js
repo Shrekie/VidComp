@@ -43,6 +43,10 @@ var changeResource = function (projectName, resourceChange){
 var play = function(projectName){
     getProject(projectName).startPlaying();
 };
+
+var stop = function(projectName){
+    getProject(projectName).stopPlaying();
+};
         
 export default {
     setTarget,
@@ -51,5 +55,6 @@ export default {
     changeLayer,
     newProject,
     addLayer,
-    play
+    play,
+    stop
 };
