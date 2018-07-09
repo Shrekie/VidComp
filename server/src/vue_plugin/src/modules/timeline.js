@@ -8,6 +8,10 @@ export default function () {
         return store.layers[index];
     }
 
+    this.getAllLayers = function () {
+        return store.layers;
+    }
+
     this.addLayer = function (layer) {
         return store.layers.push(layer);
     };

@@ -30,6 +30,14 @@ export default {
                 VideoComposerManager.addMedia(projectName, newMedia);
             };
 
+            var getAllMedia = function (layerIndex) {
+                return VideoComposerManager.getAllMedia(projectName, layerIndex);
+            };
+            
+            var getAllLayers = function () {
+                return VideoComposerManager.getAllLayers(projectName);
+            };
+
             var changeResource = function (resourceChange){
                 VideoComposerManager.changeResource(projectName, resourceChange);
             };
@@ -45,6 +53,8 @@ export default {
             return {
                 addLayer,
                 addMedia,
+                getAllMedia,
+                getAllLayers,
                 changeResource,
                 changeLayer,
                 play

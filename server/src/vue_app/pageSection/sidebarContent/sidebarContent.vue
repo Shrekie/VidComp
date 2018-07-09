@@ -9,10 +9,10 @@
 			<router-link to="/" tag="v-btn">Home</router-link>
 		</div>
 		<div>
-			<router-link to="/upload" tag="v-btn">Upload</router-link>
+			<router-link to="/upload/test" tag="v-btn">Upload</router-link>
 		</div>
 		<div>
-			<router-link to="/compose" tag="v-btn">Edit</router-link>
+			<router-link to="/compose/test" tag="v-btn">Edit</router-link>
 		</div>
 	</v-flex>
 </v-layout>

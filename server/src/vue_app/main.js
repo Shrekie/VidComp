@@ -25,6 +25,8 @@ import workspaceContent from './pageSection/workspaceContent/workspaceContent.vu
 import sidebarContent from './pageSection/sidebarContent/sidebarContent.vue';
 import assetComposer from './pageContent/assetComposer/assetComposer.vue';
 import assetRelocator from './pageContent/assetRelocator/assetRelocator.vue';
+import timelineEditor from './vidCompManipulation/projectHandling/timeline/timelineEditor.vue';
+import establishMedia from './vidCompManipulation/projectHandling/timelineGenerators/establishMedia.vue';
 
 // Stores
 import pve_store from './stores/pve_store.js';
@@ -41,11 +43,27 @@ const routes = [
                 sidebar: sidebarContent
             },
             children: [{
-                path: 'compose',
-                component:assetComposer
+
+                path: 'compose/:projectName',
+                component:assetComposer,
+
+                children: [{
+                    path: '',
+                    component: timelineEditor,
+                    props: true
+                },
+                {
+                    path: 'addmedia/:layerIndex',
+                    component: establishMedia,
+                    props: true
+
+                }]
+
             }, {
-                path: 'upload',
+
+                path: 'upload/:projectName',
                 component:assetRelocator
+
             }]
         }]
     }
@@ -58,6 +76,7 @@ VidComp.addLayer('test', {
 
     newMedia: {
         name: 'mainparent',
+        layerIndex: 0,
         size: [200, 100],
         timelineTime: [1, 33],
         position: [0,0],
@@ -66,7 +85,7 @@ VidComp.addLayer('test', {
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r6---sn-aigl6n7d.googlevideo.com/videoplayback?initcwndbps=141250&gir=yes&ratebypass=yes&pl=20&source=youtube&c=WEB&requiressl=yes&ipbits=0&mn=sn-aigl6n7d%2Csn-aigs6n7r&mm=31%2C29&ms=au%2Crdu&ei=8f9AW7r9IsKOxwLR5bO4CA&mv=m&clen=7220914&expire=1531008081&key=yt6&ip=167.99.91.144&dur=0.000&mt=1530986388&lmt=1515129617977566&id=o-AMy3FnZI6KEYgK-rkJPERqCb56RQZtayBFvV2ebArNX-&itag=43&signature=127E43F9FFFAB737C86C9CFD840C514891433B9D.A4CBE795B675586573E0440CA22D2B10871AA82A&mime=video%2Fwebm&fvip=6&sparams=clen%2Cdur%2Cei%2Cgir%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&fexp=23709359',
+        resourceLink: 'https://r1---sn-aigl6n7s.googlevideo.com/videoplayback?requiressl=yes&dur=139.342&pl=20&fexp=23709359&ms=au%2Crdu&mt=1531082379&mv=m&source=youtube&mm=31%2C29&mn=sn-aigl6n7s%2Csn-aigzrn7z&ratebypass=yes&expire=1531104090&c=WEB&id=o-ACjh5WmfeME4HwphL2_e5umqHk87iqV69aEIPKrRaxHM&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&lmt=1516189607568004&fvip=1&initcwndbps=118750&ip=167.99.91.144&mime=video%2Fmp4&itag=22&key=yt6&ei=-nZCW56UHdeh1gbVvZmYCQ&ipbits=0&signature=8784328037C1BDD12BEBB56CACEBBEBED0A2B2E4.397662FEF1D4B70CD683851048EB37AEFCEEB1E7',
         resourceType: 'video',
 
         resourceLoaded: function () {

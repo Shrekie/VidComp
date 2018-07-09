@@ -1,8 +1,10 @@
-export default function (newMedia) {
+export default function (layerIndex, newMedia) {
 
     var store = {
         media: []
     }
+
+    this.layerIndex = layerIndex;
 
     var Media = function (newMedia){ 
 
@@ -17,6 +19,10 @@ export default function (newMedia) {
         if (newMedia.size) this.size = newMedia.size;
         else this.size = [100, 100];
 
+    };
+
+    this.getAllMedia = function () {
+        return store.media;
     };
 
     this.getMedia = function (name){

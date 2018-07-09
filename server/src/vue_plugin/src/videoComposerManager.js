@@ -32,6 +32,14 @@ var addMedia = function (projectName, mediaChange) {
     getProject(projectName).addMedia(mediaChange);
 };
 
+var getAllMedia = function (projectName, layerIndex) {
+    return getProject(projectName).getAllMedia(layerIndex);
+};
+
+var getAllLayers = function (projectName) {
+    return getProject(projectName).getAllLayers();
+};
+
 var changeLayer = function (projectName, layerChange) {
     getProject(projectName).editLayer(layerChange);
 };
@@ -54,6 +62,8 @@ export default {
     addMedia,
     changeLayer,
     newProject,
+    getAllMedia,
+    getAllLayers,
     addLayer,
     play,
     stop

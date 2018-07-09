@@ -1,21 +1,28 @@
 export default function () {
 
-    // FIXME: this object has too many responsibilities, split up
+    var TimeTracker = function () {
 
-    var startTime = 0;
-    var nowTime = 0;
-    var elapsed = 0;
-    var isPlaying = false;
-    var animationFrame = {};
+        var startTime = 0;
+        var nowTime = 0;
+        this.elapsed = 0;
+        
+        this.trackTime = function () {
+            nowTime = new Date();
+            this.elapsed = nowTime - startTime;
+            this.elapsed /= 1000;
+            this.elapsed = Math.round(this.elapsed);
+        };
 
-    var trackTime = function(){
-
-        nowTime = new Date();
-        elapsed = nowTime - startTime;
-        elapsed /= 1000;
-        elapsed = Math.round(elapsed);
+        this.resetTime = function () {
+            startTime = new Date();
+            this.elapsed = 0;
+        };
 
     };
+
+    var timeTracker = new TimeTracker();
+    var isPlaying = false;
+    var animationFrame = {};
 
     var resetContent = function (sourceLoader) {
 
@@ -23,8 +30,8 @@ export default function () {
             if(source.type == 'video'){
                 if(!source.cast.paused){
                     // reset videos
-                    source.cast.load();
                     source.cast.pause();
+                    source.cast.load();
                 }
             }
         });
@@ -38,14 +45,14 @@ export default function () {
         sourceLoader.eachSource(function(source){
             
             if(source.type == 'image'){
-                if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+                if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
                     videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
                     source.media.size[0], source.media.size[1]);
                 }
             }
 
             if(source.type == 'video'){
-                if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+                if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
                     if(source.cast.paused){
                         // video starts displaying
                         source.cast.currentTime = source.media.videoStartTime;
@@ -62,7 +69,7 @@ export default function () {
 
         });
         
-        trackTime();
+        timeTracker.trackTime();
         animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput) });
     };
 
@@ -72,10 +79,8 @@ export default function () {
 
             resetContent(sourceLoader);
             cancelAnimationFrame(animationFrame);
+            timeTracker.resetTime();
             isPlaying = false;
-            elapsed = 0;
-            startTime = 0;
-
         }
 
     }
@@ -85,14 +90,14 @@ export default function () {
         if(isPlaying){
 
             resetContent(sourceLoader);
-            startTime = new Date();
-            elapsed = 0;
+            timeTracker.resetTime();
 
         }else{
 
             isPlaying = true;
             animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput) });
-            startTime = new Date();
+            console.log(timeTracker);
+            timeTracker.resetTime(); // TODO: maybe remove this, what if nav too fast ??
 
         }
 

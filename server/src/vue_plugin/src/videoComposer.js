@@ -18,7 +18,7 @@ export default function () {
         if(newLayer.newResource && newLayer.newMedia){
 
             // create layer with media and resource
-            var layer = new Layer(newLayer.newMedia);
+            var layer = new Layer(newLayer.newMedia.layerIndex, newLayer.newMedia);
             timeline.addLayer(layer);
             resourceImporter.importResource
             (newLayer.newResource, function(resource){
@@ -31,14 +31,14 @@ export default function () {
         }else if (newLayer.newMedia) {
 
             // create layer with empty media
-            var layer = new Layer(newLayer.newMedia);
+            var layer = new Layer(newLayer.newMedia.layerIndex, newLayer.newMedia);
             timeline.addLayer(layer);
             sourceLoader.loadMedia(layer.getMedia(newLayer.newMedia.name));
 
         }else{
 
             // create layer with no media
-            var layer = new Layer();
+            var layer = new Layer(newLayer.layerIndex);
             timeline.addLayer(layer);
 
         }
@@ -93,6 +93,14 @@ export default function () {
 
     this.setTarget = function (canvas) {
         videoProjection.setTarget(canvas);
+    };
+
+    this.getAllMedia = function (layerIndex) {
+        return timeline.getLayer(layerIndex).getAllMedia();
+    };
+
+    this.getAllLayers = function () {
+        return timeline.getAllLayers();
     };
 
     this.stopPlaying = function () {

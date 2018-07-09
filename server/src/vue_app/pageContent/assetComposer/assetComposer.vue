@@ -4,12 +4,13 @@
 
 <template>
 <v-flex xs12 text-xs-center>
+
 	<canvas v-project-composition="test"></canvas>
 	<v-btn small color="primary" @click="playVideo">Play</v-btn>
 	<v-btn small color="primary" @click="newImage">Change Image</v-btn>
-	<!--
-	<ImageInserter/>
-	-->
+	<router-view>
+
+	</router-view>
 </v-flex>
 </template>
 
