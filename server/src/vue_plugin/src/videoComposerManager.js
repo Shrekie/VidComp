@@ -3,6 +3,7 @@
 */
 
 // TODO: change name of this file. 
+// TODO: make anon func that gets project first and returns functions bound to it
 
 import VideoComposer from './videoComposer.js';
 
@@ -55,6 +56,14 @@ var play = function(projectName){
 var stop = function(projectName){
     getProject(projectName).stopPlaying();
 };
+
+var videoControl = function(projectName, frameHookName, frameHook){
+    getProject(projectName).videoControl(frameHookName, frameHook);
+};
+
+var unbindAllFrameHooks = function(projectName){
+    getProject(projectName).unbindAllFrameHooks();
+};
         
 export default {
     setTarget,
@@ -66,5 +75,7 @@ export default {
     getAllLayers,
     addLayer,
     play,
-    stop
+    stop,
+    videoControl,
+    unbindAllFrameHooks
 };

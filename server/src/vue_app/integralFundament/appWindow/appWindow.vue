@@ -4,10 +4,11 @@
 
 <template>
 <v-app>
-<v-navigation-drawer app permanent="true" width="120">
+<v-navigation-drawer v-model="drawer" fixed temporary app width="120">
 	<router-view name="sidebar"></router-view> <!-- #TODO: add this as component -->
 </v-navigation-drawer>
 <v-toolbar app dense>
+	<v-btn color="pink" @click.stop="drawer = !drawer">Toggle</v-btn>
 	<v-toolbar-title>Progressive Video Editor</v-toolbar-title>
 </v-toolbar>
 <v-content>
@@ -24,6 +25,7 @@ export default {
 	name: "appWindow",
 	data() {
 		return {
+			drawer: null
 		}
 	}
 };

@@ -9,8 +9,8 @@ export default function () {
         this.trackTime = function () {
             nowTime = new Date();
             this.elapsed = nowTime - startTime;
-            this.elapsed /= 1000;
-            this.elapsed = Math.round(this.elapsed);
+            this.elapsed /= 100;
+            this.elapsed = (Math.round(this.elapsed)/1000).toFixed(3);
         };
 
         this.resetTime = function () {
@@ -20,7 +20,23 @@ export default function () {
 
     };
 
+    var ContextHooks = function (drawingContext) {
+
+        this.drawingContext = drawingContext;
+        this.frameContextHooks = [];
+
+        this.runContextHooks = function () {
+            if(this.frameContextHooks){
+                this.frameContextHooks.forEach(function(contextHook, index){
+                    contextHook.callbackHook(contextHooks.drawingContext);
+                });
+            }
+        }
+
+    };
+
     var timeTracker = new TimeTracker();
+    var contextHooks = new ContextHooks({elapsed: timeTracker.elapsed});
     var isPlaying = false;
     var animationFrame = {};
 
@@ -57,7 +73,7 @@ export default function () {
                         // video starts displaying
                         source.cast.currentTime = source.media.videoStartTime;
                         source.cast.play();
-                    } 
+                    }
                     videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
                     source.media.size[0], source.media.size[1]);
                 }else if(!source.cast.paused){
@@ -68,9 +84,22 @@ export default function () {
             }
 
         });
-        
+
+        contextHooks.runContextHooks();
+        contextHooks.drawingContext = {elapsed:timeTracker.elapsed};
         timeTracker.trackTime();
         animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput) });
+
+    };
+
+    this.registerFrameHooks = function (hookInitialize, frameContextHooks){
+        hookInitialize(contextHooks.drawingContext);
+        contextHooks.frameContextHooks = frameContextHooks;
+    };
+
+    this.unregisterFrameHooks = function () {
+        // TODO: add argument for which to unregister
+        contextHooks.frameContextHooks = [];
     };
 
     this.stopDrawSources = function (sourceLoader) {

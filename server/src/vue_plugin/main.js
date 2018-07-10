@@ -17,6 +17,7 @@ export default {
                 console.log('unbound');
                 // Cleanup for new instance of canvas
                 VideoComposerManager.stop(binding.expression);
+                VideoComposerManager.unbindAllFrameHooks();
             }
         });
 
@@ -50,6 +51,14 @@ export default {
                 VideoComposerManager.play(projectName);
             };
 
+            var videoControl = function (frameHookName, frameHook) {
+                VideoComposerManager.videoControl(projectName, frameHookName, frameHook);
+            };
+
+            var unbindAllFrameHooks = function () {
+                VideoComposerManager.unbindAllFrameHooks();
+            };
+
             return {
                 addLayer,
                 addMedia,
@@ -57,7 +66,9 @@ export default {
                 getAllLayers,
                 changeResource,
                 changeLayer,
-                play
+                play,
+                videoControl,
+                unbindAllFrameHooks
             }
 
         };

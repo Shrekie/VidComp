@@ -14,10 +14,7 @@ export default {
     name: "layer",
     methods: {
         showInsertMedia () {
-            const projectName = this.projectName;
-            const layerIndex = this.layerIndex;
-
-            this.$router.push({ path: `${projectName}/addmedia/${layerIndex}`});
+            this.$router.push({ path: `${this.projectName}/addmedia/${this.layerIndex}`});
         }
     },
     props: ['layerIndex', 'projectName'],
@@ -34,9 +31,15 @@ export default {
 <style>
 
 .layerContainer{
+    display: inline-block;
+    position: relative;
+    margin-bottom: 20px;
     background-color: gray;
-    height: 50;
-    width: 50;
+    height: 60px;
+    width: 1000px;
+    margin-right: 50%;
+    margin-left: 50%;
+    right: 0px;
 }
 
 </style>

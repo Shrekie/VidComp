@@ -4,10 +4,15 @@
 
 <template>
 <v-flex xs12 text-xs-center>
-
-	<canvas v-project-composition="test"></canvas>
+	
+	<!-- #TODO: add in component -->
+	<div id="canvasLockAspectContainer">
+		<canvas v-project-composition="test"></canvas>
+	</div>
 	<v-btn small color="primary" @click="playVideo">Play</v-btn>
-	<v-btn small color="primary" @click="newImage">Change Image</v-btn>
+	<v-btn small color="primary" @click="playVideo">Pause</v-btn>
+	<v-btn small color="primary" @click="playVideo">Reset</v-btn>
+
 	<router-view>
 
 	</router-view>
@@ -29,21 +34,31 @@ export default {
 	methods: {
 		playVideo () {
 			this.$vcomp('test').play();
-		},
-		newImage () {
-			this.$vcomp('test').changeResource({
-				name: 'BunnyVideo',
-				resourceLink: 'https://i.imgur.com/71t58N9.jpg',
-				resourceType: 'image'
-			});
 		}
 	}
 };
 </script>
 
 <style>
-canvas{
+
+@media screen and (max-width: 780px) {
+    #canvasLockAspectContainer{
+		max-width: 360px !important;
+		max-height: 190px !important;
+	}
+}
+
+#canvasLockAspectContainer{
+	margin: 0 auto;
+	overflow: hidden;
+	max-width: 640px;
+	max-height: 330px;
+}
+
+#canvasLockAspectContainer canvas{
 	width: 100%;
-	height: 500px;
+	margin-bottom: 56.25%;
+	border: 1px solid;
+	background: gold;
 }
 </style>
