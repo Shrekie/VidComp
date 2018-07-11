@@ -57,6 +57,10 @@ var stop = function(projectName){
     getProject(projectName).stopPlaying();
 };
 
+var reset = function(projectName){
+    getProject(projectName).resetPlayer();
+};
+
 var videoControl = function(projectName, frameHookName, frameHook){
     getProject(projectName).videoControl(frameHookName, frameHook);
 };
@@ -76,6 +80,7 @@ export default {
     addLayer,
     play,
     stop,
+    reset,
     videoControl,
     unbindAllFrameHooks
 };

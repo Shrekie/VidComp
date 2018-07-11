@@ -110,9 +110,17 @@ export default function () {
     this.startPlaying = function () {
         videoProjection.startPlaying(sourceLoader);
     };
+
+    this.resetPlayer = function () {
+        videoProjection.resetPlayer(sourceLoader);
+    };
     
-    // TODO: refactor all pure calls to this
-    this.videoControl = videoProjection.videoControl;
-    this.unbindAllFrameHooks = videoProjection.unbindAllFrameHooks;
+    this.videoControl = function (frameHookName, frameHook) {
+        videoProjection.videoControl(frameHookName, frameHook);
+    };
+
+    this.unbindAllFrameHooks = function () {
+        videoProjection.unbindAllFrameHooks();
+    };
 
 };

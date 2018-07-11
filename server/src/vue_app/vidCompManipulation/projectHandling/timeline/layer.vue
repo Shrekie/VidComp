@@ -33,13 +33,13 @@ export default {
 .layerContainer{
     display: inline-block;
     position: relative;
+    margin-top: 20px;
     margin-bottom: 20px;
     background-color: gray;
     height: 60px;
     width: 1000px;
     margin-right: 50%;
     margin-left: 50%;
-    right: 0px;
 }
 
 </style>

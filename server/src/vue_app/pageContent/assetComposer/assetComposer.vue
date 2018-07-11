@@ -10,8 +10,8 @@
 		<canvas v-project-composition="test"></canvas>
 	</div>
 	<v-btn small color="primary" @click="playVideo">Play</v-btn>
-	<v-btn small color="primary" @click="playVideo">Pause</v-btn>
-	<v-btn small color="primary" @click="playVideo">Reset</v-btn>
+	<v-btn small color="primary" @click="stopVideo">Pause</v-btn>
+	<v-btn small color="primary" @click="resetVideo">&lt;</v-btn>
 
 	<router-view>
 
@@ -21,6 +21,8 @@
 
 <script>
 import ImageInserter from './../../vidCompManipulation/resourceImport/imageInserter.vue';
+
+// TODO: pass projectName from props
 
 export default {
 	name: "assetComposer",
@@ -34,6 +36,12 @@ export default {
 	methods: {
 		playVideo () {
 			this.$vcomp('test').play();
+		},
+		stopVideo () {
+			this.$vcomp('test').stop();
+		},
+		resetVideo () {
+			this.$vcomp('test').reset();
 		}
 	}
 };

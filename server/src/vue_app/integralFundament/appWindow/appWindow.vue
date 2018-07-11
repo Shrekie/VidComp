@@ -4,7 +4,7 @@
 
 <template>
 <v-app>
-<v-navigation-drawer v-model="drawer" fixed temporary app width="120">
+<v-navigation-drawer v-model="drawer" fixed temporary app touchless="true" width="120">
 	<router-view name="sidebar"></router-view> <!-- #TODO: add this as component -->
 </v-navigation-drawer>
 <v-toolbar app dense>

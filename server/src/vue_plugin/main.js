@@ -2,6 +2,9 @@
     Entry point of plugin, install to vue app space.
 */
 
+// TODO: remove intermediate function calls
+// ex: play: VideoComposerManager.play,
+
 import VideoComposerManager from './src/videoComposerManager.js';
 
 export default {
@@ -17,6 +20,10 @@ export default {
                 console.log('unbound');
                 // Cleanup for new instance of canvas
                 VideoComposerManager.stop(binding.expression);
+                /*
+                    every component hooking up should also bind to unbind,
+                    so might be overkill
+                */
                 VideoComposerManager.unbindAllFrameHooks();
             }
         });
@@ -51,12 +58,20 @@ export default {
                 VideoComposerManager.play(projectName);
             };
 
+            var reset = function () {
+                VideoComposerManager.reset(projectName);
+            };
+
+            var stop = function () {
+                VideoComposerManager.stop(projectName);
+            }
+
             var videoControl = function (frameHookName, frameHook) {
                 VideoComposerManager.videoControl(projectName, frameHookName, frameHook);
             };
 
             var unbindAllFrameHooks = function () {
-                VideoComposerManager.unbindAllFrameHooks();
+                VideoComposerManager.unbindAllFrameHooks(projectName);
             };
 
             return {
@@ -67,6 +82,8 @@ export default {
                 changeResource,
                 changeLayer,
                 play,
+                stop,
+                reset,
                 videoControl,
                 unbindAllFrameHooks
             }

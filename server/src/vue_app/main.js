@@ -46,6 +46,7 @@ const routes = [
 
                 path: 'compose/:projectName',
                 component:assetComposer,
+                //props: true,
 
                 children: [{
                     path: '',
@@ -85,10 +86,22 @@ VidComp.addLayer('test', {
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigl6ned.googlevideo.com/videoplayback?ms=au%2Crdu&mv=m&pl=20&ipbits=0&initcwndbps=177500&source=youtube&ip=167.99.91.144&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&dur=63.088&id=o-ABNuY0Bf1Tb7umpKM87DkyCm91uD2Eb10bLzjTF5GWWV&fvip=2&signature=68BAA47353FE08596387AAE9E414843F3E94931E.B6603083C64CAA6750721EDC93C191F6A140580B&key=yt6&mime=video%2Fmp4&requiressl=yes&ei=LuZDW8a8FaaMxgKMrYvwBw&itag=22&mt=1531176401&mn=sn-aigl6ned%2Csn-aigs6n7y&c=WEB&fexp=23709359&ratebypass=yes&mm=31%2C29&expire=1531198094&lmt=1509022744117697',
+        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?ipbits=0&lmt=1471812821364858&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ei=nptFW-b4MtPOxwLEy5noCA&initcwndbps=161250&source=youtube&requiressl=yes&ratebypass=yes&dur=280.915&fvip=14&nh=%2CIgpwZjAxLmFtczE2Kgs3Mi4xNC4yMTMuOQ&fexp=23709359%2C23745105&expire=1531310078&mime=video%2Fmp4&key=yt6&c=WEB&itag=22&pl=20&mn=sn-aigzrn7z%2Csn-5hne6nse&ip=167.99.91.144&mm=31%2C26&ms=au%2Conr&mv=m&mt=1531288351&id=o-ACuv1VJ5vdPXH_oA48YG1PywTbLdaQL5NI-0Zx58Rhuo&signature=76B695C29DC1F1AD54DFDE8AFBFC3EC3EBA2328F.D2741B633397D24FBD6CF183817EC10E9CB2FDFA',
         resourceType: 'video',
 
         resourceLoaded: function () {
+
+            VidComp.addMedia('test', {
+                name: 'fullScreenTest',
+                layerIndex: 0,
+                size: [300, 160],
+                timelineTime: [0.21, 1.0],
+                position: [0,0],
+                videoStartTime: 0.80,
+                resource: {
+                    name: 'BunnyVideo'
+                }
+            });
 
             VidComp.addMedia('test', {
                 name: 'SECONDBALL',
@@ -96,7 +109,31 @@ VidComp.addLayer('test', {
                 size: [50, 100],
                 timelineTime: [0.11, 0.20],
                 position: [0,0],
-                videoStartTime: 100,
+                videoStartTime: 0.20,
+                resource: {
+                    name: 'BunnyVideo'
+                }
+            });
+
+            VidComp.addMedia('test', {
+                name: 'alonsideSecond',
+                layerIndex: 0,
+                size: [200, 100],
+                timelineTime: [0.15, 0.25],
+                position: [0,40],
+                videoStartTime: 1.0,
+                resource: {
+                    name: 'BunnyVideo'
+                }
+            });
+
+            VidComp.addMedia('test', {
+                name: 'anotheroneofthese',
+                layerIndex: 0,
+                size: [150, 100],
+                timelineTime: [0.21, 0.35],
+                position: [0,0],
+                videoStartTime: 1.0,
                 resource: {
                     name: 'BunnyVideo'
                 }
