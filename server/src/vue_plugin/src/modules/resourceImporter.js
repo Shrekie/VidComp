@@ -24,11 +24,11 @@ export default function () {
 
         if(resourceChange.name) resource.name = resourceChange.name;
         if(resourceChange.resourceType) resource.type = resourceChange.resourceType;
-        
-        resource.url = 'fetching';
 
         if(resourceChange.resourceLink){
 
+            resource.url = 'fetching';
+            
             sourceLoader.loadSelectedResource(resource);
 
             fetchResource(newResource.resourceLink)

@@ -105,16 +105,9 @@ export default function () {
     this.reset = function () {
         videoProjection.resetPlayer(sourceLoader);
     };
-
-    /*
-    this.timelineFeed = function(timelineHookName, timelineHook) {
-        contextHooks.registerHooks({name:timelineHookName, callbackHook:timelineHook});
-    }
-    */
    
     this.videoControl = function (frameHookName, frameHook) {
-        videoProjection.mediaDrawer
-        .contextHooks
+        videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:frameHookName, callbackHook:frameHook});
     };
 

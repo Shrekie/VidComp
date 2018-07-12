@@ -9,9 +9,12 @@ export default function () {
     var castMedia = function (media){
 
         if(!media.resource) {
-            console.log('YOU CASTED MEDIA WITH NO RESOURCE');
-        }else if(media.resource.url == 'fetching'){
 
+            console.log('YOU CASTED MEDIA WITH NO RESOURCE');
+
+        }else if(media.resource.url == 'fetching'){
+            
+            // TODO: do something better while fetching
             var image = new Image();
             image.src = 'https://i.imgur.com/IaS4CqB.png';
             store.sources.push({media:media, cast:image, type: 'image'});
@@ -60,6 +63,8 @@ export default function () {
     };
 
     this.loadSelectedResource = function (resource) {
+
+        // deletes and recasts media that has 'resource'
 
         let i = store.sources.length;
 

@@ -12,7 +12,7 @@ var videoProjectDir = function (projectName){
 export default {
     videoProject (projectName) {
         videoComposerManager.newProject(projectName);
-        return videoComposerManager.getProject(projectName);
+        return videoProjectDir(projectName);
     },
     install(Vue, options) {
 

@@ -1,12 +1,10 @@
+// TODO: make a seperate scanner drawer? or re render on stop?
+
 import ContextHooks from './contextHooks.js';
 
 export default function () {
-    // TODO: make a seperate scanner drawer? or re render on stop?
 
     var TimeTracker = function () {
-
-        // TODO: rename this class.
-        // the addition of isPlaying makes it weird.
 
         var startTime = 0;
         var nowTime = 0;
@@ -31,9 +29,7 @@ export default function () {
         }
 
         this.convertTimeInteger = function (time) {
-            //console.log(time);
             var Newtime = time*100;
-            //console.log(Newtime);
             return parseFloat(Newtime);
         }
 
@@ -101,9 +97,9 @@ export default function () {
 
         if(timeTracker.isPlaying){
 
-            this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'stop'});
             cancelAnimationFrame(animationFrame);
             stopContent(sourceLoader);
+            this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'stop'});
             timeTracker.isPlaying = false;
             this.contextHooks.runContextHooks({name: 'drawingUpdate'});
 
@@ -134,9 +130,7 @@ export default function () {
             this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'play'});
             stopContent(sourceLoader);
             timeTracker.isPlaying = true;
-            // FIXME: WHY CANT I BIND "this" TO "requestAnimationFrame" ????
             animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, this.contextHooks) }.bind(this));
-            console.log(timeTracker);
             timeTracker.startTime();
 
         }

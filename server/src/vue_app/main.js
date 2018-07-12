@@ -85,7 +85,7 @@ testProject.createLayer({
     },
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?ipbits=0&initcwndbps=148750&mm=31%2C29&mn=sn-aigl6nl7%2Csn-aigzrn7z&mt=1531414789&mv=m&pl=20&ei=bYlHW7T3E8aVVpXFjKAL&fexp=23709359%2C23745105&ms=au%2Crdu&lmt=1471812821364858&key=yt6&ip=167.99.91.144&dur=280.915&source=youtube&signature=381210CF968C569AB19607EFB5CDDF0B4F160965.DB39ADCFAB8CE5BBF34533DB81E7A78419FC0F42&itag=22&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ratebypass=yes&requiressl=yes&mime=video%2Fmp4&fvip=2&c=WEB&id=o-AKg2VSP2aWrJsx4LsmKJsCWwBoM58yDcspK1e0MhpsdO&expire=1531436493',
+        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?mn=sn-aigzrn7z%2Csn-5hne6nse&signature=55BDDA90FD3BCEF0A2AA76684017B2A5C66FD760.C8F2782D2701783946789BC2E5D4B84B36CBE810&source=youtube&requiressl=yes&nh=%2CIgpwZjAxLmFtczE2Kgs3Mi4xNC4yMTMuOQ&mime=video%2Fmp4&beids=%5B9466593%5D&ipbits=0&initcwndbps=150000&fexp=23709359%2C23745105&dur=280.915&key=yt6&lmt=1471812821364858&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ip=167.99.91.144&mv=m&ratebypass=yes&id=o-AIs7dyuO2sCO4kFCk84v1gmy8U3I6EcuxifL_2D4aRW2&fvip=14&c=WEB&expire=1531459011&mm=31%2C26&ms=au%2Conr&ei=Y-FHW8W0F5CcxwLAg7oY&itag=22&pl=20&mt=1531437280',
         resourceType: 'video'
     }
 
@@ -107,7 +107,7 @@ testProject.addMedia({
     name: 'alonsideSecond',
     layerIndex: 0,
     size: [200, 100],
-    timelineTime: [0.15, 0.25],
+    timelineTime: [0.23, 0.30],
     position: [0,40],
     videoStartTime: 1.0,
     resource: {
@@ -119,7 +119,7 @@ testProject.addMedia({
     name: 'anotheroneofthese',
     layerIndex: 0,
     size: [150, 100],
-    timelineTime: [0.21, 0.35],
+    timelineTime: [0.40, 0.42],
     position: [0,0],
     videoStartTime: 1.0,
     resource: {
@@ -131,7 +131,7 @@ testProject.addMedia({
     name: 'fullScreenTest',
     layerIndex: 0,
     size: [300, 160],
-    timelineTime: [0.21, 1.0],
+    timelineTime: [0.43, 0.58],
     position: [0,0],
     videoStartTime: 0.80,
     resource: {
@@ -143,7 +143,7 @@ testProject.addMedia({
     name: 'CAT',
     layerIndex: 0,
     size: [100, 100],
-    timelineTime: [0.113, 0.205],
+    timelineTime: [0.65, 1.00],
     position: [40, 40],
     videoStartTime: 0,
     newResource: {

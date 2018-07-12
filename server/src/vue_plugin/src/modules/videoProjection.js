@@ -1,13 +1,8 @@
-// FIXME: kinda shallow
 import MediaDrawer from './mediaDrawer.js';
 
 export default function () {
 
     this.videoOutput = {};
-
-    var store = {
-        hooks: []
-    };
 
     this.mediaDrawer = new MediaDrawer();
 

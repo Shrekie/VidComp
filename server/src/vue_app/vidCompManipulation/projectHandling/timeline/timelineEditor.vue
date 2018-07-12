@@ -28,6 +28,43 @@ export default {
         TimelineSlider
 	},
     methods: {
+        setVideoStartTime: function (){
+
+            // TODO: move this behaviour more to component?
+            this.$vcomp(this.projectName).videoControl('beforeActionStart', function(action, drawContext){
+                
+                if(action == 'play'){
+                    var startTime = (this.$refs.timeline.scrollLeft*100)
+                    console.log(startTime);
+                    drawContext.timeTracker.elapsedDateTime = startTime;
+                    // FIXME: will probably not use scrollbars so fix these
+                    this.$refs.timeline.style.overflow = "hidden";
+                }
+
+                if(action == 'stop'){
+                    this.$refs.timeline.style.overflow = "overlay";
+                }
+
+                if(action == 'reset'){
+                    this.$refs.timeline.scrollLeft = 0;
+                    this.$refs.timeline.style.overflow = "overlay";
+                }
+    
+            }.bind(this));
+
+        },
+        updateScrolling: function () {
+
+            this.$vcomp(this.projectName).videoControl('drawingUpdate', function(drawContext){
+
+                if(drawContext.timeTracker.isPlaying){
+                    var currentSliderTime = ((drawContext.timeTracker.convertTimeInteger(drawContext.timeTracker.elapsed))*10);
+                    if(currentSliderTime != this.$refs.timeline.scrollLeft) this.$refs.timeline.scrollLeft = currentSliderTime;
+                }
+    
+            }.bind(this));
+
+        }
     },
     props: ['projectName'],
 	data() {
@@ -43,39 +80,8 @@ export default {
         
     },
     mounted: function () {
-
-        // TODO: move this behaviour more to component?
-        // TODO: make overflow not scrollable when playing
-
-        this.$vcomp(this.projectName).videoControl('beforeActionStart', function(action, drawContext){
-            
-            if(action == 'play'){
-                var startTime = (this.$refs.timeline.scrollLeft*100)
-                console.log(startTime);
-                drawContext.timeTracker.elapsedDateTime = startTime;
-                // FIXME: will probably not use scrollbars so fix these
-                this.$refs.timeline.style.overflow = "hidden";
-            }
-
-            if(action == 'stop'){
-                this.$refs.timeline.style.overflow = "overlay";
-            }
-
-            if(action == 'reset'){
-                this.$refs.timeline.scrollLeft = 0;
-                this.$refs.timeline.style.overflow = "overlay";
-            }
- 
-        }.bind(this));
-
-        this.$vcomp(this.projectName).videoControl('drawingUpdate', function(drawContext){
-            if(drawContext.timeTracker.isPlaying){
-                var currentSliderTime = ((drawContext.timeTracker.convertTimeInteger(drawContext.timeTracker.elapsed))*10);
-                if(currentSliderTime != this.$refs.timeline.scrollLeft) this.$refs.timeline.scrollLeft = currentSliderTime;
-            }
- 
-        }.bind(this));
-
+        this.setVideoStartTime();
+        this.updateScrolling();
     },
 
     beforeDestroy: function () {
@@ -105,19 +111,9 @@ export default {
     height: 100%;
     position: relative;
     /*
-        #TODO: THE SCROLLLLLLLLLLLLLLLLL
-        I hate how this is implemented.
-        Most probably hide the overflow and navigate with custom made scrolling
+        #TODO: remove scrollbar support entirely, implement own "scrollbars"
     */
     overflow: overlay; 
-
 }
-
-/*
-    MAKE SCROLL ALWAYS OVERLAYED U BROWSER CUCKS
-    with scroll: 1649
-    without scroll: 1666
-    (chrome)
-*/
 
 </style>

@@ -16,6 +16,7 @@ export default function () {
         return store.layers.push(layer);
     };
 
+    // FIXME: probably remove this, remember change
     this.eachLayer = function (cb) {
         store.layers.forEach(function(layer){
             cb(layer);

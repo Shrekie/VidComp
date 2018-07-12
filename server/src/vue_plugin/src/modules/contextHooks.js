@@ -24,7 +24,8 @@ export default function (drawingContext) {
                     console.log('dont run on draw ' + context.name);
                     contextHook.callbackHook(context.action, this.drawingContext);
                 }
-                
+
+                // FIXME: probably remove, wont need anything like this.
                 if(context.name == 'addedMedia' && 
                     contextHook.name == context.name){
                     contextHook.callbackHook(context.media, this.drawingContext);
@@ -35,17 +36,13 @@ export default function (drawingContext) {
     };
 
     this.initializeContextHooks = function (name, callbackHook) {
-        console.log(name + 'INIT');
         if(name == 'drawingUpdate')
             callbackHook(this.drawingContext);
     };
 
     this.registerHooks = function (newHook){
-        // TODO: implement hook init on 'contextHooks'
         this.initializeContextHooks(newHook.name, newHook.callbackHook);
-
         this.frameContextHooks.push(newHook);
-        console.log(this.frameContextHooks);
     };
 
     this.unregisterHooks = function () {
