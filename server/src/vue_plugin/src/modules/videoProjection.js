@@ -1,3 +1,4 @@
+// FIXME: kinda shallow
 import MediaDrawer from './mediaDrawer.js';
 
 export default function () {
@@ -8,32 +9,22 @@ export default function () {
         hooks: []
     };
 
-    var mediaDrawer = new MediaDrawer();
+    this.mediaDrawer = new MediaDrawer();
 
     this.setTarget = function (canvas) {
         this.videoOutput = {ctx: canvas.getContext('2d'), el: canvas};
     };
 
     this.startPlaying = function (sourceLoader) {
-        mediaDrawer.drawSources(sourceLoader, this.videoOutput);
+        this.mediaDrawer.drawSources(sourceLoader, this.videoOutput);
     };
     
     this.resetPlayer = function (sourceLoader) {
-        mediaDrawer.resetDrawSources(sourceLoader);
-    }
-
-    this.unbindAllFrameHooks = function () {
-        store.hooks = [];
-        mediaDrawer.unregisterFrameHooks();
-    };
-
-    this.videoControl = function (frameHookName, frameHook) {
-        store.hooks.push({name: frameHookName, callbackHook:frameHook});
-        mediaDrawer.registerFrameHooks({name: frameHookName, callbackHook:frameHook}, store.hooks);
+        this.mediaDrawer.resetDrawSources(sourceLoader);
     }
 
     this.stopPlaying = function (sourceLoader) {
-        mediaDrawer.stopDrawSources(sourceLoader);
+        this.mediaDrawer.stopDrawSources(sourceLoader);
     };
 
 };

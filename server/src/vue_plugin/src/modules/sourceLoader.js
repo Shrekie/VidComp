@@ -10,8 +10,12 @@ export default function () {
 
         if(!media.resource) {
             console.log('YOU CASTED MEDIA WITH NO RESOURCE');
-            // TODO: do something about media with no resource
-            // maybe give cast that just renders them black or something
+        }else if(media.resource.url == 'fetching'){
+
+            var image = new Image();
+            image.src = 'https://i.imgur.com/IaS4CqB.png';
+            store.sources.push({media:media, cast:image, type: 'image'});
+
         }else{
 
             if(media.resource.type == 'image'){
@@ -62,13 +66,16 @@ export default function () {
         while (i--) {
             if( store.sources[i].media.resource.name == resource.name ){
                 decastMedia(store.sources[i]);
+                console.log(resource);
                 castMedia(store.sources[i].media);
                 store.sources.splice(i, 1);
             }
         }
+        
+        console.log(store.sources);
 
     };
-
+    
     this.loadMedia = function (media) {
         castMedia(media);
     };

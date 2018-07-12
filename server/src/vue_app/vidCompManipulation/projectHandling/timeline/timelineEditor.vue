@@ -3,11 +3,15 @@
 -->
 
 <template>
-    <div ref="timeline" class="timelineContainer">
+    <div class="timelineContainer">
+        <div ref="timeline" class="viewport">
 
-        <TimelineSlider ref="timelineSlider"></TimelineSlider>
-        <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
-        v-for="layer in allLayers" :key="layer.layerIndex"></Layer>
+                <TimelineSlider ref="timelineSlider"></TimelineSlider>
+
+                <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
+                v-for="layer in allLayers" :key="layer.layerIndex"></Layer>
+
+        </div>
     </div>
 </template>
 
@@ -42,18 +46,24 @@ export default {
 
         // TODO: move this behaviour more to component?
         // TODO: make overflow not scrollable when playing
+
         this.$vcomp(this.projectName).videoControl('beforeActionStart', function(action, drawContext){
             
-            console.log(action);
-
             if(action == 'play'){
                 var startTime = (this.$refs.timeline.scrollLeft*100)
                 console.log(startTime);
                 drawContext.timeTracker.elapsedDateTime = startTime;
+                // FIXME: will probably not use scrollbars so fix these
+                this.$refs.timeline.style.overflow = "hidden";
+            }
+
+            if(action == 'stop'){
+                this.$refs.timeline.style.overflow = "overlay";
             }
 
             if(action == 'reset'){
                 this.$refs.timeline.scrollLeft = 0;
+                this.$refs.timeline.style.overflow = "overlay";
             }
  
         }.bind(this));
@@ -67,6 +77,7 @@ export default {
         }.bind(this));
 
     },
+
     beforeDestroy: function () {
         this.$vcomp(this.projectName).unbindAllFrameHooks();
         console.log('beforeDestroy');
@@ -77,13 +88,36 @@ export default {
 </script>
 
 <style>
+
 .timelineContainer{
     background-color: yellow;
-    margin-top: 20px;
+    margin: 0 auto;
     width: 100%;
-    max-height: 240px;
     height: 240px;
-    overflow: auto;
+    max-height: 240px;
+    position: relative;
+    overflow:hidden;
+    transform: translateZ(0);
 }
+
+.viewport{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /*
+        #TODO: THE SCROLLLLLLLLLLLLLLLLL
+        I hate how this is implemented.
+        Most probably hide the overflow and navigate with custom made scrolling
+    */
+    overflow: overlay; 
+
+}
+
+/*
+    MAKE SCROLL ALWAYS OVERLAYED U BROWSER CUCKS
+    with scroll: 1649
+    without scroll: 1666
+    (chrome)
+*/
 
 </style>

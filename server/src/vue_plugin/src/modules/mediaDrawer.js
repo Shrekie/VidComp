@@ -1,3 +1,5 @@
+import ContextHooks from './contextHooks.js';
+
 export default function () {
     // TODO: make a seperate scanner drawer? or re render on stop?
 
@@ -37,34 +39,8 @@ export default function () {
 
     };
 
-    var ContextHooks = function (drawingContext) {
-
-        // TODO: make this run only when needed
-
-        this.drawingContext = drawingContext;
-        this.frameContextHooks = [];
-
-        this.runContextHooks = function (contextType) {
-            if(this.frameContextHooks){
-                this.frameContextHooks.forEach(function(contextHook, index){
-
-                    if(contextType.name == 'drawingUpdate' && 
-                    contextHook.name == contextType.name)
-                        contextHook.callbackHook(contextHooks.drawingContext);
-
-                    if(contextType.name == 'beforeActionStart' && 
-                    contextHook.name == contextType.name)
-                        contextHook.callbackHook(contextType.action, contextHooks.drawingContext);
-                    
-
-                });
-            }
-        }
-
-    };
-
     var timeTracker = new TimeTracker();
-    var contextHooks = new ContextHooks({timeTracker});
+    this.contextHooks = new ContextHooks({timeTracker});
     var animationFrame = {};
 
     var stopContent = function (sourceLoader) {
@@ -80,8 +56,7 @@ export default function () {
 
     };
 
-    var videoUpdate = function (sourceLoader, videoOutput) {
-
+    var videoUpdate = function (sourceLoader, videoOutput, contextHooks) {
         videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
         timeTracker.trackTime();
 
@@ -118,32 +93,19 @@ export default function () {
         });
 
         contextHooks.runContextHooks({name: 'drawingUpdate'});
-        animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput) });
+        animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
 
-    };
-
-    this.registerFrameHooks = function (newHook, frameContextHooks){
-        // TODO: implement hook init on 'contextHooks'
-        if(newHook.frameHookName == 'drawingUpdate')
-            newHook.callbackHook(contextHooks.drawingContext);
-
-        contextHooks.frameContextHooks = frameContextHooks;
-    };
-
-    this.unregisterFrameHooks = function () {
-        // TODO: add argument for which to unregister
-        contextHooks.frameContextHooks = [];
     };
 
     this.stopDrawSources = function (sourceLoader) {
 
         if(timeTracker.isPlaying){
 
-            contextHooks.runContextHooks({name: 'beforeActionStart', action: 'stop'});
+            this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'stop'});
             cancelAnimationFrame(animationFrame);
             stopContent(sourceLoader);
             timeTracker.isPlaying = false;
-            contextHooks.runContextHooks({name: 'drawingUpdate'});
+            this.contextHooks.runContextHooks({name: 'drawingUpdate'});
 
         }
 
@@ -154,9 +116,9 @@ export default function () {
         cancelAnimationFrame(animationFrame);
         stopContent(sourceLoader);
         timeTracker.resetTime();
-        contextHooks.runContextHooks({name: 'beforeActionStart', action: 'reset'});
+        this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'reset'});
         timeTracker.isPlaying = false;
-        contextHooks.runContextHooks({name: 'drawingUpdate'});
+        this.contextHooks.runContextHooks({name: 'drawingUpdate'});
 
     };
 
@@ -169,10 +131,11 @@ export default function () {
 
         }else{
 
-            contextHooks.runContextHooks({name: 'beforeActionStart', action: 'play'});
+            this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'play'});
             stopContent(sourceLoader);
             timeTracker.isPlaying = true;
-            animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput) });
+            // FIXME: WHY CANT I BIND "this" TO "requestAnimationFrame" ????
+            animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, this.contextHooks) }.bind(this));
             console.log(timeTracker);
             timeTracker.startTime();
 

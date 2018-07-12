@@ -1,3 +1,5 @@
+// TODO: catch errors better and stuff, cleanup
+
 export default function () {
 
     var store = {
@@ -5,12 +7,9 @@ export default function () {
     };
     
     const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxy
-    var fetchResource = function (resourceLink, cb) {
-        fetch(proxyurl + resourceLink)
-        .then(res => res.blob())
-        .then(blob => {
-            cb(URL.createObjectURL(blob));
-        });
+    
+    var fetchResource = function (resourceLink) {
+        return fetch(proxyurl + resourceLink);
     };
 
     this.existingResource = function (name) {
@@ -19,41 +18,62 @@ export default function () {
         });
     };
 
-    this.changeResource = function(resourceChange, cb){
+    this.changeResource = function(resourceChange, sourceLoader){
 
         var resource = this.existingResource(resourceChange.name);
 
         if(resourceChange.name) resource.name = resourceChange.name;
         if(resourceChange.resourceType) resource.type = resourceChange.resourceType;
+        
+        resource.url = 'fetching';
 
         if(resourceChange.resourceLink){
-            fetchResource(resourceChange.resourceLink, function(url){
-                resource.url = url;
-                cb(resource);
-            });
+
+            sourceLoader.loadSelectedResource(resource);
+
+            fetchResource(newResource.resourceLink)
+            .then(res => res.blob())
+            .then(blob => {
+                resource.url = URL.createObjectURL(blob);
+                console.log(resource);
+                sourceLoader.loadSelectedResource(resource);
+            }); 
+
+            return resource
+
         }else{
-            cb(resource);
+            return resource;
         }
 
     }
 
-    this.importResource = function (newResource, cb) { 
+    this.importResource = function (newResource, sourceLoader) { 
 
         var resourceExists =  this.existingResource(newResource.name);
 
         if(resourceExists){
-            cb(resourceExists);
+            return resourceExists;
         }
         else{
-            fetchResource(newResource.resourceLink, function(url){
-                var resource = {
-                    name:newResource.name,
-                    url:url,
-                    type: newResource.resourceType
-                };
-                store.resources.push(resource);
-                cb(resource);
-            });
+
+            var resource = {
+                name: newResource.name,
+                url: 'fetching',
+                type: newResource.resourceType
+            };
+
+            store.resources.push(resource);
+            
+            fetchResource(newResource.resourceLink)
+            .then(res => res.blob())
+            .then(blob => {
+                resource.url = URL.createObjectURL(blob);
+                console.log(resource);
+                sourceLoader.loadSelectedResource(resource);
+            }); 
+
+            return resource;
+
         }
 
     };
