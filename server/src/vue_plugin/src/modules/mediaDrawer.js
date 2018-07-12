@@ -1,4 +1,5 @@
 export default function () {
+    // TODO: make a seperate scanner drawer? or re render on stop?
 
     var TimeTracker = function () {
 
@@ -46,9 +47,6 @@ export default function () {
         this.runContextHooks = function (contextType) {
             if(this.frameContextHooks){
                 this.frameContextHooks.forEach(function(contextHook, index){
-
-                    //console.log(contextType.name);
-                    //console.log(contextHook.name);
 
                     if(contextType.name == 'drawingUpdate' && 
                     contextHook.name == contextType.name)

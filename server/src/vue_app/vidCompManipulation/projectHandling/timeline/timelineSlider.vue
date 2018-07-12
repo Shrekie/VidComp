@@ -8,8 +8,11 @@
 
 <script>
 
-// FIXME: timelineSlider messes up on zoom, fix: no scroll overflow on <html> 
-// ^ this fixes when website more applike
+    /*
+        FIXME: if scroll overflow is not overlay the timeslider is misaligned.
+        add some js or something that readjusts slider, also have dynamic top or something
+        when user zooms, remember element is fixed.
+    */
 
 export default {
     name: "timelineSlider",

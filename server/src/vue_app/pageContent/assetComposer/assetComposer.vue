@@ -7,7 +7,7 @@
 	
 	<!-- #TODO: add in component -->
 	<div id="canvasLockAspectContainer">
-		<canvas v-project-composition="test"></canvas>
+		<canvas v-project-composition=this.projectName></canvas>
 	</div>
 	<v-btn small color="primary" @click="playVideo">Play</v-btn>
 	<v-btn small color="primary" @click="stopVideo">Pause</v-btn>
@@ -26,6 +26,7 @@ import ImageInserter from './../../vidCompManipulation/resourceImport/imageInser
 
 export default {
 	name: "assetComposer",
+	props: ['projectName'],
 	components: {
 		ImageInserter
 	},
@@ -35,13 +36,13 @@ export default {
 	},
 	methods: {
 		playVideo () {
-			this.$vcomp('test').play();
+			this.$vcomp(this.projectName).play();
 		},
 		stopVideo () {
-			this.$vcomp('test').stop();
+			this.$vcomp(this.projectName).stop();
 		},
 		resetVideo () {
-			this.$vcomp('test').reset();
+			this.$vcomp(this.projectName).reset();
 		}
 	}
 };

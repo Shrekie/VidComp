@@ -28,7 +28,6 @@ export default function () {
 
         if(resourceChange.resourceLink){
             fetchResource(resourceChange.resourceLink, function(url){
-                console.log(store.resources);
                 resource.url = url;
                 cb(resource);
             });
@@ -53,7 +52,6 @@ export default function () {
                     type: newResource.resourceType
                 };
                 store.resources.push(resource);
-                console.log(store.resources);
                 cb(resource);
             });
         }

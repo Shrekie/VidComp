@@ -46,7 +46,7 @@ const routes = [
 
                 path: 'compose/:projectName',
                 component:assetComposer,
-                //props: true,
+                props: true,
 
                 children: [{
                     path: '',
@@ -71,9 +71,9 @@ const routes = [
 ];
 
 // VideoComposer init
-VidComp.newProject('test');
+var testProject = VidComp.videoProject('test');
 
-VidComp.addLayer('test', {
+testProject.createLayer({
 
     newMedia: {
         name: 'FIRSTBALL',
@@ -91,7 +91,7 @@ VidComp.addLayer('test', {
 
         resourceLoaded: function () {
 
-            VidComp.addMedia('test', {
+            testProject.addMedia({
                 name: 'fullScreenTest',
                 layerIndex: 0,
                 size: [300, 160],
@@ -103,7 +103,7 @@ VidComp.addLayer('test', {
                 }
             });
 
-            VidComp.addMedia('test', {
+            testProject.addMedia({
                 name: 'SECONDBALL',
                 layerIndex: 0,
                 size: [50, 100],
@@ -115,7 +115,7 @@ VidComp.addLayer('test', {
                 }
             });
 
-            VidComp.addMedia('test', {
+            testProject.addMedia({
                 name: 'alonsideSecond',
                 layerIndex: 0,
                 size: [200, 100],
@@ -127,7 +127,7 @@ VidComp.addLayer('test', {
                 }
             });
 
-            VidComp.addMedia('test', {
+            testProject.addMedia({
                 name: 'anotheroneofthese',
                 layerIndex: 0,
                 size: [150, 100],
@@ -143,7 +143,7 @@ VidComp.addLayer('test', {
     }
 });
 
-VidComp.addMedia('test', {
+testProject.addMedia({
     name: 'CAT',
     layerIndex: 0,
     size: [100, 100],

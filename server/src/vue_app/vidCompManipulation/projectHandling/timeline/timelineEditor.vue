@@ -83,7 +83,6 @@ export default {
     width: 100%;
     max-height: 240px;
     height: 240px;
-    /*FIXME: if overflow is not overlay it breaks*/
     overflow: auto;
 }
 

@@ -46,7 +46,9 @@ export default function () {
     };
 
     this.addMedia = function (newMedia) {
-
+        
+        console.log(newMedia);
+        
         if ( newMedia.newResource ){
 
             // add new resource to new media in existing layer
@@ -77,7 +79,7 @@ export default function () {
 
     };
 
-    this.editResource = function(resourceChange){
+    this.changeResource = function(resourceChange){
 
         resourceImporter.changeResource(resourceChange, function(resource){
             // recast media, the source has changed.
@@ -86,7 +88,7 @@ export default function () {
 
     };
 
-    this.editLayer = function(layerChange){
+    this.changeLayer = function(layerChange){
         var layer = timeline.getLayer(layerChange.layerIndex);
         layer.changeMedia(layerChange);
     };
@@ -103,15 +105,15 @@ export default function () {
         return timeline.getAllLayers();
     };
 
-    this.stopPlaying = function () {
+    this.stop = function () {
         videoProjection.stopPlaying(sourceLoader);
     };
 
-    this.startPlaying = function () {
+    this.play = function () {
         videoProjection.startPlaying(sourceLoader);
     };
 
-    this.resetPlayer = function () {
+    this.reset = function () {
         videoProjection.resetPlayer(sourceLoader);
     };
     

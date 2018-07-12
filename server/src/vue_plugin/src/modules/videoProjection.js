@@ -11,13 +11,10 @@ export default function () {
     var mediaDrawer = new MediaDrawer();
 
     this.setTarget = function (canvas) {
-        console.log(canvas);
         this.videoOutput = {ctx: canvas.getContext('2d'), el: canvas};
-        console.log( this.videoOutput );
     };
 
     this.startPlaying = function (sourceLoader) {
-        console.log(this.videoOutput);
         mediaDrawer.drawSources(sourceLoader, this.videoOutput);
     };
     
