@@ -1,47 +1,31 @@
 /*
-    bind hooks on specific actions
+    context hook for specific events.
 */
-// TODO: make base class and inherit for specific classes
-// TODO: also after above make it mixin?
-export default function (drawingContext) {
-
-    // TODO: make this run only when needed
-
-    if(drawingContext) this.drawingContext = drawingContext;
+// TODO: Maybe add context hook for media changes?
+export default  function (context) {
+    
     this.frameContextHooks = [];
+    this.context = context;
 
     this.runContextHooks = function (context){
         if(this.frameContextHooks){
-            this.frameContextHooks.forEach(function(contextHook, index){
 
-                if(context.name == 'drawingUpdate' && 
-                context.name == context.name){
-                    contextHook.callbackHook(this.drawingContext);
+            this.frameContextHooks.forEach(function(contextHook){
+                
+                if(contextHook.name == context.name){
+                    contextHook.callbackHook(context);
                 }
 
-                if(context.name == 'beforeActionStart' && 
-                contextHook.name == context.name){
-                    console.log('dont run on draw ' + context.name);
-                    contextHook.callbackHook(context.action, this.drawingContext);
-                }
+            });
 
-                // FIXME: probably remove, wont need anything like this.
-                if(context.name == 'addedMedia' && 
-                    contextHook.name == context.name){
-                    contextHook.callbackHook(context.media, this.drawingContext);
-                }
-
-            }.bind(this));
         }
     };
 
-    this.initializeContextHooks = function (name, callbackHook) {
-        if(name == 'drawingUpdate')
-            callbackHook(this.drawingContext);
+    this.initializeContextHook = function (hook) {
+        hook.callbackHook(this.context);
     };
 
     this.registerHooks = function (newHook){
-        this.initializeContextHooks(newHook.name, newHook.callbackHook);
         this.frameContextHooks.push(newHook);
     };
 

@@ -8,7 +8,8 @@ export default function (layerIndex, newMedia) {
 
     var Media = function (newMedia){ 
 
-        this.name = newMedia.name;
+        this.layerIndex = newMedia.layerIndex;
+        this.mediaIndex = newMedia.mediaIndex;
         this.resource = newMedia.resource;
         this.timelineTime = newMedia.timelineTime;
 
@@ -25,28 +26,22 @@ export default function (layerIndex, newMedia) {
         return store.media;
     };
 
-    this.getMedia = function (name){
-        return store.media.find(function(element) 
-        {return element.name == name;});
-    };
-
-    var getMediaIndex = function (name){
-        return store.media.findIndex(function(element) 
-        {return element.name == name;});
+    this.getMedia = function (mediaIndex){
+        return store.media[mediaIndex];
     };
 
     this.changeMedia = function (mediaChange) {
-
-        var mediaIndex = getMediaIndex(mediaChange.name);
-        store.media[mediaIndex] = mediaChange;
-
+        store.media[mediaChange.mediaIndex] = mediaChange;
+        console.log(store.media[mediaChange.mediaIndex]);
     };
 
     this.addMedia = function (newMedia) {
+        newMedia.mediaIndex = store.media.length;
         store.media.push(new Media(newMedia));
+        return newMedia.mediaIndex;
     };
 
-    
+    //FIXME: remove this, remember change
     this.eachMedia = function (cb) {
 
         store.media.forEach(function(resource){

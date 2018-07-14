@@ -7,7 +7,7 @@
 
     <!-- <v-btn small color="primary" @click="showInsertMedia">add Media</v-btn> -->
 
-    <Media ref="medias" v-bind:media-name="media.name" 
+    <Media ref="medias" v-bind:media-index="media.mediaIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
     v-for="media in allLayerMedia" :key="media.name"></Media>
 
@@ -27,8 +27,8 @@ export default {
     data() {
 
         var allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
-        console.log(allLayerMedia);
-		return {
+        
+        return {
             allLayerMedia,
             projectName: this.projectName,
             width: "100px"
@@ -42,24 +42,24 @@ export default {
     },
     methods: {
         setInitalLayerSize () {
+
             if(!this.allLayerMedia.length) return "100px";
             var currentTotal = 0;
-            console.log(this.allLayerMedia);
             this.allLayerMedia.forEach(element => {
-                console.log(element);
                 if(element.timelineTime[1] > currentTotal)
                 currentTotal = element.timelineTime[1];
             });
             this.width = (currentTotal*1000) + 'px';
-            console.log(this.width);
+
         },
         showInsertMedia () {
+
             this.$router.push({ path: `${this.projectName}/addmedia/${this.layerIndex}`});
+
         }
     },
     mounted: function () {
         this.setInitalLayerSize();
-        console.log(this.width);
     }
 };
 </script>
@@ -69,6 +69,7 @@ export default {
 .layerContainer{
     display: inline-block;
     position: relative;
+    vertical-align:bottom;
     margin-top: 20px;
     margin-bottom: 20px;
     background-color: gray;
@@ -76,6 +77,7 @@ export default {
     width: 0px;
     margin-right: 50%;
     margin-left: 50%;
+    z-index: 1;
 }
 
 </style>

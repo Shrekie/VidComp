@@ -76,7 +76,17 @@ export default function () {
                 store.sources.splice(i, 1);
             }
         }
-        
+
+        function compare(a,b) {
+            if (a.media.layerIndex < b.media.layerIndex)
+              return 1;
+            if (a.media.layerIndex > b.media.layerIndex)
+              return -1;
+            return 0;
+        }
+          
+        store.sources.sort(compare);
+
         console.log(store.sources);
 
     };

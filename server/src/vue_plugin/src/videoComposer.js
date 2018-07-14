@@ -18,18 +18,20 @@ export default function () {
         if(newLayer.newResource && newLayer.newMedia){
 
             // create layer with media and resource
-            var layer = new Layer(newLayer.newMedia.layerIndex, newLayer.newMedia);
-            timeline.addLayer(layer);
             newLayer.newMedia.resource = resourceImporter.importResource(newLayer.newResource, sourceLoader);
-            layer.changeMedia(newLayer.newMedia);
-            sourceLoader.loadMedia(layer.getMedia(newLayer.newMedia.name));
+            var layer = new Layer(newLayer.newMedia.layerIndex);
+            let mediaIndex = layer.addMedia(newLayer.newMedia);
+            console.log(mediaIndex);
+            timeline.addLayer(layer);
+            sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
         }else if (newLayer.newMedia) {
 
             // create layer with empty media
-            var layer = new Layer(newLayer.newMedia.layerIndex, newLayer.newMedia);
+            var layer = new Layer(newLayer.newMedia.layerIndex);
+            let mediaIndex = layer.addMedia(newLayer.newMedia);
             timeline.addLayer(layer);
-            sourceLoader.loadMedia(layer.getMedia(newLayer.newMedia.name));
+            sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
         }else{
 
@@ -50,8 +52,8 @@ export default function () {
             // add new resource to new media in existing layer
             var layer = timeline.getLayer(newMedia.layerIndex);
             newMedia.resource = resourceImporter.importResource(newMedia.newResource,sourceLoader);
-            layer.addMedia(newMedia);
-            sourceLoader.loadMedia(layer.getMedia(newMedia.name));
+            let mediaIndex = layer.addMedia(newMedia);
+            sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
 
         }else if ( newMedia.resource ) {
@@ -59,15 +61,16 @@ export default function () {
             // add new media with existing resource
             var layer = timeline.getLayer(newMedia.layerIndex);
             newMedia.resource = resourceImporter.existingResource(newMedia.resource.name);
-            layer.addMedia(newMedia);
-            sourceLoader.loadMedia(layer.getMedia(newMedia.name));
+            let mediaIndex = layer.addMedia(newMedia);
+            sourceLoader.loadMedia(layer.getMedia(mediaIndex));
             
 
         } else {
 
             // add new media without resource
             var layer = timeline.getLayer(newMedia.layerIndex);
-            layer.addMedia(newMedia);
+            let mediaIndex = layer.addMedia(newMedia);
+            sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
         }
 
@@ -75,11 +78,6 @@ export default function () {
 
     this.changeResource = function(resourceChange){
         resourceImporter.changeResource(resourceChange, sourceLoader);
-    };
-
-    this.changeLayer = function(layerChange){
-        var layer = timeline.getLayer(layerChange.layerIndex);
-        layer.changeMedia(layerChange);
     };
 
     this.setTarget = function (canvas) {
@@ -107,8 +105,15 @@ export default function () {
     };
    
     this.videoControl = function (frameHookName, frameHook) {
+
         videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:frameHookName, callbackHook:frameHook});
+
+        if(frameHookName == 'drawingUpdate'){
+            videoProjection.mediaDrawer.contextHooks
+            .initializeContextHook({name:frameHookName, callbackHook:frameHook});
+        }
+
     };
 
     this.unbindAllFrameHooks = function () {

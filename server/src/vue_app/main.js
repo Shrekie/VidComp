@@ -25,8 +25,8 @@ import workspaceContent from './pageSection/workspaceContent/workspaceContent.vu
 import sidebarContent from './pageSection/sidebarContent/sidebarContent.vue';
 import assetComposer from './pageContent/assetComposer/assetComposer.vue';
 import assetRelocator from './pageContent/assetRelocator/assetRelocator.vue';
-import timelineEditor from './vidCompManipulation/projectHandling/timeline/timelineEditor.vue';
-import establishMedia from './vidCompManipulation/projectHandling/timelineGenerators/establishMedia.vue';
+import timelineEditor from './projectHandling/timeline/timelineEditor.vue';
+import establishMedia from './projectHandling/timelineGenerators/establishMedia.vue';
 
 // Stores
 import pve_store from './stores/pve_store.js';
@@ -76,23 +76,22 @@ var testProject = VidComp.videoProject('test');
 testProject.createLayer({
 
     newMedia: {
-        name: 'FIRSTBALL',
         layerIndex: 0,
         size: [200, 100],
         timelineTime: [0.00, 0.10],
         position: [0,0],
         videoStartTime: 0
     },
+
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?mn=sn-aigzrn7z%2Csn-5hne6nse&signature=55BDDA90FD3BCEF0A2AA76684017B2A5C66FD760.C8F2782D2701783946789BC2E5D4B84B36CBE810&source=youtube&requiressl=yes&nh=%2CIgpwZjAxLmFtczE2Kgs3Mi4xNC4yMTMuOQ&mime=video%2Fmp4&beids=%5B9466593%5D&ipbits=0&initcwndbps=150000&fexp=23709359%2C23745105&dur=280.915&key=yt6&lmt=1471812821364858&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ip=167.99.91.144&mv=m&ratebypass=yes&id=o-AIs7dyuO2sCO4kFCk84v1gmy8U3I6EcuxifL_2D4aRW2&fvip=14&c=WEB&expire=1531459011&mm=31%2C26&ms=au%2Conr&ei=Y-FHW8W0F5CcxwLAg7oY&itag=22&pl=20&mt=1531437280',
+        resourceLink: 'https://r14---sn-q0c7dn7y.googlevideo.com/videoplayback?sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&signature=624438FD70D4888F00852A9C7096ACDF662A2C75.61DBFF57901FF3C9B87CFCA136B176DDFF4A093A&fexp=23709359%2C23745105&ipbits=0&ip=167.99.91.144&lmt=1471812821364858&key=yt6&fvip=2&c=WEB&initcwndbps=118750&itag=22&ei=gBFJW6HyIIWBxwL7xLOABw&id=o-AFqGqLNdQeeM_EPBQMrBllMwfInjznpb6rwPsr4_QDnp&mm=31%2C26&mn=sn-q0c7dn7y%2Csn-aigzrn7z&ratebypass=yes&mime=video%2Fmp4&requiressl=yes&source=youtube&pl=23&dur=280.915&expire=1531536864&mt=1531515118&mv=m&ms=au%2Conr',
         resourceType: 'video'
     }
 
 });
 
 testProject.addMedia({
-    name: 'SECONDBALL',
     layerIndex: 0,
     size: [50, 100],
     timelineTime: [0.11, 0.20],
@@ -104,55 +103,77 @@ testProject.addMedia({
 });
 
 testProject.addMedia({
-    name: 'alonsideSecond',
     layerIndex: 0,
     size: [200, 100],
     timelineTime: [0.23, 0.30],
     position: [0,40],
-    videoStartTime: 1.0,
+    videoStartTime: 0.2,
     resource: {
         name: 'BunnyVideo'
     }
 });
 
 testProject.addMedia({
-    name: 'anotheroneofthese',
     layerIndex: 0,
     size: [150, 100],
     timelineTime: [0.40, 0.42],
     position: [0,0],
-    videoStartTime: 1.0,
+    videoStartTime: 0.25,
     resource: {
         name: 'BunnyVideo'
     }
 });
 
 testProject.addMedia({
-    name: 'fullScreenTest',
     layerIndex: 0,
     size: [300, 160],
     timelineTime: [0.43, 0.58],
     position: [0,0],
-    videoStartTime: 0.80,
+    videoStartTime: 0.30,
     resource: {
         name: 'BunnyVideo'
     }
 });
 
-testProject.addMedia({
-    name: 'CAT',
-    layerIndex: 0,
-    size: [100, 100],
-    timelineTime: [0.65, 1.00],
-    position: [40, 40],
-    videoStartTime: 0,
+testProject.createLayer({
+
+    newMedia: {
+        layerIndex: 1,
+        size: [200, 100],
+        timelineTime: [0.00, 0.10],
+        position: [0,0],
+        videoStartTime: 0
+    },
+
     newResource: {
-        name: 'catvideo',
+        name: 'catvideoTwo',
         resourceLink: 'https://i.imgur.com/Q5PBbSW.mp4',
         resourceType: 'video'
     }
+
 });
 
+testProject.addMedia({
+    layerIndex: 1,
+    size: [100, 100],
+    timelineTime: [0.65, 0.9],
+    position: [40, 40],
+    videoStartTime: 0,
+    resource: {
+        name: 'catvideoTwo'
+    }
+});
+
+testProject.addMedia({
+    layerIndex: 0,
+    size: [100, 100],
+    timelineTime: [0.65, 0.8],
+    position: [50, 40],
+    videoStartTime: 0,
+    resource: {
+        name: 'catvideoTwo'
+    }
+});
 
 // Store init config
 const store = new Vuex.Store(pve_store);

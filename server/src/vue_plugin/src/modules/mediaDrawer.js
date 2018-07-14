@@ -4,6 +4,7 @@ import ContextHooks from './contextHooks.js';
 
 export default function () {
 
+    // TODO: move 'TimeTracker' to own file
     var TimeTracker = function () {
 
         var startTime = 0;
@@ -67,7 +68,8 @@ export default function () {
 
             if(source.type == 'video'){
                 if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
-                   
+                    
+                    // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                     if(source.cast.paused){
                         source.cast.play();
                         // if paused, shift currentTime to correct pos
@@ -88,7 +90,7 @@ export default function () {
 
         });
 
-        contextHooks.runContextHooks({name: 'drawingUpdate'});
+        contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
         animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
 
     };
@@ -101,7 +103,7 @@ export default function () {
             stopContent(sourceLoader);
             this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'stop'});
             timeTracker.isPlaying = false;
-            this.contextHooks.runContextHooks({name: 'drawingUpdate'});
+            this.contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
 
         }
 
@@ -114,7 +116,7 @@ export default function () {
         timeTracker.resetTime();
         this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'reset'});
         timeTracker.isPlaying = false;
-        this.contextHooks.runContextHooks({name: 'drawingUpdate'});
+        this.contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
 
     };
 
@@ -127,7 +129,7 @@ export default function () {
 
         }else{
 
-            this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'play'});
+            this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'play', timeTracker});
             stopContent(sourceLoader);
             timeTracker.isPlaying = true;
             animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, this.contextHooks) }.bind(this));

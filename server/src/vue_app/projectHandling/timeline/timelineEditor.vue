@@ -31,21 +31,22 @@ export default {
         setVideoStartTime: function (){
 
             // TODO: move this behaviour more to component?
-            this.$vcomp(this.projectName).videoControl('beforeActionStart', function(action, drawContext){
+            this.$vcomp(this.projectName).videoControl('beforeActionStart', function(context){
                 
-                if(action == 'play'){
+                if(context.action == 'play'){
                     var startTime = (this.$refs.timeline.scrollLeft*100)
                     console.log(startTime);
-                    drawContext.timeTracker.elapsedDateTime = startTime;
+                    console.log(context);
+                    context.timeTracker.elapsedDateTime = startTime;
                     // FIXME: will probably not use scrollbars so fix these
                     this.$refs.timeline.style.overflow = "hidden";
                 }
 
-                if(action == 'stop'){
+                if(context.action == 'stop'){
                     this.$refs.timeline.style.overflow = "overlay";
                 }
 
-                if(action == 'reset'){
+                if(context.action == 'reset'){
                     this.$refs.timeline.scrollLeft = 0;
                     this.$refs.timeline.style.overflow = "overlay";
                 }
@@ -55,10 +56,10 @@ export default {
         },
         updateScrolling: function () {
 
-            this.$vcomp(this.projectName).videoControl('drawingUpdate', function(drawContext){
+            this.$vcomp(this.projectName).videoControl('drawingUpdate', function(context){
 
-                if(drawContext.timeTracker.isPlaying){
-                    var currentSliderTime = ((drawContext.timeTracker.convertTimeInteger(drawContext.timeTracker.elapsed))*10);
+                if(context.timeTracker.isPlaying){
+                    var currentSliderTime = ((context.timeTracker.convertTimeInteger(context.timeTracker.elapsed))*10);
                     if(currentSliderTime != this.$refs.timeline.scrollLeft) this.$refs.timeline.scrollLeft = currentSliderTime;
                 }
     
@@ -97,21 +98,24 @@ export default {
 
 .timelineContainer{
     background-color: yellow;
-    margin: 0 auto;
+    margin: 10px auto;
     width: 100%;
     height: 240px;
     max-height: 240px;
     position: relative;
     overflow:hidden;
     transform: translateZ(0);
+    
 }
 
 .viewport{
     width: 100%;
     height: 100%;
     position: relative;
+    z-index: 3;
     /*
         #TODO: remove scrollbar support entirely, implement own "scrollbars"
+        Scrolling is will still be based on "scrolling" just always hide the overflow.
     */
     overflow: overlay; 
 }

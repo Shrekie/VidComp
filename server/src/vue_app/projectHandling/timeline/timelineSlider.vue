@@ -30,10 +30,10 @@ export default {
     width: 5px;
     background-color: red;
     max-height: inherit;
-    height: 190px;
+    height: 100%;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
+    z-index: 2;
 }
 </style>

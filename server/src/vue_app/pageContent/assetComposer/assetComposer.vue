@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import ImageInserter from './../../vidCompManipulation/resourceImport/imageInserter.vue';
+import ImageInserter from './../../resourceImport/imageInserter.vue';
 
 // TODO: pass projectName from props
 
