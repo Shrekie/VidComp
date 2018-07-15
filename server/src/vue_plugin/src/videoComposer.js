@@ -103,7 +103,15 @@ export default function () {
     this.reset = function () {
         videoProjection.resetPlayer(sourceLoader);
     };
-   
+
+    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos) {
+        timeline.adjustMediaShift(currentTimelinePos, newTimelinePos);
+    }
+
+    this.layerControl = function (frameHookName, frameHook) {
+        timeline.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
+    };
+
     this.videoControl = function (frameHookName, frameHook) {
 
         videoProjection.mediaDrawer.contextHooks
@@ -118,6 +126,7 @@ export default function () {
 
     this.unbindAllFrameHooks = function () {
         videoProjection.mediaDrawer.contextHooks.unregisterHooks();
+        timeline.contextHooks.unregisterHooks();
     };
 
 };

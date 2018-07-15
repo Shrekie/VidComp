@@ -7,15 +7,14 @@
 
     <!-- <v-btn small color="primary" @click="showInsertMedia">add Media</v-btn> -->
 
-    <Media ref="medias" v-bind:media-index="media.mediaIndex" 
+    <Media v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
-    v-for="media in allLayerMedia" :key="media.name"></Media>
+    v-for="media in allLayerMedia" :key="media.timelineTime[0]"></Media>
 
 </div>
 </template>
 
 <script>
-
 import Media from './media.vue';
 
 export default {
@@ -38,10 +37,13 @@ export default {
     computed: {
         layerSize: function () {
             return this.width;
+        },
+        allLayerMedia: function () {
+            return this.allLayerMedia;
         }
     },
     methods: {
-        setInitalLayerSize () {
+        setLayerSize () {
 
             if(!this.allLayerMedia.length) return "100px";
             var currentTotal = 0;
@@ -53,13 +55,21 @@ export default {
 
         },
         showInsertMedia () {
-
             this.$router.push({ path: `${this.projectName}/addmedia/${this.layerIndex}`});
-
+        },
+        layerUpdate () {
+            this.$vcomp(this.projectName).layerControl('mediaShift', function(context){
+                if(context.layerIndex == this.layerIndex){
+                    console.log('reload media')
+                    this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
+                    console.log(this.allLayerMedia);
+                }
+            }.bind(this));
         }
     },
     mounted: function () {
-        this.setInitalLayerSize();
+        this.setLayerSize();
+        this.layerUpdate();
     }
 };
 </script>
@@ -77,7 +87,6 @@ export default {
     width: 0px;
     margin-right: 50%;
     margin-left: 50%;
-    z-index: 1;
 }
 
 </style>

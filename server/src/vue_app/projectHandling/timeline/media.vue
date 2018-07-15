@@ -3,43 +3,37 @@
 -->
 
 <template>
-<div>
-    <div class="mediaContainer" v-bind:style="{ width: mediaWidth, left: mediaLeft }" >
-        
-    </div>
-    <!--
-    <div class="addMediaContainer" v-bind:style="{ width: addMediaWidth, left: addMediaLeft }" >
-        
-    </div>
-    -->
-</div>
+
+<div class="mediaContainer" ref="media"
+v-bind:style="{ width: mediaWidth, left: mediaLeft }" ></div>
+
+
 </template>
 
 <script>
+import MotionEvents from './../../dragResizeMotion/motionEvents.js';
 
 export default {
     name: "media",
-    props: ['mediaIndex', 'timelineTime', 'projectName'],
+    props: ['mediaIndex', 'layerIndex', 'timelineTime', 'projectName'],
     data() {
 
 		return {
             mediaIndex: this.mediaIndex,
             projectName: this.projectName,
             timelineTime: this.timelineTime,
+            layerIndex: this.layerIndex,
             mediaWidth: "0px",
             mediaLeft: "50%",
-            addMediaLeft: "50%",
-            addMediaWidth: "0px"
+            motionEvents: new MotionEvents ()
         }
         
     },
     methods: {
-        getInitalMediaSize () {
+        setMediaSize () {
 
             this.mediaWidth = ((this.timelineTime[1]-this.timelineTime[0])*1000) + 'px';
             this.mediaLeft = (this.timelineTime[0]*1000) + 'px';
-            this.addMediaLeft = (this.timelineTime[1]*1000) + 'px';
-            this.addMediaWidth = ((this.timelineTime[1]-this.timelineTime[0])*1000) + 'px';
 
         }
     },
@@ -49,31 +43,32 @@ export default {
         },
         mediaLeft: function () {
             return this.mediaLeft;
-        },
-        addMediaLeft: function () {
-            return this.addMediaLeft;
-        },
-        addMediaLeft: function () {
-            return this.addMediaWidth;
         }
     },
     mounted: function () {
         console.log(this.mediaIndex);
-        this.getInitalMediaSize();
+        
+        this.motionEvents.enableDrag(this.$refs.media, function(top, left){
+            console.log('dropped element');
+            console.log(left);
+            this.$vcomp(this.projectName)
+            .adjustMediaShift({
+                    layerIndex: this.layerIndex, mediaIndex:this.mediaIndex
+                },{
+                    layerIndex:1,
+                    timelineStartTime: (left/1000)
+            });
+
+        }.bind(this));
+
+        this.setMediaSize();
+
     }
 };
+
 </script>
 
 <style>
-
-.addMediaContainer{
-    display: inline-block;
-    position: absolute;
-    background-color: red;
-    border: 1px solid black;
-    width: 100%;
-    height: 60px;
-}
 
 .mediaContainer:hover{
     opacity: 0.5 !important;
@@ -86,6 +81,8 @@ export default {
     border: 1px solid black;
     height: 60px;
     width: 0px;
+    user-select: none;
+    z-index: 1;
 }
 
 </style>

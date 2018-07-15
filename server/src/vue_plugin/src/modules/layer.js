@@ -30,12 +30,21 @@ export default function (layerIndex, newMedia) {
         return store.media[mediaIndex];
     };
 
+    this.deleteMedia = function (mediaIndex){
+        store.media.splice(mediaIndex, 1);
+    };
+
     this.changeMedia = function (mediaChange) {
         store.media[mediaChange.mediaIndex] = mediaChange;
         console.log(store.media[mediaChange.mediaIndex]);
     };
 
     this.addMedia = function (newMedia) {
+        /* 
+            TODO: when deleting media the mediaIndex 
+            will not be correct based on array index, 
+            producing many bugs 
+        */
         newMedia.mediaIndex = store.media.length;
         store.media.push(new Media(newMedia));
         return newMedia.mediaIndex;

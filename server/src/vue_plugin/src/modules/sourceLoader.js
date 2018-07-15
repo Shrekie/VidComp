@@ -79,9 +79,9 @@ export default function () {
 
         function compare(a,b) {
             if (a.media.layerIndex < b.media.layerIndex)
-              return 1;
-            if (a.media.layerIndex > b.media.layerIndex)
               return -1;
+            if (a.media.layerIndex > b.media.layerIndex)
+              return 1;
             return 0;
         }
           

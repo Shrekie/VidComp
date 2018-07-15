@@ -9,24 +9,27 @@
                 <TimelineSlider ref="timelineSlider"></TimelineSlider>
 
                 <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
-                v-for="layer in allLayers" :key="layer.layerIndex"></Layer>
+                v-for="layer in allLayers" :key="layer.layerIndex">
+
+                </Layer>
 
         </div>
     </div>
 </template>
 
 <script>
-
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
 
 export default {
 
     name: "timelineEditor",
+
     components: {
         Layer,
         TimelineSlider
-	},
+    },
+    
     methods: {
         setVideoStartTime: function (){
 
@@ -67,7 +70,9 @@ export default {
 
         }
     },
+
     props: ['projectName'],
+
 	data() {
 
         var allLayers = this.$vcomp(this.projectName).getAllLayers();
@@ -80,13 +85,17 @@ export default {
         }
         
     },
+
     mounted: function () {
         this.setVideoStartTime();
         this.updateScrolling();
+
+        //this.$eventHub.$on('edit-enabled', this.editEnabled);
     },
 
     beforeDestroy: function () {
         this.$vcomp(this.projectName).unbindAllFrameHooks();
+        //this.$eventHub.$off('edit-enabled');
         console.log('beforeDestroy');
     }
     
