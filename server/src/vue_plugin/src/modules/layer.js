@@ -22,6 +22,12 @@ export default function (layerIndex, newMedia) {
 
     };
 
+    var sortMedia = function () {
+        store.media.forEach(function(media, index){
+            media.mediaIndex = index;
+        });
+    }
+
     this.getAllMedia = function () {
         return store.media;
     };
@@ -32,23 +38,24 @@ export default function (layerIndex, newMedia) {
 
     this.deleteMedia = function (mediaIndex){
         store.media.splice(mediaIndex, 1);
+        sortMedia();
     };
 
     this.changeMedia = function (mediaChange) {
         store.media[mediaChange.mediaIndex] = mediaChange;
-        console.log(store.media[mediaChange.mediaIndex]);
     };
 
     this.addMedia = function (newMedia) {
-        /* 
-            TODO: when deleting media the mediaIndex 
-            will not be correct based on array index, 
-            producing many bugs 
-        */
         newMedia.mediaIndex = store.media.length;
         store.media.push(new Media(newMedia));
         return newMedia.mediaIndex;
     };
+
+    this.insertMedia = function (newMedia){
+        newMedia.mediaIndex = store.media.length;
+        store.media.push(newMedia);
+        return newMedia.mediaIndex;
+    }
 
     //FIXME: remove this, remember change
     this.eachMedia = function (cb) {

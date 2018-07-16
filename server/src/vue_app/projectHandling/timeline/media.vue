@@ -49,15 +49,22 @@ export default {
         console.log(this.mediaIndex);
         
         this.motionEvents.enableDrag(this.$refs.media, function(top, left){
+            
             console.log('dropped element');
-            console.log(left);
+            var nextLayerPixels = 70;
+
+            var newLayerIndex = Math.sign((top/nextLayerPixels)) * 
+            Math.floor(Math.abs((top/nextLayerPixels)));
+
             this.$vcomp(this.projectName)
             .adjustMediaShift({
                     layerIndex: this.layerIndex, mediaIndex:this.mediaIndex
                 },{
-                    layerIndex:1,
+                    layerIndex:newLayerIndex,
                     timelineStartTime: (left/1000)
             });
+
+            this.$refs.media.style.top = "0px";
 
         }.bind(this));
 

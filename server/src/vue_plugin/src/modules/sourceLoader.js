@@ -54,6 +54,20 @@ export default function () {
 
     };
 
+    this.sortMediaLayers = function(){
+        function compare(a,b) {
+            if (a.media.layerIndex < b.media.layerIndex)
+              return -1;
+            if (a.media.layerIndex > b.media.layerIndex)
+              return 1;
+            return 0;
+        }
+          
+        store.sources.sort(compare);
+
+        console.log(store.sources);
+    }
+
     this.eachSource = function (cb) {
 
         store.sources.forEach(function(source, index){
@@ -77,17 +91,7 @@ export default function () {
             }
         }
 
-        function compare(a,b) {
-            if (a.media.layerIndex < b.media.layerIndex)
-              return -1;
-            if (a.media.layerIndex > b.media.layerIndex)
-              return 1;
-            return 0;
-        }
-          
-        store.sources.sort(compare);
-
-        console.log(store.sources);
+        this.sortMediaLayers();
 
     };
     

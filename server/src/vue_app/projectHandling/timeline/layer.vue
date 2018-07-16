@@ -62,7 +62,8 @@ export default {
                 if(context.layerIndex == this.layerIndex){
                     console.log('reload media')
                     this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
-                    console.log(this.allLayerMedia);
+                    this.allLayerMedia.splice(this.allLayerMedia.length);
+                    this.setLayerSize();
                 }
             }.bind(this));
         }

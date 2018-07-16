@@ -20,7 +20,7 @@ export default function () {
         return store.layers.push(layer);
     };
 
-    this.adjustMediaShift = function(currentTimelinePos, newTimelinePos){
+    this.adjustMediaShift = function(currentTimelinePos, newTimelinePos, sourceLoader){
 
         /*
             Based on new position of media, apply changes to timeline.
@@ -33,10 +33,22 @@ export default function () {
             newTimelinePos.timelineStartTime
 
         */
+        
+        if (newTimelinePos.layerIndex < 0){
+            newTimelinePos.layerIndex = Math.abs(newTimelinePos.layerIndex) - currentTimelinePos.layerIndex;
+        }else{
+            newTimelinePos.layerIndex = newTimelinePos.layerIndex + currentTimelinePos.layerIndex;
+        }
+
+        if(newTimelinePos.layerIndex < 0) newTimelinePos.layerIndex = 0;
 
         var changedMedia = this.getLayer(currentTimelinePos.layerIndex).getMedia(currentTimelinePos.mediaIndex);
 
         var affectedLayerMedia = this.getLayer(newTimelinePos.layerIndex).getAllMedia();
+
+        var changedMediaSize = changedMedia.timelineTime[1] - changedMedia.timelineTime[0];
+        changedMedia.timelineTime[0] = newTimelinePos.timelineStartTime;
+        changedMedia.timelineTime[1] = newTimelinePos.timelineStartTime + changedMediaSize;
 
         var shiftMedia = function(direction, shiftPos, media) {
 
@@ -48,54 +60,74 @@ export default function () {
                 media.timelineTime[1] = media.timelineTime[1] - shiftPos;
                 media.timelineTime[0] = media.timelineTime[0] - shiftPos;
             }
-                
+
+            checkShift(media);
+
         };
 
-        var changedMediaSize = changedMedia.timelineTime[1] - changedMedia.timelineTime[0];
-        changedMedia.timelineTime[0] = newTimelinePos.timelineStartTime;
-        changedMedia.timelineTime[1] = newTimelinePos.timelineStartTime + changedMediaSize;
-
-        affectedLayerMedia.forEach(function(media){
-            if( (changedMedia.timelineTime[0] > media.timelineTime[0] && 
-                changedMedia.timelineTime[0] < media.timelineTime[1]) || 
-                (changedMedia.timelineTime[1] > media.timelineTime[0] && 
-                    changedMedia.timelineTime[1] < media.timelineTime[1])  ) {
-                
+        var checkShift = function (changedMedia) {
             
-                console.log(changedMedia.timelineTime[0]);
-                console.log(changedMedia.timelineTime[1]);
-                var middleValue = ((changedMedia.timelineTime[1] - changedMedia.timelineTime[0])/2);
+            affectedLayerMedia.forEach(function(media){
 
-                var middleOfMediaPos = changedMedia.timelineTime[0] + middleValue;
-                
-                console.log(media.timelineTime[0]);
-                console.log(middleOfMediaPos);
+                if( 
+                    
+                    (changedMedia.timelineTime[0] > media.timelineTime[0] 
+                    && 
+                    changedMedia.timelineTime[0] < media.timelineTime[1]) 
+                    
+                    || 
 
-                if(media.timelineTime[0] > middleOfMediaPos){
-                    let shiftedFrontPos = changedMedia.timelineTime[1] - media.timelineTime[0];
-                    shiftMedia('forwards', shiftedFrontPos, media);
+                    (changedMedia.timelineTime[1] > media.timelineTime[0] && 
+                    changedMedia.timelineTime[1] < media.timelineTime[1]) 
+                    
+                    ||
 
-                }else{
-                    let shiftedBackPos =  media.timelineTime[1] - changedMedia.timelineTime[0];
-                    shiftMedia('backwards', shiftedBackPos, media);
+                    (media.timelineTime[0] > changedMedia.timelineTime[0] &&
+                    media.timelineTime[1] < changedMedia.timelineTime[1])
+                    
+                ){
+                    
+                    var middleValue = ((media.timelineTime[1] - media.timelineTime[0])/2);
+                    var ChangedmiddleValue = ((changedMedia.timelineTime[1] - changedMedia.timelineTime[0])/2);
+                    var middleOfMediaPos = media.timelineTime[0] + middleValue;
+                    var middleOfChangedMediaPos = changedMedia.timelineTime[0] + ChangedmiddleValue;
+
+
+
+                    if(middleOfChangedMediaPos < middleOfMediaPos){
+                        let shiftedFrontPos = changedMedia.timelineTime[1] - media.timelineTime[0];
+                        shiftMedia('forwards', shiftedFrontPos, media);
+
+                    }else{
+                        let shiftedBackPos =  media.timelineTime[1] - changedMedia.timelineTime[0];
+                        shiftMedia('backwards', shiftedBackPos, media);
+
+                    }
 
                 }
 
-            }
+            });
 
-        });
+        }
 
-        console.log(affectedLayerMedia);
+        checkShift(changedMedia);
 
+        changedMedia.layerIndex = newTimelinePos.layerIndex;
 
         if(newTimelinePos.layerIndex == currentTimelinePos.layerIndex){
-            this.getLayer(currentTimelinePos.layerIndex).changeMedia(changedMedia);
+
             this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: newTimelinePos.layerIndex});
+
         }else{
+
+            
+            changedMedia.mediaIndex = this.getLayer(newTimelinePos.layerIndex).insertMedia(changedMedia);
             this.getLayer(currentTimelinePos.layerIndex).deleteMedia(currentTimelinePos.mediaIndex);
-            this.getLayer(newTimelinePos.layerIndex).addMedia(changedMedia);
+            sourceLoader.sortMediaLayers();
+
             this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: newTimelinePos.layerIndex});
             this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: currentTimelinePos.layerIndex});
+
         }
 
     }

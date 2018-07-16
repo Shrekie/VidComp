@@ -104,8 +104,8 @@ export default function () {
         videoProjection.resetPlayer(sourceLoader);
     };
 
-    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos) {
-        timeline.adjustMediaShift(currentTimelinePos, newTimelinePos);
+    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos, cb) {
+        timeline.adjustMediaShift(currentTimelinePos, newTimelinePos, sourceLoader);
     }
 
     this.layerControl = function (frameHookName, frameHook) {
