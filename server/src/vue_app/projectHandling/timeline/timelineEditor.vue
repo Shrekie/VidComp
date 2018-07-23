@@ -7,7 +7,7 @@
         <div ref="timeline" class="viewport">
 
                 <TimelineSlider ref="timelineSlider"></TimelineSlider>
-
+        
                 <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
                 v-for="layer in allLayers" :key="layer.layerIndex">
 
@@ -80,8 +80,8 @@ export default {
         console.log(allLayers);
 
 		return {
-            allLayers,
-            projectName: this.projectName
+            allLayers
+            //projectName: this.projectName
         }
         
     },

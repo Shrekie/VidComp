@@ -29,7 +29,6 @@ export default {
         
         return {
             allLayerMedia,
-            projectName: this.projectName,
             width: "100px"
         }
         
@@ -37,9 +36,6 @@ export default {
     computed: {
         layerSize: function () {
             return this.width;
-        },
-        allLayerMedia: function () {
-            return this.allLayerMedia;
         }
     },
     methods: {
@@ -61,6 +57,7 @@ export default {
             this.$vcomp(this.projectName).layerControl('mediaShift', function(context){
                 if(context.layerIndex == this.layerIndex){
                     console.log('reload media')
+                    // TODO: fix id media to something better also fix reloading to less forced
                     this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
                     this.allLayerMedia.splice(this.allLayerMedia.length);
                     this.setLayerSize();

@@ -51,6 +51,16 @@ export default function (layerIndex, newMedia) {
         return newMedia.mediaIndex;
     };
 
+    this.pushMediaIndex = function(fromIndex){
+
+        store.media.forEach(function(media){
+            if(media.mediaIndex >= fromIndex){
+                media.mediaIndex =  media.mediaIndex + 1;
+            }
+        });
+
+    };
+
     this.insertMedia = function (newMedia){
         newMedia.mediaIndex = store.media.length;
         store.media.push(newMedia);

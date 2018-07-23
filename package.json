@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "build": "poi build server/src/vue_app/main.js",
+    "hotreload": "poi watch server/src/vue_app/main.js",
     "start": "node server/server.js",
     "postinstall": "bower install"
   },

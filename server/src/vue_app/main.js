@@ -85,7 +85,7 @@ testProject.createLayer({
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r4---sn-aigzrn7l.googlevideo.com/videoplayback?lmt=1529227567484654&requiressl=yes&signature=C434B564C067C4784F93F300BA478C10A622EFD1.66239EDA4A5DC793D22BB9C3E299FEA1186E29DE&itag=22&ratebypass=yes&c=WEB&key=yt6&ei=NB1MW8uQINrWVMOiu4AL&expire=1531736468&beids=%5B9466591%5D&ipbits=0&mn=sn-aigzrn7l%2Csn-5hne6nlk&mm=31%2C26&ip=167.99.91.144&fexp=23709359%2C23745105&mt=1531714737&fvip=4&pl=20&dur=278.918&id=o-AG76qHRb4tRI7fRZS6yadwoa4-pSp7zjf5cE2eKfYMpQ&initcwndbps=163750&mv=m&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&source=youtube&ms=au%2Conr&mime=video%2Fmp4',
+        resourceLink: 'https://r4---sn-25glene6.googlevideo.com/videoplayback?expire=1532379023&c=WEB&ratebypass=yes&ei=L-tVW-hr2ozGAtuuioAF&fvip=4&dur=278.918&ipbits=0&source=youtube&signature=35F789953E3EE9444418C27897BB6947AB4522F5.B830BE630811E1C8DF419D67DDF22EA70A151C9A&initcwndbps=53750&itag=22&mn=sn-25glene6%2Csn-aigzrn7l&mm=31%2C29&pl=20&id=o-AIXLtNcd_xQ_atsL3Az1esez-WoXG8WibyoOjsyJ0q9Z&mv=m&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mt=1532357319&key=yt6&mime=video%2Fmp4&requiressl=yes&beids=%5B23745634%5D&ip=167.99.91.144&lmt=1529227567484654&ms=au%2Crdu',
         resourceType: 'video'
     }
 
@@ -156,7 +156,7 @@ testProject.createLayer({
 testProject.addMedia({
     layerIndex: 1,
     size: [100, 100],
-    timelineTime: [0.65, 0.9],
+    timelineTime: [0.45, 0.6],
     position: [40, 40],
     videoStartTime: 0,
     resource: {
@@ -167,7 +167,7 @@ testProject.addMedia({
 testProject.addMedia({
     layerIndex: 1,
     size: [100, 100],
-    timelineTime: [0.4, 0.6],
+    timelineTime: [0.64, 0.7],
     position: [40, 40],
     videoStartTime: 0,
     resource: {
@@ -178,7 +178,7 @@ testProject.addMedia({
 testProject.addMedia({
     layerIndex: 0,
     size: [100, 100],
-    timelineTime: [0.65, 0.8],
+    timelineTime: [0.75, 0.9],
     position: [50, 40],
     videoStartTime: 0,
     resource: {

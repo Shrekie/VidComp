@@ -19,10 +19,6 @@ export default {
     data() {
 
 		return {
-            mediaIndex: this.mediaIndex,
-            projectName: this.projectName,
-            timelineTime: this.timelineTime,
-            layerIndex: this.layerIndex,
             mediaWidth: "0px",
             mediaLeft: "50%",
             motionEvents: new MotionEvents ()
@@ -38,12 +34,6 @@ export default {
         }
     },
     computed: {
-        mediaWidth: function () {
-            return this.mediaWidth;
-        },
-        mediaLeft: function () {
-            return this.mediaLeft;
-        }
     },
     mounted: function () {
         console.log(this.mediaIndex);
@@ -65,7 +55,6 @@ export default {
             });
 
             this.$refs.media.style.top = "0px";
-
         }.bind(this));
 
         this.setMediaSize();

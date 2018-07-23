@@ -50,18 +50,48 @@ export default function () {
         changedMedia.timelineTime[0] = newTimelinePos.timelineStartTime;
         changedMedia.timelineTime[1] = newTimelinePos.timelineStartTime + changedMediaSize;
 
-        var shiftMedia = function(direction, shiftPos, media) {
+        var shiftMedia = function(direction, shiftPos, targetMedia) {
 
-            if(direction == 'forwards'){
-                media.timelineTime[1] = media.timelineTime[1] + shiftPos;
-                media.timelineTime[0] = media.timelineTime[0] + shiftPos;
 
-            }else{
-                media.timelineTime[1] = media.timelineTime[1] - shiftPos;
-                media.timelineTime[0] = media.timelineTime[0] - shiftPos;
+            var checkCascade = function (direction, targetMedia, shiftPos){
+
+                if(direction == "forwards"){
+
+                    affectedLayerMedia.forEach(function(media){
+                        if(media.timelineTime[0] >= targetMedia.timelineTime[1] && 
+                            targetMedia.timelineTime[1] + shiftPos > media.timelineTime[0]){
+                            checkCascade(direction, media, shiftPos);
+                            media.timelineTime[0] = media.timelineTime[0] + shiftPos;
+                            media.timelineTime[1] = media.timelineTime[1] + shiftPos;
+                        }
+                    });
+                
+                   
+                }else{
+
+                    affectedLayerMedia.forEach(function(media){
+                        if(media.timelineTime[1] <= targetMedia.timelineTime[0] && 
+                            targetMedia.timelineTime[0] - shiftPos < media.timelineTime[1]){
+                            checkCascade(direction, media, shiftPos);
+                            media.timelineTime[0] = media.timelineTime[0] - shiftPos;
+                            media.timelineTime[1] = media.timelineTime[1] - shiftPos;
+                        }
+                    });
+                    
+
+                }
+
             }
 
-            checkShift(media);
+            checkCascade(direction, targetMedia, shiftPos);
+
+            if(direction == "forwards"){
+                targetMedia.timelineTime[1] = targetMedia.timelineTime[1] + shiftPos;
+                targetMedia.timelineTime[0] = targetMedia.timelineTime[0] + shiftPos;
+            }else{
+                targetMedia.timelineTime[1] = targetMedia.timelineTime[1] - shiftPos;
+                targetMedia.timelineTime[0] = targetMedia.timelineTime[0] - shiftPos;
+            }
 
         };
 
@@ -98,7 +128,7 @@ export default function () {
                         let shiftedFrontPos = changedMedia.timelineTime[1] - media.timelineTime[0];
                         shiftMedia('forwards', shiftedFrontPos, media);
 
-                    }else{
+                    }else if (middleOfChangedMediaPos > middleOfMediaPos){
                         let shiftedBackPos =  media.timelineTime[1] - changedMedia.timelineTime[0];
                         shiftMedia('backwards', shiftedBackPos, media);
 
@@ -110,19 +140,21 @@ export default function () {
 
         }
 
-        checkShift(changedMedia);
-
         changedMedia.layerIndex = newTimelinePos.layerIndex;
 
         if(newTimelinePos.layerIndex == currentTimelinePos.layerIndex){
 
+            checkShift(changedMedia);
             this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: newTimelinePos.layerIndex});
 
         }else{
 
             
-            changedMedia.mediaIndex = this.getLayer(newTimelinePos.layerIndex).insertMedia(changedMedia);
+            this.getLayer(newTimelinePos.layerIndex).insertMedia(changedMedia);
             this.getLayer(currentTimelinePos.layerIndex).deleteMedia(currentTimelinePos.mediaIndex);
+            
+            checkShift(changedMedia);
+
             sourceLoader.sortMediaLayers();
 
             this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: newTimelinePos.layerIndex});

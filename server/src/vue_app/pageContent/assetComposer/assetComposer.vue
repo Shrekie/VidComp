@@ -12,7 +12,6 @@
 	<v-btn small color="primary" @click="playVideo">Play</v-btn>
 	<v-btn small color="primary" @click="stopVideo">Pause</v-btn>
 	<v-btn small color="primary" @click="resetVideo">&lt;</v-btn>
-
 	<router-view>
 
 	</router-view>
