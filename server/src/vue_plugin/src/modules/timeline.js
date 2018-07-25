@@ -130,12 +130,10 @@ export default function () {
 
         var shiftPos = Math.abs(targetedTargetMedia.timelineTime[0]);
         var timeSize = Math.abs(targetedTargetMedia.timelineTime[1] - targetedTargetMedia.timelineTime[0]);
-        console.log(timeSize);
         affectedLayerMedia.forEach(function(media){
             media.timelineTime[0] = media.timelineTime[0] + shiftPos;
             media.timelineTime[1] = media.timelineTime[1] + shiftPos;
         });
-        console.log(timeSize);
         targetedTargetMedia.timelineTime[0] = 0;
         targetedTargetMedia.timelineTime[1] = timeSize;
 
