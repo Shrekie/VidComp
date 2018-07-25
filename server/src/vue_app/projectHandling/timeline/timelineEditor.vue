@@ -124,7 +124,7 @@ export default {
     z-index: 3;
     /*
         #TODO: remove scrollbar support entirely, implement own "scrollbars"
-        Scrolling is will still be based on "scrolling" just always hide the overflow.
+        Scrolling will still be based on "scrolling" just always hide the overflow.
     */
     overflow: overlay; 
 }

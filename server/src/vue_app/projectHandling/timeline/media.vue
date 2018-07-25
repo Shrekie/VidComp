@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         setMediaSize () {
-
+            // FIXME: change name, it also positions.
             this.mediaWidth = ((this.timelineTime[1]-this.timelineTime[0])*1000) + 'px';
             this.mediaLeft = (this.timelineTime[0]*1000) + 'px';
 

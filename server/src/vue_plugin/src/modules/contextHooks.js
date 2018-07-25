@@ -1,7 +1,7 @@
 /*
     context hook for specific events.
 */
-// TODO: Maybe add context hook for media changes?
+// TODO: Maybe make extended types of this class
 export default  function (context) {
     
     this.frameContextHooks = [];

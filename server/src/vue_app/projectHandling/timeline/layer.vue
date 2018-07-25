@@ -7,9 +7,14 @@
 
     <!-- <v-btn small color="primary" @click="showInsertMedia">add Media</v-btn> -->
 
-    <Media v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
+    <Media ref="mediaElements" v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
-    v-for="media in allLayerMedia" :key="media.timelineTime[0]"></Media>
+    v-for="media in allLayerMedia" 
+    :key='media.timelineTime[0] + 
+    " - " +
+    media.mediaIndex + 
+    " - " + 
+    layerSize'></Media> <!-- #TODO: this key, i dont like this -->
 
 </div>
 </template>
@@ -58,6 +63,7 @@ export default {
                 if(context.layerIndex == this.layerIndex){
                     console.log('reload media')
                     // TODO: fix id media to something better also fix reloading to less forced
+                    // TODO: when layer empty, delete or something
                     this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
                     this.allLayerMedia.splice(this.allLayerMedia.length);
                     this.setLayerSize();

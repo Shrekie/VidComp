@@ -67,15 +67,6 @@ export default function (layerIndex, newMedia) {
         return newMedia.mediaIndex;
     }
 
-    //FIXME: remove this, remember change
-    this.eachMedia = function (cb) {
-
-        store.media.forEach(function(resource){
-            cb(resource);
-        });
-        
-    };
-
     if(newMedia)this.addMedia(newMedia);
 
 };
