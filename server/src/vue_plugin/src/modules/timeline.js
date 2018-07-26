@@ -25,7 +25,7 @@ export default function () {
     this.adjustMediaShift = function(currentTimelinePos, newTimelinePos, sourceLoader){
 
         /*
-        
+
             Based on new position of media, apply changes to timeline.
             And return position 
 
@@ -38,6 +38,7 @@ export default function () {
         }else{
             newTimelinePos.layerIndex = newTimelinePos.layerIndex + currentTimelinePos.layerIndex;
         }
+        // TODO: If new layerIndex is lower than "0" pre math.abs, push layers down and add new one on 0.
         if(newTimelinePos.layerIndex < 0) newTimelinePos.layerIndex = 0;
 
         var changedMedia = this.getLayer(currentTimelinePos.layerIndex).getMedia(currentTimelinePos.mediaIndex);
