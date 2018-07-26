@@ -126,6 +126,7 @@ export default {
         #TODO: remove scrollbar support entirely, implement own "scrollbars"
         Scrolling will still be based on "scrolling" just always hide the overflow.
     */
+    padding-bottom: 25px;
     overflow: overlay; 
 }
 

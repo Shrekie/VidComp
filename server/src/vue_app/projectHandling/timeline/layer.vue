@@ -14,7 +14,7 @@
     " - " +
     media.mediaIndex + 
     " - " + 
-    layerSize'></Media> <!-- #TODO: this key, i dont like this -->
+    layerSize'></Media> <!-- #TODO: this key is still not unique enough, and i dont like it. -->
 
 </div>
 </template>
