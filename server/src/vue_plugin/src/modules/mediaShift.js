@@ -53,7 +53,6 @@ function MediaShift() {
         });
 
         if(negativeMedia.length > 0) negativePush(affectedLayerMedia, negativeMedia);
-
     };
 
     var checkShift = function (affectedLayerMedia, changedMedia) {
@@ -76,10 +75,10 @@ function MediaShift() {
 
                 (media.timelineTime[0] > changedMedia.timelineTime[0] 
                 &&
-                media.timelineTime[1] < changedMedia.timelineTime[1])
+                media.timelineTime[1] <= changedMedia.timelineTime[1])
                 
             ){
-                
+
                 var middleValue = ((media.timelineTime[1] - media.timelineTime[0])/2);
                 var ChangedmiddleValue = ((changedMedia.timelineTime[1] - changedMedia.timelineTime[0])/2);
                 var middleOfMediaPos = media.timelineTime[0] + middleValue;
@@ -96,7 +95,6 @@ function MediaShift() {
                     shiftMedia(affectedLayerMedia, 'backwards', shiftedBackPos, media);
 
                 } else {
-
                     // it is exactly on the middle, make it go forwards
                     let shiftedFrontPos = changedMedia.timelineTime[1] - media.timelineTime[0];
                     shiftMedia(affectedLayerMedia, 'forwards', shiftedFrontPos, media);
@@ -122,13 +120,13 @@ function MediaShift() {
                 return 0;
             });
 
-            targetedTargetMedia = targetMedia[targetMedia.length - 1];
+            targetedTargetMedia = targetMedia[0];
         }else{
             targetedTargetMedia = targetMedia;
         }
 
         var shiftPos = Math.abs(targetedTargetMedia.timelineTime[0]);
-        var timeSize = Math.abs(targetedTargetMedia.timelineTime[1] - targetedTargetMedia.timelineTime[0]);
+        var timeSize = targetedTargetMedia.timelineTime[1] - targetedTargetMedia.timelineTime[0];
 
         /*
             "static push"

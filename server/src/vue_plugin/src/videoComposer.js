@@ -104,12 +104,12 @@ export default function () {
         videoProjection.resetPlayer(sourceLoader);
     };
 
-    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos, cb) {
+    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos) {
         timeline.adjustMediaShift(currentTimelinePos, newTimelinePos, sourceLoader);
     }
 
     this.layerControl = function (frameHookName, frameHook) {
-        timeline.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
+        return timeline.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
     };
 
     this.videoControl = function (frameHookName, frameHook) {
@@ -125,8 +125,19 @@ export default function () {
     };
 
     this.unbindAllFrameHooks = function () {
-        videoProjection.mediaDrawer.contextHooks.unregisterHooks();
-        timeline.contextHooks.unregisterHooks();
+        videoProjection.mediaDrawer.contextHooks.unregisterAllHooks();
+        timeline.contextHooks.unregisterAllHooks();
+    };
+
+    this.unbindFrameHook = function (frameHookParent, hookIndex) {
+        switch(frameHookParent) {
+            case "layerControl":
+                timeline.contextHooks.unregisterHook(hookIndex);
+                break;
+            case "videoControl":
+                videoProjection.mediaDrawer.contextHooks.unregisterHook(hookIndex);
+                break;
+        }
     };
 
 };

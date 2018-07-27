@@ -26,11 +26,14 @@ export default  function (context) {
     };
 
     this.registerHooks = function (newHook){
-        this.frameContextHooks.push(newHook);
+        return this.frameContextHooks.push(newHook) - 1;
     };
 
-    this.unregisterHooks = function () {
-        // TODO: add argument for which to unregister
+    this.unregisterHook = function(hookIndex){
+        this.frameContextHooks.splice(hookIndex, 1);
+    };
+
+    this.unregisterAllHooks = function () {
         this.frameContextHooks = [];
     };
 

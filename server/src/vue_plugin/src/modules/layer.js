@@ -1,5 +1,5 @@
 export default function (layerIndex, newMedia) {
-
+ 
     var store = {
         media: []
     }

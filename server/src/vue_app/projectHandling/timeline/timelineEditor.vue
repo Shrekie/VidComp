@@ -25,12 +25,27 @@ export default {
 
     name: "timelineEditor",
 
+    props: ['projectName'],
+
+	data() {
+
+        var allLayers = this.$vcomp(this.projectName).getAllLayers();
+
+        console.log(allLayers);
+
+		return {
+            allLayers
+        }
+        
+    },
+
     components: {
         Layer,
         TimelineSlider
     },
     
     methods: {
+
         setVideoStartTime: function (){
 
             // TODO: move this behaviour more to component?
@@ -57,6 +72,7 @@ export default {
             }.bind(this));
 
         },
+
         updateScrolling: function () {
 
             this.$vcomp(this.projectName).videoControl('drawingUpdate', function(context){
@@ -69,34 +85,24 @@ export default {
             }.bind(this));
 
         }
+
     },
 
-    props: ['projectName'],
 
-	data() {
-
-        var allLayers = this.$vcomp(this.projectName).getAllLayers();
-
-        console.log(allLayers);
-
-		return {
-            allLayers
-            //projectName: this.projectName
-        }
+    mounted: function () {
+        
+        this.setVideoStartTime();
+        this.updateScrolling();
+        //this.$eventHub.$on('edit-enabled', this.editEnabled);
         
     },
 
-    mounted: function () {
-        this.setVideoStartTime();
-        this.updateScrolling();
-
-        //this.$eventHub.$on('edit-enabled', this.editEnabled);
-    },
-
     beforeDestroy: function () {
+
         this.$vcomp(this.projectName).unbindAllFrameHooks();
         //this.$eventHub.$off('edit-enabled');
         console.log('beforeDestroy');
+
     }
     
 };

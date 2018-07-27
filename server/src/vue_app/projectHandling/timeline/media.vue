@@ -15,7 +15,9 @@ import MotionEvents from './../../dragResizeMotion/motionEvents.js';
 
 export default {
     name: "media",
+
     props: ['mediaIndex', 'layerIndex', 'timelineTime', 'projectName'],
+
     data() {
 
 		return {
@@ -25,23 +27,30 @@ export default {
         }
         
     },
+
     methods: {
         setMediaSize () {
             // FIXME: change name, it also positions.
             this.mediaWidth = ((this.timelineTime[1]-this.timelineTime[0])*1000) + 'px';
             this.mediaLeft = (this.timelineTime[0]*1000) + 'px';
 
+        },
+        updateElement () {
+            this.$forceUpdate();
         }
     },
+
     computed: {
     },
+
     mounted: function () {
+
         console.log(this.mediaIndex);
         
         this.motionEvents.enableDrag(this.$refs.media, function(top, left){
             
             console.log('dropped element');
-            var nextLayerPixels = 70;
+            var nextLayerPixels = 40;
 
             var newLayerIndex = Math.sign((top/nextLayerPixels)) * 
             Math.floor(Math.abs((top/nextLayerPixels)));
@@ -55,11 +64,14 @@ export default {
             });
 
             this.$refs.media.style.top = "0px";
+            this.$refs.media.style.left = this.mediaLeft
+
         }.bind(this));
 
         this.setMediaSize();
 
     }
+    
 };
 
 </script>
@@ -75,7 +87,7 @@ export default {
     position: absolute;
     background-color: forestgreen;
     border: 1px solid black;
-    height: 60px;
+    height: 40px;
     width: 0px;
     user-select: none;
     z-index: 1;

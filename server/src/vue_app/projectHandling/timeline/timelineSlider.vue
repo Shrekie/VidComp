@@ -15,11 +15,14 @@
     */
 
 export default {
+    
     name: "timelineSlider",
+
 	data() {
 		return {
 		}
-	}
+    }
+    
 };
 
 </script>
