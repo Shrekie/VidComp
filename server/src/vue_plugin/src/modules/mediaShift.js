@@ -56,7 +56,79 @@ function MediaShift() {
     };
 
     var checkShift = function (affectedLayerMedia, changedMedia) {
-            
+
+        var specifyShift = function(changedMedia, media){
+
+            var middleValue = ((media.timelineTime[1] - media.timelineTime[0])/2);
+            var ChangedmiddleValue = ((changedMedia.timelineTime[1] - changedMedia.timelineTime[0])/2);
+            var middleOfMediaPos = media.timelineTime[0] + middleValue;
+            var middleOfChangedMediaPos = changedMedia.timelineTime[0] + ChangedmiddleValue;
+            var direction;
+            var shiftPos;
+    
+            if(middleOfChangedMediaPos < middleOfMediaPos){
+    
+                shiftPos = changedMedia.timelineTime[1] - media.timelineTime[0];
+                direction = 'forwards';
+    
+            }else if (middleOfChangedMediaPos > middleOfMediaPos){
+    
+                shiftPos =  media.timelineTime[1] - changedMedia.timelineTime[0];
+                direction = 'backwards';
+    
+            } else {
+                // it is exactly on the middle, make it go forwards
+                shiftPos = changedMedia.timelineTime[1] - media.timelineTime[0];
+                direction = 'forwards';
+    
+            }
+
+            return {direction, shiftPos, media};
+
+        };
+
+        var shiftClosestSpecification = function(shiftSpecification, direction){
+
+            if(shiftSpecification.length <= 1){
+
+                if(shiftSpecification.length > 0){
+                    shiftMedia(affectedLayerMedia, shiftSpecification[0].direction,
+                        shiftSpecification[0].shiftPos, shiftSpecification[0].media);
+                }
+
+            }else{
+                
+                if(direction == 'forwards'){
+
+                    shiftSpecification.sort(function (a, b) {
+                        if (a.media.timelineTime[0] < b.media.timelineTime[0])
+                            return -1;
+                        if (a.media.timelineTime[0] > b.media.timelineTime[0])
+                            return 1;
+                        return 0;
+                    });
+
+                }else{
+
+                    shiftSpecification.sort(function (a, b) {
+                        if (a.media.timelineTime[1] > b.media.timelineTime[1])
+                            return -1;
+                        if (a.media.timelineTime[1] < b.media.timelineTime[1])
+                            return 1;
+                        return 0;
+                    });
+
+                }
+                
+                shiftMedia(affectedLayerMedia, shiftSpecification[0].direction,
+                    shiftSpecification[0].shiftPos, shiftSpecification[0].media);
+
+            }
+
+        }
+
+        var targetedAffectedMedia = [];
+
         affectedLayerMedia.forEach(function(media){
 
             if( 
@@ -78,32 +150,44 @@ function MediaShift() {
                 media.timelineTime[1] <= changedMedia.timelineTime[1])
                 
             ){
-
-                var middleValue = ((media.timelineTime[1] - media.timelineTime[0])/2);
-                var ChangedmiddleValue = ((changedMedia.timelineTime[1] - changedMedia.timelineTime[0])/2);
-                var middleOfMediaPos = media.timelineTime[0] + middleValue;
-                var middleOfChangedMediaPos = changedMedia.timelineTime[0] + ChangedmiddleValue;
-
-                if(middleOfChangedMediaPos < middleOfMediaPos){
-
-                    let shiftedFrontPos = changedMedia.timelineTime[1] - media.timelineTime[0];
-                    shiftMedia(affectedLayerMedia, 'forwards', shiftedFrontPos, media);
-
-                }else if (middleOfChangedMediaPos > middleOfMediaPos){
-
-                    let shiftedBackPos =  media.timelineTime[1] - changedMedia.timelineTime[0];
-                    shiftMedia(affectedLayerMedia, 'backwards', shiftedBackPos, media);
-
-                } else {
-                    // it is exactly on the middle, make it go forwards
-                    let shiftedFrontPos = changedMedia.timelineTime[1] - media.timelineTime[0];
-                    shiftMedia(affectedLayerMedia, 'forwards', shiftedFrontPos, media);
-
-                }
-
+                targetedAffectedMedia.push(media);
             }
 
         });
+
+        if(targetedAffectedMedia.length > 0){
+
+            // shift closest of the targeted affected media
+
+            if(targetedAffectedMedia.length <= 1){
+
+                let shiftSpecification = specifyShift(changedMedia, targetedAffectedMedia[0]);
+                shiftMedia(affectedLayerMedia, shiftSpecification.direction,
+                shiftSpecification.shiftPos, shiftSpecification.media);
+
+            }else{
+
+                let backwardShiftSpecifications = [];
+                let forwardShiftSpecifications = []; 
+
+                targetedAffectedMedia.forEach(function(media){
+
+                    let shiftSpecification = specifyShift(changedMedia, media);
+
+                    if(shiftSpecification.direction == "forwards"){
+                        forwardShiftSpecifications.push(shiftSpecification);
+                    }else{
+                        backwardShiftSpecifications.push(shiftSpecification);
+                    }
+
+                });
+
+                shiftClosestSpecification(forwardShiftSpecifications, 'forwards');
+                shiftClosestSpecification(backwardShiftSpecifications, 'backwards');
+
+            }
+
+        }
 
     }
 

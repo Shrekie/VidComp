@@ -34,7 +34,7 @@ export default function () {
     this.adjustMediaShift = function(currentTimelinePos, newTimelinePos, sourceLoader){
 
         /*
-        
+
             Based on new position of media, apply changes to timeline.
             #FIXME: mediaIndex indifferent, only maintains uniqueness but makes mediaIndex dirty
 
@@ -92,7 +92,7 @@ export default function () {
 
             mediaShift.checkShift(affectedLayerMedia, changedMedia);
 
-            sourceLoader.sortMediaLayers();
+            sourceLoader.sortMediaLayers(); // FIXME: does this need to be aded after deleteLayer?
 
             
             if(!currentMedia.length > 0){
