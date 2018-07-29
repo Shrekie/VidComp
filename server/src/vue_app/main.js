@@ -85,7 +85,7 @@ testProject.createLayer({
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?mime=video%2Fmp4&source=youtube&key=yt6&itag=22&ip=167.99.91.144&mt=1532674487&mv=m&ms=au%2Crdu&mm=31%2C29&pl=20&signature=429E7CA3D2D68F6C36834295D5A045623CD063E1.1B2BD312B09306D3D7112A99B42254F64D0BA0EE&id=o-AK7aHebX6u4J3CiSxQcIKWhGSxeDP5fzA6ZWOUqXl4hF&dur=280.915&requiressl=yes&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ratebypass=yes&ipbits=0&expire=1532696185&lmt=1471812821364858&mn=sn-aigzrn7z%2Csn-aigl6nl7&initcwndbps=122500&fvip=2&c=WEB&ei=GcJaW82WD4yThAer7pXYAQ',
+        resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?source=youtube&initcwndbps=148750&ei=PEBdW7H4HszFVdfXhJAH&itag=22&c=WEB&requiressl=yes&mime=video%2Fmp4&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&key=yt6&lmt=1471812821364858&ipbits=0&mt=1532837860&mv=m&fvip=2&ms=au%2Crdu&signature=05D8BF01782076B4CD5652A42AA24C69166E4F7F.3708C85B0F48495A72104D90E14B83A2C50982EA&id=o-AIaYMoiWzyD-4jc3H9w1TL7trzzpsvBpM7soqIZmA-AV&ratebypass=yes&ip=167.99.91.144&mm=31%2C29&mn=sn-aigl6nl7%2Csn-aigzrn7z&dur=280.915&expire=1532859548&pl=20',
         resourceType: 'video'
     }
 

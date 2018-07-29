@@ -29,15 +29,18 @@ export default {
     },
 
     methods: {
+
         setMediaSize () {
             // FIXME: change name, it also positions.
             this.mediaWidth = ((this.timelineTime[1]-this.timelineTime[0])*1000) + 'px';
             this.mediaLeft = (this.timelineTime[0]*1000) + 'px';
 
         },
+
         updateElement () {
             this.$forceUpdate();
-        }
+        },
+
     },
 
     computed: {
@@ -45,9 +48,8 @@ export default {
 
     mounted: function () {
 
-        console.log(this.mediaIndex);
-        
-        this.motionEvents.enableDrag(this.$refs.media, function(top, left){
+        var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
+        this.motionEvents.enableDrag(media, this.$refs.media, function(top, left){
             
             console.log('dropped element');
             var nextLayerPixels = 40;

@@ -58,6 +58,7 @@ function MediaShift() {
     var checkShift = function (affectedLayerMedia, changedMedia) {
 
         var specifyShift = function(changedMedia, media){
+            // specifies how media should be pushed
 
             var middleValue = ((media.timelineTime[1] - media.timelineTime[0])/2);
             var ChangedmiddleValue = ((changedMedia.timelineTime[1] - changedMedia.timelineTime[0])/2);
@@ -89,6 +90,8 @@ function MediaShift() {
 
         var shiftClosestSpecification = function(shiftSpecification, direction){
 
+            // shifts either single specification or an array
+        
             if(shiftSpecification.length <= 1){
 
                 if(shiftSpecification.length > 0){
@@ -98,6 +101,8 @@ function MediaShift() {
 
             }else{
                 
+                // if array sort to closest based on direction
+
                 if(direction == 'forwards'){
 
                     shiftSpecification.sort(function (a, b) {
@@ -131,24 +136,38 @@ function MediaShift() {
 
         affectedLayerMedia.forEach(function(media){
 
+            // check if drop position has media on it
             if( 
                 // TODO: fix whitespace when i dont need to debug anymore
-                (changedMedia.timelineTime[0] > media.timelineTime[0] 
-                && 
-                changedMedia.timelineTime[0] < media.timelineTime[1]) 
-                
-                || 
+                // TODO: im pretty sure this check can be simplified
+                media !== changedMedia
 
-                (changedMedia.timelineTime[1] > media.timelineTime[0] 
-                && 
-                changedMedia.timelineTime[1] < media.timelineTime[1]) 
-                
-                ||
-
-                (media.timelineTime[0] > changedMedia.timelineTime[0] 
                 &&
-                media.timelineTime[1] <= changedMedia.timelineTime[1])
-                
+                (
+                    (changedMedia.timelineTime[0] > media.timelineTime[0] 
+
+                    && 
+
+                    changedMedia.timelineTime[0] < media.timelineTime[1]) 
+                    
+                    || 
+
+                    (changedMedia.timelineTime[1] > media.timelineTime[0] 
+                    && 
+                    changedMedia.timelineTime[1] < media.timelineTime[1]) 
+                    
+                    ||
+
+                    (media.timelineTime[0] > changedMedia.timelineTime[0] 
+                    &&
+                    media.timelineTime[1] <= changedMedia.timelineTime[1])
+
+                    ||
+
+                    (media.timelineTime[0] >= changedMedia.timelineTime[0] 
+                    &&
+                    media.timelineTime[1] <= changedMedia.timelineTime[1])
+                )
             ){
                 targetedAffectedMedia.push(media);
             }

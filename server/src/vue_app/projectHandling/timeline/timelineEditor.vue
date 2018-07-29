@@ -20,6 +20,7 @@
 <script>
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
+import MotionEvents from './../../dragResizeMotion/motionEvents.js';
 
 export default {
 
@@ -45,6 +46,51 @@ export default {
     },
     
     methods: {
+
+        determineSnaps: function(){
+
+            MotionEvents.prototype.snapCalculation = function(mediaElement, elementToSnap){
+
+                let rangeOfSnap = 4;
+                let snapPoints = [];
+
+                this.allLayers.forEach(function(layer){
+
+                    let allLayerMedia = layer.getAllMedia();
+
+                    allLayerMedia.forEach(function(media){
+                        if(media !== mediaElement){
+
+
+                            let layerPos = media.layerIndex;
+
+                            media.timelineTime.forEach(function(timelineTime){
+
+                                let snapPoint = {
+                                    snapRange:[],
+                                    snapPosition:0,
+                                    layerPos:0
+                                };
+
+                                let frontSnap = (timelineTime*1000) + rangeOfSnap
+                                let backSnap = (timelineTime*1000) - rangeOfSnap
+                                let snapPosition = timelineTime*1000;
+                                snapPoint.snapRange = [backSnap, frontSnap];
+                                snapPoint.snapPosition = snapPosition;
+                                snapPoint.layerPos = layerPos;
+                                snapPoints.push(snapPoint);
+
+                            });
+
+                        }
+                    })
+
+                });
+
+                MotionEvents.prototype.setSnapPoints(snapPoints);
+                
+            }.bind(this);
+        },
 
         setVideoStartTime: function (){
 
@@ -93,6 +139,7 @@ export default {
         
         this.setVideoStartTime();
         this.updateScrolling();
+        this.determineSnaps();
         //this.$eventHub.$on('edit-enabled', this.editEnabled);
         
     },
@@ -132,7 +179,8 @@ export default {
         #TODO: remove scrollbar support entirely, implement own "scrollbars"
         Scrolling will still be based on "scrolling" just always hide the overflow.
     */
-    padding-bottom: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     overflow: overlay; 
 }
 

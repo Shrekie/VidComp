@@ -92,6 +92,10 @@ export default function () {
         return timeline.getAllLayers();
     };
 
+    this.getMedia = function(layerIndex, mediaIndex){
+        return timeline.getLayer(layerIndex).getMedia(mediaIndex);
+    }
+
     this.stop = function () {
         videoProjection.stopPlaying(sourceLoader);
     };
