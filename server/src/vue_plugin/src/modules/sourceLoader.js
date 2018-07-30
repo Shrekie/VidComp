@@ -68,13 +68,7 @@ export default function () {
         console.log(store.sources);
     }
 
-    this.eachSource = function (cb) {
-
-        store.sources.forEach(function(source, index){
-            cb(source, index);
-        });
-
-    };
+    this.eachSource = store.sources;
 
     this.loadSelectedResource = function (resource) {
 

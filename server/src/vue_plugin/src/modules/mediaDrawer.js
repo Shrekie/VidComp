@@ -15,10 +15,9 @@ export default function () {
         
         this.trackTime = function () {
             nowTime = new Date();
-            this.elapsedDateTime = nowTime - startTime;
+            this.elapsedDateTime = (nowTime - startTime)
             this.elapsed = this.elapsedDateTime;
-            this.elapsed /= 100;
-            this.elapsed = (Math.round(this.elapsed)/1000).toFixed(3);
+            this.elapsed = this.elapsed/100000;
         };
 
         this.resetTime = function () {
@@ -39,25 +38,48 @@ export default function () {
     var timeTracker = new TimeTracker();
     this.contextHooks = new ContextHooks({timeTracker});
     var animationFrame = {};
+    var loadingBuffer = false;
 
     var stopContent = function (sourceLoader) {
 
-        sourceLoader.eachSource(function(source){
+        sourceLoader.eachSource.forEach(function(source){
+
             if(source.type == 'video'){
+
                 if(!source.cast.paused){
+
                     // pause videos
-                    source.cast.pause();
+                    if(source.cast.playPromise){
+
+                        source.cast.playPromise.then(_ => {
+                            source.cast.pause();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
+                    }else{
+
+                        source.cast.pause();
+
+                    }
+
                 }
+
             }
+
         });
 
     };
 
     var videoUpdate = function (sourceLoader, videoOutput, contextHooks) {
+
         videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
         timeTracker.trackTime();
 
-        sourceLoader.eachSource(function(source){
+        loadingBuffer = false;
+
+        sourceLoader.eachSource.forEach(function(source){
             
             if(source.type == 'image'){
                 if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
@@ -68,31 +90,88 @@ export default function () {
 
             if(source.type == 'video'){
                 if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
-                    
+                
+
                     // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                     if(source.cast.paused){
-                        source.cast.play();
+
                         // if paused, shift currentTime to correct pos
                         source.cast.currentTime = timeTracker.convertTimeInteger(source.media.videoStartTime) + 
-                        (timeTracker.convertTimeInteger(timeTracker.elapsed) - 
+                        (timeTracker.convertTimeInteger(timeTracker.elapsed)- 
                         timeTracker.convertTimeInteger(source.media.timelineTime[0]));
+
+                        source.cast.playPromise = source.cast.play();
+
+                        source.cast.playPromise.then(_ => {
+                            source.cast.playPromise = false;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
                     } 
 
                     videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
                     source.media.size[0], source.media.size[1]);
 
                 }else if(!source.cast.paused){
+
                     // video stops displaying
-                    source.cast.load();
-                    source.cast.pause();
+                    if(source.cast.playPromise){
+
+                        source.cast.playPromise.then(_ => {
+                            source.cast.pause();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
+                    }else{
+
+                        source.cast.pause();
+
+                    }
+
                 }
             }
 
         });
 
-        contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
-        animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
+        var loadingBufferCheck = function(){
 
+            loadingBuffer = false;
+
+            for(var i = 0; i < sourceLoader.eachSource.length; i++) {
+
+                if (sourceLoader.eachSource[i].cast.playPromise) {
+
+                    sourceLoader.eachSource[i].cast.playPromise.then(_ => {
+
+                        loadingBufferCheck();
+                        timeTracker.startTime();
+                        
+                    })
+                    .catch(error => {
+
+                        console.log(error);
+
+                    });
+                    
+                    loadingBuffer = true;
+                    break;
+                    
+                }
+
+            }
+
+            if( (!loadingBuffer) && timeTracker.isPlaying ){
+                animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
+            }
+
+        }
+
+        contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
+        loadingBufferCheck();
     };
 
     this.stopDrawSources = function (sourceLoader) {

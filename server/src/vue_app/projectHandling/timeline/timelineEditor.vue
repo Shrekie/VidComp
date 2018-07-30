@@ -125,7 +125,7 @@ export default {
 
                 if(context.timeTracker.isPlaying){
                     var currentSliderTime = ((context.timeTracker.convertTimeInteger(context.timeTracker.elapsed))*10);
-                    if(currentSliderTime != this.$refs.timeline.scrollLeft) this.$refs.timeline.scrollLeft = currentSliderTime;
+                    this.$refs.timeline.scrollLeft = currentSliderTime;
                 }
     
             }.bind(this));
