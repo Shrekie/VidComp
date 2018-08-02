@@ -1,35 +1,117 @@
 
 var MotionEvents = function () {
 
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    var ghostLeft = 0;
-    var ghostRight = 0;
-
     this.onDragClose = function(){};
     this.media;
-    this.element = {};
-    this.element.onmousedown = null;
+    this.widthGhost = 0;
+    this.direction = 0;
+    this.dragElement = {};
+    this.triggerElement = {};
+    this.resizeElement = {};
+    this.triggerElement.onmousedown = null;
+    
 
-    this.enableDrag = function (media, element, onDragClose) {
+    this.enableDrag = function (media, triggerElement, dragElement, onDragClose) {
         this.media = media;
         this.onDragClose = onDragClose;
-        this.element = element;
-        this.element.onmousedown = dragMouseDown;
+        this.dragElement = dragElement;
+        this.triggerElement = triggerElement;
+        this.triggerElement.onmousedown = dragMouseDown;
     }
+
+    this.enableResize = function(media, dragElement, resizeElement, onDragClose, direction){
+        this.media = media;
+        this.onDragClose = onDragClose;
+        this.dragElement = dragElement;
+        this.direction = direction;
+        this.resizeElement = resizeElement;
+        this.dragElement.onmousedown = resizeMouseDown;
+    }
+
+    var resizeMouseDown = function(e){
+        e = e || window.event;
+        e.preventDefault();
+        this.snapCalculation(this.media, this.resizeElement);
+        // get the mouse cursor position at startup:
+        console.log(this.dragElement.offsetLeft);
+
+        this.widthGhost = this.resizeElement.offsetWidth;
+        this.ghostLeftResize = this.resizeElement.offsetLeft;
+        this.ghostRightResize = this.ghostLeft + this.widthGhost;
+
+        this.ghostLeft = this.dragElement.offsetLeft;
+        this.ghostRight = this.ghostLeft + this.dragElement.offsetWidth;
+        this.dragElement.style.left = this.ghostLeft + "px";
+        this.pos3 = e.clientX;
+        
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementResize;
+    }.bind(this);
 
     var dragMouseDown = function(e) {
 
         e = e || window.event;
         e.preventDefault();
-        this.snapCalculation(this.media, this.element);
+        this.snapCalculation(this.media, this.dragElement);
         // get the mouse cursor position at startup:
-        ghostLeft = (this.element.offsetLeft - pos1);
-        ghostRight = ghostLeft + this.element.offsetWidth;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
+        this.ghostLeft = (this.dragElement.offsetLeft - this.pos1);
+        this.ghostRight = this.ghostLeft + this.dragElement.offsetWidth;
+        this.pos3 = e.clientX;
+        this.pos4 = e.clientY;
         document.onmouseup = closeDragElement;
         // call a function whenever the cursor moves:
         document.onmousemove = elementDrag;
+
+    }.bind(this);
+
+    var elementResize = function(e){
+
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        this.pos1 = this.pos3 - e.clientX;
+        this.pos3 = e.clientX;
+        this.ghostRight = this.ghostLeft + this.dragElement.offsetWidth;
+
+
+
+        if(this.direction == "right"){
+            this.widthGhost = this.widthGhost - this.pos1;
+            this.ghostLeft = this.ghostLeft -  this.pos1;
+        }else{
+            this.widthGhost = this.widthGhost + this.pos1;
+            this.ghostLeftResize = this.ghostLeftResize - this.pos1;
+        }
+
+        this.ghostLeftResize = this.ghostLeftResize 
+        this.ghostRightResize = this.ghostLeftResize + this.widthGhost;
+
+        var checkSnap = snapCheckResize(this.ghostLeftResize, this.ghostRightResize, this.resizeElement);
+        
+        if(this.direction == "right"){
+            if(!checkSnap.right.snapped){
+                this.resizeElement.style.width =  this.widthGhost + "px";
+                this.dragElement.style.left = this.ghostLeft + "px";
+            }else{
+                var widthIncrease = checkSnap.right.snapPosition - (this.resizeElement.offsetWidth + this.resizeElement.offsetLeft);
+                this.resizeElement.style.width = (this.resizeElement.offsetWidth + widthIncrease) + "px";
+                console.log(checkSnap.right.snapPosition);
+                console.log(this.dragElement.offsetLeft);
+                this.dragElement.style.left = this.dragElement.offsetLeft + widthIncrease + "px";
+            }
+        }else{
+            if(!checkSnap.left.snapped){
+                this.resizeElement.style.left = this.ghostLeftResize + "px";
+                this.resizeElement.style.width =  this.widthGhost + "px";
+            }else{
+                var widthIncrease = this.resizeElement.offsetLeft - checkSnap.left.snapPosition;
+                this.resizeElement.style.left = checkSnap.left.snapPosition + "px";
+                this.resizeElement.style.width = (this.resizeElement.offsetWidth + widthIncrease) + "px";
+            }
+        }
+
+
 
     }.bind(this);
 
@@ -37,19 +119,50 @@ var MotionEvents = function () {
         e = e || window.event;
         e.preventDefault();
         // calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        ghostLeft = (ghostLeft - pos1);
-        ghostRight = ghostLeft + this.element.offsetWidth;
+        this.pos1 = this.pos3 - e.clientX;
+        this.pos2 = this.pos4 - e.clientY;
+        this.pos3 = e.clientX;
+        this.pos4 = e.clientY;
+        this.ghostLeft = (this.ghostLeft - this.pos1);
+        this.ghostRight = this.ghostLeft + this.dragElement.offsetWidth;
 
         // set the element's new position:
-        if(!snapCheck(ghostLeft, ghostRight, this.element)){
-            this.element.style.left = ghostLeft + "px";
-            this.element.style.left = (this.element.offsetLeft - pos1) + "px";
+        if(!snapCheck(this.ghostLeft, this.ghostRight, this.dragElement)){
+            this.dragElement.style.left = this.ghostLeft + "px";
+            this.dragElement.style.left = (this.dragElement.offsetLeft - this.pos1) + "px";
         }
-        this.element.style.top = (this.element.offsetTop - pos2) + "px";
+        this.dragElement.style.top = (this.dragElement.offsetTop - this.pos2) + "px";
+    }.bind(this);
+
+
+    var snapCheckResize = function(ghostLeft, ghostRight, element) {
+        var snapResult = {
+            left:{snapped:false, snapPosition:0}, 
+            right:{snapped:false, snapPosition:0}
+        };
+
+        for(var i = 0; i < this.snapPoints.length; i++){
+
+            if(ghostLeft >= this.snapPoints[i].snapRange[0] && ghostLeft <= this.snapPoints[i].snapRange[1]){
+                //element.style.left = this.snapPoints[i].snapPosition + "px";
+                //this.dragElement.style.left = this.ghostLeft + "px";
+                console.log("LEFT HIT");
+                snapResult.left.snapped = true;
+                snapResult.left.snapPosition = this.snapPoints[i].snapPosition;
+            }
+            
+            if(ghostRight >= this.snapPoints[i].snapRange[0] && ghostRight <= this.snapPoints[i].snapRange[1]){
+                //element.style.left = (this.snapPoints[i].snapPosition - element.offsetWidth) + "px";
+                //this.resizeElement.style.width =  this.widthGhost + "px";
+                //this.dragElement.style.left = this.ghostLeft + "px";
+                console.log("RIGHT HIT");
+                snapResult.right.snapped = true;
+                snapResult.right.snapPosition = this.snapPoints[i].snapPosition;
+            }
+        }
+
+        return snapResult;
+
     }.bind(this);
 
     var snapCheck = function(ghostLeft, ghostRight, element) {
@@ -74,18 +187,22 @@ var MotionEvents = function () {
         document.onmouseup = null;
         document.onmousemove = null;
 
-        console.log("OFFSET LEFT")
-        console.log(this.element.offsetLeft);
-        console.log(this.element.offsetLeft - pos1);
         //FIXME: OFFSET LEFT NOT CORRECT LEFT POSITION
         this.onDragClose(
-            this.element.offsetTop, 
-            (this.element.offsetLeft)
+            this.dragElement.offsetTop, 
+            (this.dragElement.offsetLeft)
         );
     }.bind(this);
 
 }
 
+//FIXME: this wont work, need unique for each instance or change each invocation
+MotionEvents.prototype.pos1 = 0;
+MotionEvents.prototype.pos2 = 0;
+MotionEvents.prototype.pos3 = 0;
+MotionEvents.prototype.pos4 = 0;
+MotionEvents.prototype.ghostRight = 0;
+MotionEvents.prototype.ghostLeft = 0;
 MotionEvents.prototype.snapPoints = [];
 
 MotionEvents.prototype.setSnapPoints = function (snapPoints){

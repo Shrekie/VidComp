@@ -1,5 +1,5 @@
 
-// Modules
+// Modules #TODO: Seperate into proper directories
 import VideoProjection from './modules/videoProjection.js';
 import Timeline from './modules/timeline.js';
 import ResourceImporter from './modules/resourceImporter.js';

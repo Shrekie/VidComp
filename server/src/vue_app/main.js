@@ -85,7 +85,7 @@ testProject.createLayer({
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?dur=280.915&fvip=2&mt=1532898579&pl=20&initcwndbps=112500&id=o-ACueIawxcU_E9M_o16Z4PGn5l5l9vhJl_4R1AoWojdBt&mv=m&source=youtube&ms=au%2Crdu&signature=BE474264E22A889EAF6676145E3E8970F968FC13.DDCAE8481ED227E2F99F171EBF2DA0B58046390B&mime=video%2Fmp4&mn=sn-aigzrn7z%2Csn-aigl6nl7&mm=31%2C29&ipbits=0&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&itag=22&requiressl=yes&expire=1532920305&ratebypass=yes&ip=167.99.91.144&ei=kS1eW5jfJKWTxwL-majADA&lmt=1471812821364858&c=WEB&key=yt6',
+        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mime=video%2Fmp4&initcwndbps=97500&ipbits=0&c=WEB&source=youtube&dur=280.915&lmt=1471812821364858&requiressl=yes&nh=%2CIgpwZjAxLmFtczE1Kg04MC4yMzkuMTI4LjE2&signature=7FA64154648158EE5A7906552456A6AC89337A62.DADE971A274DEC034E6963BFA4679B21A6F5C27E&key=yt6&itag=22&expire=1533158345&ratebypass=yes&fvip=14&mt=1533136674&mv=m&ei=ac9hW5eXCZP7xgLG-IroBg&ms=au%2Conr&ip=167.99.91.144&pl=20&mm=31%2C26&mn=sn-aigzrn7z%2Csn-5hne6nse&id=o-AFRyJ_Swo8xKG-g6DPaKRCBjDxKyVntPb6FFpWSoqw7d',
         resourceType: 'video'
     }
 

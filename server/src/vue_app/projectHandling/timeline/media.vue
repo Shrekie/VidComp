@@ -4,17 +4,37 @@
 
 <template>
 
-<div class="mediaContainer" ref="media"
-v-bind:style="{ width: mediaWidth, left: mediaLeft }" ></div>
+<div class="mediaContainer" ref="mediaContainer"
+v-bind:style="{ width: mediaWidth, left: mediaLeft }" >
+
+    <RimDrag v-bind:media-index="mediaIndex" 
+    v-bind:layer-index="layerIndex" v-bind:project-name="projectName"
+    v-bind:element-to-resize="this.$refs"
+    v-bind:direction='"right"'></RimDrag>
+
+    <RimDrag v-bind:media-index="mediaIndex" 
+    v-bind:layer-index="layerIndex" v-bind:project-name="projectName"
+    v-bind:element-to-resize="this.$refs"
+    v-bind:direction='"left"'></RimDrag>
+
+    <div class="media" ref="media" v-bind:style="{ width: mediaWidth, left: mediaLeft }"> </div>
+
+</div>
 
 
 </template>
 
 <script>
+
 import MotionEvents from './../../dragResizeMotion/motionEvents.js';
+import RimDrag from './rimDrag.vue';
 
 export default {
     name: "media",
+
+    components: {
+        RimDrag
+    },
 
     props: ['mediaIndex', 'layerIndex', 'timelineTime', 'projectName'],
 
@@ -23,7 +43,8 @@ export default {
 		return {
             mediaWidth: "0px",
             mediaLeft: "50%",
-            motionEvents: new MotionEvents ()
+            motionEvents: new MotionEvents (),
+            mediaElem: this.$refs.media
         }
         
     },
@@ -47,9 +68,10 @@ export default {
     },
 
     mounted: function () {
-
+        
+        
         var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        this.motionEvents.enableDrag(media, this.$refs.media, function(top, left){
+        this.motionEvents.enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
             
             console.log('dropped element');
             var nextLayerPixels = 40;
@@ -68,10 +90,14 @@ export default {
             this.$refs.media.style.top = "0px";
             this.$refs.media.style.left = this.mediaLeft
 
+            this.$refs.mediaContainer.style.top = "0px";
+            this.$refs.mediaContainer.style.left = this.mediaLeft
+
         }.bind(this));
-
+        
+        
         this.setMediaSize();
-
+        
     }
     
 };
@@ -93,6 +119,10 @@ export default {
     width: 0px;
     user-select: none;
     z-index: 1;
+}
+
+.media{
+    height: 40px;
 }
 
 </style>
