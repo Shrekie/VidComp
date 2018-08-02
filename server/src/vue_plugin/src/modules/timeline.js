@@ -31,6 +31,24 @@ export default function () {
         return store.layers.push(layer);
     };
 
+    this.adjustMediaTimeShift = function(direction, layerIndex, mediaIndex, timelineTime){
+        var changedMedia = this.getLayer(layerIndex).getMedia(mediaIndex);
+        var affectedLayerMedia = this.getLayer(layerIndex).getAllMedia();
+        var shiftPos = 0;
+
+        console.log(shiftPos);
+        if(direction == "right"){
+            shiftPos = timelineTime - changedMedia.timelineTime[1];
+            mediaShift.shiftTimeMedia(affectedLayerMedia, "forwards", shiftPos, changedMedia, timelineTime);
+        }else{
+            shiftPos = changedMedia.timelineTime[0] - timelineTime;
+            mediaShift.shiftTimeMedia(affectedLayerMedia, "backwards", shiftPos, changedMedia, timelineTime);
+        }
+
+        this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: layerIndex});
+
+    };
+
     this.adjustMediaShift = function(currentTimelinePos, newTimelinePos, sourceLoader){
 
         /*

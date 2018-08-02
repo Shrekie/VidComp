@@ -17,7 +17,7 @@ v-bind:style="{ width: mediaWidth, left: mediaLeft }" >
     v-bind:element-to-resize="this.$refs"
     v-bind:direction='"left"'></RimDrag>
 
-    <div class="media" ref="media" v-bind:style="{ width: mediaWidth, left: mediaLeft }"> </div>
+    <div class="media" ref="media"> </div>
 
 </div>
 
@@ -87,9 +87,6 @@ export default {
                     timelineStartTime: (left/1000)
             });
 
-            this.$refs.media.style.top = "0px";
-            this.$refs.media.style.left = this.mediaLeft
-
             this.$refs.mediaContainer.style.top = "0px";
             this.$refs.mediaContainer.style.left = this.mediaLeft
 
@@ -113,8 +110,7 @@ export default {
 .mediaContainer{
     display: inline-block;
     position: absolute;
-    background-color: forestgreen;
-    border: 1px solid black;
+    background-color: #1c4ec1;
     height: 40px;
     width: 0px;
     user-select: none;
@@ -122,7 +118,9 @@ export default {
 }
 
 .media{
-    height: 40px;
+    height: 100%;
+    width:100%;
+    background: #1c4ec1;
 }
 
 </style>

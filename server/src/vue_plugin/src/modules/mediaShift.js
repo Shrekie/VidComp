@@ -1,49 +1,49 @@
 // could implement like polymorphic shifting types based on how user wants shift to work
 function MediaShift() {
+    
+    var setShiftPos = function (direction, targetMedia, shiftPos){
+
+        if(direction == "forwards"){
+            targetMedia.timelineTime[1] = targetMedia.timelineTime[1] + shiftPos;
+            targetMedia.timelineTime[0] = targetMedia.timelineTime[0] + shiftPos;
+        }else{
+            targetMedia.timelineTime[1] = targetMedia.timelineTime[1] - shiftPos;
+            targetMedia.timelineTime[0] = targetMedia.timelineTime[0] - shiftPos;
+        }
+
+    }
+
+    var checkCascade = function (affectedLayerMedia, direction, targetMedia, shiftPos){
+
+        if(direction == "forwards"){
+
+            affectedLayerMedia.forEach(function(media){
+                if(media.timelineTime[0] >= targetMedia.timelineTime[1] && 
+                    targetMedia.timelineTime[1] + shiftPos > media.timelineTime[0]){
+                    checkCascade(affectedLayerMedia, direction, media, shiftPos);
+                    setShiftPos(direction, media, shiftPos);
+                }
+            });
+        
+           
+        }else{
+
+            affectedLayerMedia.forEach(function(media){
+                if(media.timelineTime[1] <= targetMedia.timelineTime[0] && 
+                    targetMedia.timelineTime[0] - shiftPos < media.timelineTime[1]){
+                    checkCascade(affectedLayerMedia, direction, media, shiftPos);
+                    setShiftPos(direction, media, shiftPos);
+                }
+            });
+            
+
+        }
+
+    }
 
     var shiftMedia = function(affectedLayerMedia, direction, shiftPos, targetMedia) {
 
-        var setShiftPos = function (direction, targetMedia, shiftPos){
-
-            if(direction == "forwards"){
-                targetMedia.timelineTime[1] = targetMedia.timelineTime[1] + shiftPos;
-                targetMedia.timelineTime[0] = targetMedia.timelineTime[0] + shiftPos;
-            }else{
-                targetMedia.timelineTime[1] = targetMedia.timelineTime[1] - shiftPos;
-                targetMedia.timelineTime[0] = targetMedia.timelineTime[0] - shiftPos;
-            }
-
-        }
-
-        var checkCascade = function (direction, targetMedia, shiftPos){
-
-            if(direction == "forwards"){
-
-                affectedLayerMedia.forEach(function(media){
-                    if(media.timelineTime[0] >= targetMedia.timelineTime[1] && 
-                        targetMedia.timelineTime[1] + shiftPos > media.timelineTime[0]){
-                        checkCascade(direction, media, shiftPos);
-                        setShiftPos(direction, media, shiftPos);
-                    }
-                });
-            
-               
-            }else{
-
-                affectedLayerMedia.forEach(function(media){
-                    if(media.timelineTime[1] <= targetMedia.timelineTime[0] && 
-                        targetMedia.timelineTime[0] - shiftPos < media.timelineTime[1]){
-                        checkCascade(direction, media, shiftPos);
-                        setShiftPos(direction, media, shiftPos);
-                    }
-                });
-                
-
-            }
-
-        }
-
-        checkCascade(direction, targetMedia, shiftPos);
+        checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
         setShiftPos(direction, targetMedia, shiftPos)
 
         let negativeMedia = [];
@@ -54,6 +54,26 @@ function MediaShift() {
 
         if(negativeMedia.length > 0) negativePush(affectedLayerMedia, negativeMedia);
     };
+
+    var shiftTimeMedia = function(affectedLayerMedia, direction, shiftPos, targetMedia, timelineTime){
+
+        checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
+
+        if(direction=="forwards"){
+            targetMedia.timelineTime[1] = timelineTime;
+        }else{
+            targetMedia.timelineTime[0] = timelineTime;
+        }
+
+        let negativeMedia = [];
+        
+        affectedLayerMedia.forEach(function(media){
+            if(media.timelineTime[0] < 0) negativeMedia.push(media);
+        });
+
+        if(negativeMedia.length > 0) negativePush(affectedLayerMedia, negativeMedia);
+
+    }
 
     var checkShift = function (affectedLayerMedia, changedMedia) {
 
@@ -261,8 +281,12 @@ function MediaShift() {
 
     return{
         shiftMedia,
+        shiftTimeMedia,
         negativePush,
-        checkShift
+        checkShift,
+        checkCascade,
+        setShiftPos
+
     }
 
 }

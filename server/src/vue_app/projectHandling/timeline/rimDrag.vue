@@ -34,11 +34,11 @@ export default {
         setDirection () {
             if(this.direction == "right"){
                 this.leftDirection = "unset";
-                this.rightDirection = "0";
+                this.rightDirection = "0px";
                 this.$refs.rimPoint.style.left = this.leftDirection;
                 this.$refs.rimPoint.style.right = this.rightDirection;
-            }else{
-                this.leftDirection = "0";
+            }else{ 
+                this.leftDirection = "0px";
                 this.rightDirection = "unset";
                 this.$refs.rimPoint.style.left = this.leftDirection;
                 this.$refs.rimPoint.style.right = this.rightDirection;
@@ -57,10 +57,22 @@ export default {
         this.elementToResize.mediaContainer, function(top, left){
             
             console.log('dropped RIM');
+            
+            var timelineTime = 0;
+            if(this.direction == "right"){
+                timelineTime = (this.elementToResize.mediaContainer.offsetWidth + 
+                this.elementToResize.mediaContainer.offsetLeft) / 1000
+            }else{
+                timelineTime = this.elementToResize.mediaContainer.offsetLeft / 1000
+            }
+            
+            this.$vcomp(this.projectName)
+            .adjustMediaTimeShift(this.direction, 
+            this.layerIndex, this.mediaIndex, timelineTime);
+            
 
-            //this.$refs.rimPoint.style.top = "0px";
-            //this.$refs.rimPoint.style.left = this.mediaLeft
             this.setDirection();
+
         }.bind(this), this.direction);
 
         this.setDirection();
@@ -74,13 +86,11 @@ export default {
 <style>
 
 .rimDrag{
-    background:red;
+    background: #c4d3f99c;
     width: 10px;
-    height: inherit;
     position: absolute;
-    top: 15px;
-    height: 10px;
-    border-radius: 20px;
+    height: 40px;
+    border: 1px solid black;
 }
 
 </style>
