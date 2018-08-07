@@ -2,7 +2,7 @@
 function MediaShift() {
     
     var setShiftPos = function (direction, targetMedia, shiftPos){
-
+        console.log(shiftPos);
         if(direction == "forwards"){
             targetMedia.timelineTime[1] = targetMedia.timelineTime[1] + shiftPos;
             targetMedia.timelineTime[0] = targetMedia.timelineTime[0] + shiftPos;
@@ -14,7 +14,7 @@ function MediaShift() {
     }
 
     var checkCascade = function (affectedLayerMedia, direction, targetMedia, shiftPos){
-
+        console.log(shiftPos);
         if(direction == "forwards"){
 
             affectedLayerMedia.forEach(function(media){

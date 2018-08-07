@@ -88,29 +88,29 @@ var MotionEvents = function () {
         this.ghostRightResize = this.ghostLeftResize + this.widthGhost;
 
         var checkSnap = snapCheckResize(this.ghostLeftResize, this.ghostRightResize, this.resizeElement);
-        
-        if(this.direction == "right"){
-            if(!checkSnap.right.snapped){
-                this.resizeElement.style.width =  this.widthGhost + "px";
-                this.dragElement.style.left = this.ghostLeft + "px";
+        if(this.widthGhost > 20){
+            if(this.direction == "right"){
+                if(!checkSnap.right.snapped){
+                    this.resizeElement.style.width =  this.widthGhost + "px";
+                    this.dragElement.style.left = this.ghostLeft + "px";
+                }else{
+                    var widthIncrease = checkSnap.right.snapPosition - (this.resizeElement.offsetWidth + this.resizeElement.offsetLeft);
+                    this.resizeElement.style.width = (this.resizeElement.offsetWidth + widthIncrease) + "px";
+                    console.log(checkSnap.right.snapPosition);
+                    console.log(this.dragElement.offsetLeft);
+                    this.dragElement.style.left = this.dragElement.offsetLeft + widthIncrease + "px";
+                }
             }else{
-                var widthIncrease = checkSnap.right.snapPosition - (this.resizeElement.offsetWidth + this.resizeElement.offsetLeft);
-                this.resizeElement.style.width = (this.resizeElement.offsetWidth + widthIncrease) + "px";
-                console.log(checkSnap.right.snapPosition);
-                console.log(this.dragElement.offsetLeft);
-                this.dragElement.style.left = this.dragElement.offsetLeft + widthIncrease + "px";
-            }
-        }else{
-            if(!checkSnap.left.snapped){
-                this.resizeElement.style.left = this.ghostLeftResize + "px";
-                this.resizeElement.style.width =  this.widthGhost + "px";
-            }else{
-                var widthIncrease = this.resizeElement.offsetLeft - checkSnap.left.snapPosition;
-                this.resizeElement.style.left = checkSnap.left.snapPosition + "px";
-                this.resizeElement.style.width = (this.resizeElement.offsetWidth + widthIncrease) + "px";
+                if(!checkSnap.left.snapped){
+                    this.resizeElement.style.left = this.ghostLeftResize + "px";
+                    this.resizeElement.style.width =  this.widthGhost + "px";
+                }else{
+                    var widthIncrease = this.resizeElement.offsetLeft - checkSnap.left.snapPosition;
+                    this.resizeElement.style.left = checkSnap.left.snapPosition + "px";
+                    this.resizeElement.style.width = (this.resizeElement.offsetWidth + widthIncrease) + "px";
+                }
             }
         }
-
 
 
     }.bind(this);
@@ -136,6 +136,9 @@ var MotionEvents = function () {
 
 
     var snapCheckResize = function(ghostLeft, ghostRight, element) {
+
+        console.log(this.widthGhost);
+
         var snapResult = {
             left:{snapped:false, snapPosition:0}, 
             right:{snapped:false, snapPosition:0}

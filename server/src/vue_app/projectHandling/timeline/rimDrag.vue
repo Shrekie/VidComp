@@ -66,6 +66,8 @@ export default {
                 timelineTime = this.elementToResize.mediaContainer.offsetLeft / 1000
             }
             
+            console.log(timelineTime);
+            
             this.$vcomp(this.projectName)
             .adjustMediaTimeShift(this.direction, 
             this.layerIndex, this.mediaIndex, timelineTime);
