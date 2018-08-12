@@ -1,8 +1,18 @@
+import timeline from "./timeline";
+
 // could implement like polymorphic shifting types based on how user wants shift to work
 function MediaShift() {
-    
+
+    var formatTimelineValue = function(targetMedia){
+
+        // make sure timelineTime is at 3 decimal places.
+        targetMedia.timelineTime[0] = Math.round(targetMedia.timelineTime[0] * 1000) / 1000;
+        targetMedia.timelineTime[1] = Math.round(targetMedia.timelineTime[1] * 1000) / 1000;
+
+    }
+
     var setShiftPos = function (direction, targetMedia, shiftPos){
-        console.log(shiftPos);
+
         if(direction == "forwards"){
             targetMedia.timelineTime[1] = targetMedia.timelineTime[1] + shiftPos;
             targetMedia.timelineTime[0] = targetMedia.timelineTime[0] + shiftPos;
@@ -11,15 +21,26 @@ function MediaShift() {
             targetMedia.timelineTime[0] = targetMedia.timelineTime[0] - shiftPos;
         }
 
+        formatTimelineValue(targetMedia);
+
     }
 
     var checkCascade = function (affectedLayerMedia, direction, targetMedia, shiftPos){
-        console.log(shiftPos);
+        
+        // cascades through affectedLayerMedia and shifts based on amount by shiftpos recursively
+
+        // TODO: make the decimal format abstracted for predictedLength
+        // predicted amount performed shift media has shifted
+        var predictedLength = 0;
+
         if(direction == "forwards"){
+
+            predictedLength = targetMedia.timelineTime[1] + shiftPos;
+            predictedLength = Math.round(predictedLength * 1000) / 1000;
 
             affectedLayerMedia.forEach(function(media){
                 if(media.timelineTime[0] >= targetMedia.timelineTime[1] && 
-                    targetMedia.timelineTime[1] + shiftPos > media.timelineTime[0]){
+                    predictedLength > media.timelineTime[0]){
                     checkCascade(affectedLayerMedia, direction, media, shiftPos);
                     setShiftPos(direction, media, shiftPos);
                 }
@@ -28,9 +49,12 @@ function MediaShift() {
            
         }else{
 
+            predictedLength = targetMedia.timelineTime[0] - shiftPos;
+            predictedLength = Math.round(predictedLength * 1000) / 1000;
+
             affectedLayerMedia.forEach(function(media){
                 if(media.timelineTime[1] <= targetMedia.timelineTime[0] && 
-                    targetMedia.timelineTime[0] - shiftPos < media.timelineTime[1]){
+                    predictedLength < media.timelineTime[1]){
                     checkCascade(affectedLayerMedia, direction, media, shiftPos);
                     setShiftPos(direction, media, shiftPos);
                 }
@@ -42,20 +66,34 @@ function MediaShift() {
     }
 
     var shiftMedia = function(affectedLayerMedia, direction, shiftPos, targetMedia) {
+        
+        // end and start pattern of cascading media shifting
 
         checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
         setShiftPos(direction, targetMedia, shiftPos)
 
         let negativeMedia = [];
-        
+
+        // set a array of media that are pushed negatively and give to negativePush
         affectedLayerMedia.forEach(function(media){
             if(media.timelineTime[0] < 0) negativeMedia.push(media);
         });
 
         if(negativeMedia.length > 0) negativePush(affectedLayerMedia, negativeMedia);
+
     };
 
-    var shiftTimeMedia = function(affectedLayerMedia, direction, shiftPos, targetMedia, timelineTime){
+    var shiftTimeMedia = function(affectedLayerMedia, direction, targetMedia, timelineTime){
+
+        //TODO: bind this tighter with shiftMedia
+
+        var shiftPos = 0;
+
+        if(direction=="forwards"){
+            shiftPos = timelineTime - targetMedia.timelineTime[1];
+        }else{
+            shiftPos =  targetMedia.timelineTime[0] - timelineTime;
+        }
 
         checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
 
@@ -111,7 +149,6 @@ function MediaShift() {
         var shiftClosestSpecification = function(shiftSpecification, direction){
 
             // shifts either single specification or an array
-        
             if(shiftSpecification.length <= 1){
 
                 if(shiftSpecification.length > 0){
@@ -272,10 +309,12 @@ function MediaShift() {
         affectedLayerMedia.forEach(function(media){
             media.timelineTime[0] = media.timelineTime[0] + shiftPos;
             media.timelineTime[1] = media.timelineTime[1] + shiftPos;
+            formatTimelineValue(media);
         });
 
         targetedTargetMedia.timelineTime[0] = 0;
         targetedTargetMedia.timelineTime[1] = timeSize;
+        formatTimelineValue(targetedTargetMedia);
 
     }
 

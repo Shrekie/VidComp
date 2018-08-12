@@ -32,17 +32,14 @@ export default function () {
     };
 
     this.adjustMediaTimeShift = function(direction, layerIndex, mediaIndex, timelineTime){
+        
         var changedMedia = this.getLayer(layerIndex).getMedia(mediaIndex);
         var affectedLayerMedia = this.getLayer(layerIndex).getAllMedia();
-        var shiftPos = 0;
 
-        console.log(shiftPos);
-        if(direction == "right"){
-            shiftPos = timelineTime - changedMedia.timelineTime[1];
-            mediaShift.shiftTimeMedia(affectedLayerMedia, "forwards", shiftPos, changedMedia, timelineTime);
+        if(direction == "forwards"){
+            mediaShift.shiftTimeMedia(affectedLayerMedia, direction, changedMedia, timelineTime);
         }else{
-            shiftPos = changedMedia.timelineTime[0] - timelineTime;
-            mediaShift.shiftTimeMedia(affectedLayerMedia, "backwards", shiftPos, changedMedia, timelineTime);
+            mediaShift.shiftTimeMedia(affectedLayerMedia, direction, changedMedia, timelineTime);
         }
 
         this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: layerIndex});

@@ -64,8 +64,6 @@ export default function () {
         }
           
         store.sources.sort(compare);
-
-        console.log(store.sources);
     }
 
     this.eachSource = store.sources;

@@ -57,19 +57,20 @@ export default {
         this.elementToResize.mediaContainer, function(top, left){
             
             console.log('dropped RIM');
-            
+            var direction = 0;
             var timelineTime = 0;
+
             if(this.direction == "right"){
                 timelineTime = (this.elementToResize.mediaContainer.offsetWidth + 
-                this.elementToResize.mediaContainer.offsetLeft) / 1000
+                this.elementToResize.mediaContainer.offsetLeft) / 1000;
+                direction = "forwards";
             }else{
-                timelineTime = this.elementToResize.mediaContainer.offsetLeft / 1000
+                timelineTime = this.elementToResize.mediaContainer.offsetLeft / 1000;
+                direction = "backwards";
             }
             
-            console.log(timelineTime);
-            
             this.$vcomp(this.projectName)
-            .adjustMediaTimeShift(this.direction, 
+            .adjustMediaTimeShift(direction, 
             this.layerIndex, this.mediaIndex, timelineTime);
             
 
