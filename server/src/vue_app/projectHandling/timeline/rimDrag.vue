@@ -9,10 +9,6 @@
 
 <script>
 
-    /*
-        #SUGGESTION: ss
-    */
-
 import MotionEvents from './../../dragResizeMotion/motionEvents.js';
 
 export default {
@@ -23,8 +19,8 @@ export default {
     
 	data() {
 		return {
-            motionEvents: new MotionEvents (),
             rightDirection:0,
+            resizeMotion:0,
             leftDirection:0
 		}
     },
@@ -43,17 +39,15 @@ export default {
                 this.$refs.rimPoint.style.left = this.leftDirection;
                 this.$refs.rimPoint.style.right = this.rightDirection;
             }
-            this.$refs.rimPoint.style.width = "10px";
         }
 
     },
 
     mounted: function () {
-        console.log(this.elementToResize);
         
         var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
         
-        this.motionEvents.enableResize(media, this.$refs.rimPoint, 
+        this.resizeMotion = new MotionEvents().enableResize(media, this.$refs.rimPoint, 
         this.elementToResize.mediaContainer, function(top, left){
             
             console.log('dropped RIM');
@@ -90,7 +84,7 @@ export default {
 
 .rimDrag{
     background: #c4d3f99c;
-    width: 10px;
+    width: 15px;
     position: absolute;
     height: 40px;
     border: 1px solid black;

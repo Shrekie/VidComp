@@ -110,7 +110,8 @@ export default {
     },
 
     mounted: function () {
-
+        
+        console.log("LAYER MOUNTED");
         this.setLayerSize();
         this.layerUpdate();
 

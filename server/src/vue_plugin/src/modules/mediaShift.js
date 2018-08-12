@@ -86,7 +86,11 @@ function MediaShift() {
     var shiftTimeMedia = function(affectedLayerMedia, direction, targetMedia, timelineTime){
 
         //TODO: bind this tighter with shiftMedia
-
+        /*
+            #SUGGESTION: seems a little forced, rather have the entire flow with checkShift, 
+            to only push amount borders cross
+        */
+       
         var shiftPos = 0;
 
         if(direction=="forwards"){

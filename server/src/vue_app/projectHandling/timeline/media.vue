@@ -43,7 +43,7 @@ export default {
 		return {
             mediaWidth: "0px",
             mediaLeft: "50%",
-            motionEvents: new MotionEvents (),
+            dragMotion:0,
             mediaElem: this.$refs.media
         }
         
@@ -69,9 +69,9 @@ export default {
 
     mounted: function () {
         
-        
+        console.log("MOUNTED MEDIA: LAYERINDEX: " + this.layerIndex + " MEDIAINDEX: " + this.mediaIndex);
         var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        this.motionEvents.enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
+        this.dragMotion = new MotionEvents().enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
             
             console.log('dropped element');
             var nextLayerPixels = 40;

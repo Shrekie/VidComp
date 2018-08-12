@@ -87,7 +87,7 @@ export default {
 
                 });
 
-                MotionEvents.prototype.setSnapPoints(snapPoints);
+                MotionEvents.prototype.snapPoints = snapPoints;
                 
             }.bind(this);
         },
@@ -137,6 +137,7 @@ export default {
 
     mounted: function () {
         
+        console.log("TIMELINE MOUNTED");
         this.setVideoStartTime();
         this.updateScrolling();
         this.determineSnaps();
