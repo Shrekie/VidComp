@@ -53,8 +53,9 @@ export default function () {
         delete source.cast;
 
     };
-
+ 
     this.sortMediaLayers = function(){
+
         function compare(a,b) {
             if (a.media.layerIndex < b.media.layerIndex)
               return -1;
@@ -64,6 +65,7 @@ export default function () {
         }
           
         store.sources.sort(compare);
+
     }
 
     this.eachSource = store.sources;

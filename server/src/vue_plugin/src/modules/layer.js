@@ -24,7 +24,7 @@ export default function (layerIndex, newMedia) {
 
     var sortMedia = function () {
         store.media.forEach(function(media, index){
-            media.mediaIndex = index;
+            media.mediaIndex = index; 
         });
     }
 

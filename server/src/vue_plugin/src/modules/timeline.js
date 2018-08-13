@@ -21,6 +21,7 @@ export default function () {
         store.layers.forEach(function(layer, index){
             layer.layerIndex = index;
         });
+        this.sortLayers();
     }
 
     this.getAllLayers = function () {
@@ -30,6 +31,16 @@ export default function () {
     this.addLayer = function (layer) {
         return store.layers.push(layer);
     };
+
+    this.sortLayers = function(){
+
+        store.layers.forEach(function(layer, index){
+            layer.getAllMedia().forEach(function(media, index){
+                media.layerIndex = layer.layerIndex;
+            });
+        });
+
+    }
 
     this.adjustMediaTimeShift = function(direction, layerIndex, mediaIndex, timelineTime){
         
@@ -81,7 +92,7 @@ export default function () {
         // apply position change to moved media
         var changedMedia = this.getLayer(currentTimelinePos.layerIndex).getMedia(currentTimelinePos.mediaIndex);
         var changedMediaSize = changedMedia.timelineTime[1] - changedMedia.timelineTime[0];
-        console.log(newTimelinePos.timelineStartTime + " TIMELINESTARTTIMELEFT");
+
         changedMedia.timelineTime[0] = newTimelinePos.timelineStartTime;
         changedMedia.timelineTime[1] = newTimelinePos.timelineStartTime + changedMediaSize;
         
@@ -108,7 +119,7 @@ export default function () {
 
             mediaShift.checkShift(affectedLayerMedia, changedMedia);
 
-            sourceLoader.sortMediaLayers(); // FIXME: does this need to be aded after deleteLayer?
+            sourceLoader.sortMediaLayers(); // SUGGESTION: does this need to be aded after deleteLayer?
 
             
             if(!currentMedia.length > 0){
@@ -116,6 +127,9 @@ export default function () {
                 // layer media moved from has 0 media, delete the layer
                 this.deleteLayer(currentTimelinePos.layerIndex);
                 this.contextHooks.runContextHooks({name:'indexShift', maxLength: store.layers.length -1});
+                if(changedMedia.layerIndex == newTimelinePos.layerIndex){
+                    console.log(store.layers);
+                }
 
             }else{
 
