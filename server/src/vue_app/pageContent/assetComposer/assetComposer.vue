@@ -9,26 +9,24 @@
 	<div id="canvasLockAspectContainer">
 		<canvas v-project-composition=this.projectName></canvas>
 	</div>
-	<v-btn small color="primary" @click="playVideo">Play</v-btn>
-	<v-btn small color="primary" @click="stopVideo">Pause</v-btn>
-	<v-btn small color="primary" @click="resetVideo">&lt;</v-btn>
 	<router-view>
 
 	</router-view>
+	<v-btn small color="primary" @click="playVideo">Play</v-btn>
+	<v-btn small color="primary" @click="stopVideo">Pause</v-btn>
+	<v-btn small color="primary" @click="resetVideo">&lt;</v-btn>
 </v-flex>
 </template>
 
 <script>
-import ImageInserter from './../../resourceImport/imageInserter.vue';
+
 
 // TODO: pass projectName from props
 
 export default {
 	name: "assetComposer",
 	props: ['projectName'],
-	components: {
-		ImageInserter
-	},
+	
 	data() {
 		return {
 		}
@@ -42,6 +40,9 @@ export default {
 		},
 		resetVideo () {
 			this.$vcomp(this.projectName).reset();
+		},
+		importVideo () {
+			console.log("import media");
 		}
 	}
 };
@@ -59,7 +60,7 @@ export default {
 #canvasLockAspectContainer{
 	margin: 0 auto;
 	overflow: hidden;
-	max-width: 640px;
+	max-width: 640px; 
 	max-height: 330px;
 }
 

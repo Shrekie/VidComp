@@ -3,6 +3,7 @@
 -->
 
 <template>
+<div>
     <div class="timelineContainer">
         <div ref="timeline" class="viewport">
 
@@ -10,16 +11,19 @@
         
                 <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
                 v-for="layer in allLayers" :key="layer.layerIndex">
-
                 </Layer>
 
         </div>
     </div>
+    <MediaImporter v-bind:project-name="projectName">
+    </MediaImporter>
+</div>
 </template>
 
 <script>
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
+import MediaImporter from './../../resourceImport/mediaImporter.vue';
 import MotionEvents from './../../dragResizeMotion/motionEvents.js';
 
 export default {
@@ -42,7 +46,8 @@ export default {
 
     components: {
         Layer,
-        TimelineSlider
+        TimelineSlider,
+        MediaImporter
     },
     
     methods: {
@@ -163,7 +168,7 @@ export default {
     background-color: yellow;
     margin: 10px auto;
     width: 100%;
-    height: 240px;
+    height: 150px;
     max-height: 240px;
     position: relative;
     overflow:hidden;
@@ -180,8 +185,7 @@ export default {
         #TODO: remove scrollbar support entirely, implement own "scrollbars"
         Scrolling will still be based on "scrolling" just always hide the overflow.
     */
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 60px;
     overflow: overlay; 
 }
 

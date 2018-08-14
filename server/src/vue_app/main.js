@@ -26,7 +26,6 @@ import sidebarContent from './pageSection/sidebarContent/sidebarContent.vue';
 import assetComposer from './pageContent/assetComposer/assetComposer.vue';
 import assetRelocator from './pageContent/assetRelocator/assetRelocator.vue';
 import timelineEditor from './projectHandling/timeline/timelineEditor.vue';
-import establishMedia from './projectHandling/timelineGenerators/establishMedia.vue';
 
 // Stores
 import pve_store from './stores/pve_store.js';
@@ -52,13 +51,7 @@ const routes = [
                     path: '',
                     component: timelineEditor,
                     props: true
-                },
-                {
-                    path: 'addmedia/:layerIndex',
-                    component: establishMedia,
-                    props: true
-
-                }]
+                },]
 
             }, {
 
