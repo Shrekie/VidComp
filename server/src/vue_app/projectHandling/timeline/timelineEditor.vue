@@ -44,6 +44,12 @@ export default {
         
     },
 
+    computed:{
+        timeSliderTime (){
+            return this.$store.getters.sliderTime;
+        }
+    },
+
     components: {
         Layer,
         TimelineSlider,
@@ -126,6 +132,12 @@ export default {
 
         updateScrolling: function () {
 
+            // set the scrollLeft to stored value
+            this.$nextTick(function () {
+                this.$refs.timeline.scrollLeft = this.timeSliderTime;
+            });
+            
+            // scrollLeft update hook loop
             this.$vcomp(this.projectName).videoControl('drawingUpdate', function(context){
 
                 if(context.timeTracker.isPlaying){
@@ -134,6 +146,12 @@ export default {
                 }
     
             }.bind(this));
+
+            // update stored scollLeft value on scroll
+            this.$refs.timeline.onscroll = function(event){
+                this.$store.dispatch('setSliderTime', this.$refs.timeline.scrollLeft);
+            }.bind(this)
+
 
         }
 

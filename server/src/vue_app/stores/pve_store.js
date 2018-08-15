@@ -8,7 +8,8 @@ import Appapi from './../../vue_api/application_api.js';
 export default {
     state: {
         users: [],
-        count: 0
+        count: 0,
+        timeSliderTime: 0
     },
     actions:{
         getUsers ({ commit }) {
@@ -16,12 +17,17 @@ export default {
                 commit('setusers', users);
             });
         },
-        createUser (context, payload) {
+        createUser ({dispatch}, payload) {
             Appapi.createUser(payload.name, (response) => {
                 console.log(response);
-                context.dispatch('getUsers');
+                dispatch('getUsers');
             });
+        },
+
+        setSliderTime ({ commit }, sliderTime) {
+            commit('setSlider', sliderTime);
         }
+
     },
     mutations: {
         setusers (state, users) {
@@ -29,6 +35,10 @@ export default {
         },
         incrementCount (state) {
             state.count++;
+        },
+
+        setSlider (state, sliderTime) {
+            state.timeSliderTime = sliderTime;
         }
     },
     getters: {
@@ -37,6 +47,9 @@ export default {
         },
         getTotalCount (state) {
             return state.count;
+        },
+        sliderTime (state){
+            return state.timeSliderTime;
         }
     }
 };

@@ -50,14 +50,22 @@ export default {
 
     props: ['projectName'],
 
+    computed:{
+        timeSliderTime (){
+            return this.$store.getters.sliderTime;
+        }
+    },
+
     methods: {
 
         getMedia () {
+            
+            console.log(this.timeSliderTime);
 
-            this.$vcomp(this.projectName).addMedia({
+            var mediaMeta = this.$vcomp(this.projectName).addMedia({
                 layerIndex: 0,
                 size: [100, 100],
-                timelineTime: [0, 0.2],
+                timelineTime: [(this.timeSliderTime/1000), ( (this.timeSliderTime/1000) + 0.1 )],
                 position: [40, 40],
                 videoStartTime: 0.03,
                 resource: {
@@ -65,6 +73,13 @@ export default {
                 }
             });
 
+            this.$vcomp(this.projectName)
+            .adjustMediaShift({
+                    layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
+                },{
+                    layerIndex: 0,
+                    timelineStartTime: this.timeSliderTime/1000
+            });
         }
 
     },

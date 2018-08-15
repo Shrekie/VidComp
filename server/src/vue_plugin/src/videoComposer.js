@@ -25,6 +25,11 @@ export default function () {
             timeline.addLayer(layer);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
+            return {
+                layerIndex:layer.layerIndex,
+                mediaIndex:mediaIndex
+            }
+
         }else if (newLayer.newMedia) {
 
             // create layer with empty media
@@ -33,11 +38,20 @@ export default function () {
             timeline.addLayer(layer);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
+            return {
+                layerIndex:layer.layerIndex,
+                mediaIndex:mediaIndex
+            }
+
         }else{
 
             // create layer with no media
             var layer = new Layer(newLayer.layerIndex);
             timeline.addLayer(layer);
+
+            return {
+                layerIndex:layer.layerIndex
+            }
 
         }
 
@@ -54,7 +68,10 @@ export default function () {
             newMedia.resource = resourceImporter.importResource(newMedia.newResource,sourceLoader);
             let mediaIndex = layer.addMedia(newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
-
+            
+            return {
+                mediaIndex: mediaIndex
+            }
 
         }else if ( newMedia.resource ) {
 
@@ -63,7 +80,10 @@ export default function () {
             newMedia.resource = resourceImporter.existingResource(newMedia.resource.name);
             let mediaIndex = layer.addMedia(newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
-            
+
+            return {
+                mediaIndex: mediaIndex
+            }
 
         } else {
 
@@ -71,6 +91,10 @@ export default function () {
             var layer = timeline.getLayer(newMedia.layerIndex);
             let mediaIndex = layer.addMedia(newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
+
+            return {
+                mediaIndex: mediaIndex
+            }
 
         }
 
