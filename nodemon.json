@@ -7,7 +7,8 @@
         "bower_components/*",
         "server/public/*",
         "server/src/*",
-        "nodemon.json"
+        "nodemon.json",
+        "data/"
     ],
     "ext": "js json css styl jade vue"
   }
