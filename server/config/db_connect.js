@@ -1,5 +1,15 @@
 var mongoose = require('mongoose');
 
-mongoose.Promise = global.Promise;
-    mongoose.connect(process.env.MONGO_URL,{
+const options = {
+    useNewUrlParser: true
+};
+
+mongoose.connect(process.env.MONGO_URL, options, (err)=>{
+    if(err){
+        console.log('Could not connect to database: ', err);
+    }
+    else{
+
+        console.log('Connected to database: ');
+    }
 });

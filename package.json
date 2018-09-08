@@ -6,7 +6,7 @@
   "scripts": {
     "build": "poi build server/src/vue_app/main.js",
     "hotreload": "poi watch server/src/vue_app/main.js",
-    "start": "node server/server.js"
+    "start": "nodemon & npm run hotreload"
   },
   "engines": {
     "node": "8.9.4",
@@ -24,5 +24,7 @@
     "vuetify": "^1.0.19",
     "vuex": "^3.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
 }
