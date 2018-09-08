@@ -4,9 +4,10 @@
 
 <template>
     <div class="rimDrag" ref="rimPoint">
+	    <v-icon small v-if="this.direction == 'right'">mdi-chevron-right</v-icon>
+        <v-icon small v-else>mdi-chevron-left</v-icon>
     </div>
 </template>
-
 <script>
 
 import MotionEvents from './../../dragResizeMotion/motionEvents.js';
@@ -83,11 +84,16 @@ export default {
 <style>
 
 .rimDrag{
-    background: #c4d3f99c;
     width: 15px;
     position: absolute;
     height: 40px;
-    border: 1px solid black;
+}
+.rimDrag .mdi-chevron-left,
+.rimDrag .mdi-chevron-right
+{
+    font-size: 14px !important;
+    margin-top: 90%;
+    color: #000000;
 }
 
 </style>

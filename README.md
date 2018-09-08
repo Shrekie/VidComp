@@ -1,1 +1,1 @@
-<img src="./documentation/videoEditorExample.gif"/>
+<img src="./documentation/screenshot.png"/>

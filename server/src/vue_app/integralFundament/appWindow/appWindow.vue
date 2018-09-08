@@ -3,12 +3,14 @@
 -->
 
 <template>
-<v-app>
+<v-app dark>
+<!--
 <v-navigation-drawer v-model="drawer" fixed temporary app touchless width="120">
-	<router-view name="sidebar"></router-view> <!-- #TODO: add this as component -->
+	<router-view name="sidebar"></router-view>
 </v-navigation-drawer>
-<v-toolbar app dense>
-	<v-btn color="pink" @click.stop="drawer = !drawer">Toggle</v-btn>
+-->
+<v-toolbar app dense flat>
+	<!--<v-btn color="pink" @click.stop="drawer = !drawer">Toggle</v-btn>-->
 	<v-toolbar-title>Progressive Video Editor</v-toolbar-title>
 </v-toolbar>
 <v-content>
@@ -16,7 +18,6 @@
 		<router-view name="workspace"></router-view>
 	</v-container>
 </v-content>
-<v-footer app></v-footer>
 </v-app>
 </template>
 

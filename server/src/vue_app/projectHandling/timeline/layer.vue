@@ -137,9 +137,8 @@ export default {
     display: inline-block;
     position: relative;
     vertical-align:bottom;
-    margin-top: 0px;
-    margin-bottom: 10px;
-    background-color: gray;
+    margin-top: 10px;
+    background-color: #DADADA;
     height: 40px;
     width: 0px;
     margin-right: 50%;

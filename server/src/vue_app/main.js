@@ -10,12 +10,13 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 import VidComp from './../vue_plugin/main.js';
+import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/dist/vuetify.min.css';
 
 // Middleware binding
 Vue.use(Vuex);
 Vue.use(VueRouter);
-Vue.use(Vuetify);
+Vue.use(Vuetify)
 Vue.use(VidComp);
 
 // Top level route components
@@ -26,7 +27,7 @@ import sidebarContent from './pageSection/sidebarContent/sidebarContent.vue';
 import assetComposer from './pageContent/assetComposer/assetComposer.vue';
 import assetRelocator from './pageContent/assetRelocator/assetRelocator.vue';
 import timelineEditor from './projectHandling/timeline/timelineEditor.vue';
-
+import mediaLibrary from './resourceImport/mediaLibrary.vue';
 // Stores
 import pve_store from './stores/pve_store.js';
 
@@ -58,6 +59,11 @@ const routes = [
                 path: 'upload/:projectName',
                 component:assetRelocator
 
+            },{
+
+                path: 'media/:projectName',
+                component:mediaLibrary
+
             }]
         }]
     }
@@ -78,7 +84,7 @@ testProject.createLayer({
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?ratebypass=yes&ei=UUp0W6jsCIzUV7TfovgO&fvip=2&signature=43DB0C25203CB78E5CA3027BF2452DB039F29937.D0D7F8596D0DDC04B0FE7FC2BB808069A4A0EB1D&lmt=1471812821364858&c=WEB&initcwndbps=120000&ipbits=0&requiressl=yes&ms=au%2Conr&source=youtube&mv=m&dur=280.915&mm=31%2C26&pl=20&itag=22&key=yt6&ip=167.99.91.144&mime=video%2Fmp4&mt=1534347777&id=o-AF09XhWHbhlg1YTQUz4IqsgwHu0c7QdOU61mhCVEanfR&expire=1534369457&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mn=sn-aigzrn7z%2Csn-5hne6nsz',
+        resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?mv=m&source=youtube&ms=au%2Conr&requiressl=yes&ip=167.99.91.144&expire=1536438946&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mt=1536417250&ipbits=0&mn=sn-aigl6nl7%2Csn-5hnekn7z&mm=31%2C26&pl=24&mime=video%2Fmp4&id=o-ADwnZX_xdphtH8ifc017suU7nY5zwdHTnCp0adF4f3Lj&fvip=2&lmt=1471812821364858&key=yt6&itag=22&initcwndbps=135000&c=WEB&ratebypass=yes&ei=Qt6TW_uPA5WahAfAjImwCQ&signature=8C521343A4FB2B706A0B015E817A23C56B98DB.05730C8D1F9021FD44E06883AB0AF85E1636C20F&dur=280.915',
         resourceType: 'video'
     }
 
@@ -109,7 +115,7 @@ testProject.addMedia({
 testProject.addMedia({
     layerIndex: 0,
     size: [150, 100],
-    timelineTime: [0.40, 0.42],
+    timelineTime: [0.35, 0.42],
     position: [0,0],
     videoStartTime: 2.25,
     resource: {

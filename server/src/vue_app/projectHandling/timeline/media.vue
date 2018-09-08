@@ -120,7 +120,7 @@ export default {
 .media{
     height: 100%;
     width:100%;
-    background: #1c4ec1;
+    background: #757575
 }
 
 </style>

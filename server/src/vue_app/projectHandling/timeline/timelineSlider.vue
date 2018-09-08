@@ -29,9 +29,9 @@ export default {
 
 <style>
 #timelineSlider{
-    border: solid 1px blue;
+    border: solid 1px black;
     width: 5px;
-    background-color: red;
+    background-color: white;
     max-height: inherit;
     height: 100%;
     position: fixed;

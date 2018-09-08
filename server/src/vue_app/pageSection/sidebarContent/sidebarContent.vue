@@ -1,5 +1,6 @@
 <!-- 
 	Sidebar
+	#TODO: remove this
 -->
 
 <template>

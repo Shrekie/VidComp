@@ -15,15 +15,13 @@
 
         </div>
     </div>
-    <MediaImporter v-bind:project-name="projectName">
-    </MediaImporter>
+
 </div>
 </template>
 
 <script>
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
-import MediaImporter from './../../resourceImport/mediaImporter.vue';
 import MotionEvents from './../../dragResizeMotion/motionEvents.js';
 
 export default {
@@ -52,8 +50,7 @@ export default {
 
     components: {
         Layer,
-        TimelineSlider,
-        MediaImporter
+        TimelineSlider
     },
     
     methods: {
@@ -183,7 +180,7 @@ export default {
 <style>
 
 .timelineContainer{
-    background-color: yellow;
+    background-color: #C5C5C5;
     margin: 10px auto;
     width: 100%;
     height: 150px;

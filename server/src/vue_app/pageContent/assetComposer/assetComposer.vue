@@ -9,12 +9,42 @@
 	<div id="canvasLockAspectContainer">
 		<canvas v-project-composition=this.projectName></canvas>
 	</div>
+	
+	<v-btn icon @click="playVideo">
+		<v-icon>mdi-play</v-icon>
+    </v-btn>
+	<v-btn icon @click="stopVideo">
+		<v-icon>mdi-pause</v-icon>
+    </v-btn>
+	<v-btn icon @click="resetVideo">
+		<v-icon>mdi-skip-backward</v-icon>
+    </v-btn>
+
+	<v-card flat>
+		<v-btn icon>
+			<v-icon>mdi-undo</v-icon>
+		</v-btn>
+		<v-btn icon>
+			<v-icon>mdi-redo</v-icon>
+		</v-btn>
+		<v-btn icon>
+			<v-icon>mdi-magnify-plus-outline</v-icon>
+		</v-btn>
+		<v-btn icon>
+			<v-icon>mdi-magnify-minus-outline</v-icon>
+		</v-btn>
+    </v-card>
+
 	<router-view>
 
 	</router-view>
-	<v-btn small color="primary" @click="playVideo">Play</v-btn>
-	<v-btn small color="primary" @click="stopVideo">Pause</v-btn>
-	<v-btn small color="primary" @click="resetVideo">&lt;</v-btn>
+
+	<v-card flat>
+        <v-btn icon to="/media/ + this.projectName">
+		    <v-icon>mdi-plus-circle</v-icon>
+        </v-btn>
+    </v-card>
+
 </v-flex>
 </template>
 
@@ -67,7 +97,6 @@ export default {
 #canvasLockAspectContainer canvas{
 	width: 100%;
 	margin-bottom: 56.25%;
-	border: 1px solid;
-	background: gold;
+	background: #C5C5C5;
 }
 </style>
