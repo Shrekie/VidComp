@@ -84,15 +84,17 @@ export default {
 <style>
 
 .rimDrag{
-    width: 15px;
+    width: 25px;
     position: absolute;
-    height: 40px;
+    height: 60px;
+    /*border: 1px solid black;*/
 }
 .rimDrag .mdi-chevron-left,
 .rimDrag .mdi-chevron-right
 {
-    font-size: 14px !important;
-    margin-top: 90%;
+    font-size: 20px !important;
+
+    margin-top: 80%;
     color: #000000;
 }
 

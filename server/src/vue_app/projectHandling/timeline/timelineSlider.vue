@@ -3,7 +3,7 @@
 -->
 
 <template>
-<div id="timelineSlider"></div>
+    <div id="timelineSlider"></div>
 </template>
 
 <script>
@@ -28,6 +28,7 @@ export default {
 </script>
 
 <style>
+
 #timelineSlider{
     border: solid 1px black;
     width: 5px;
@@ -39,4 +40,5 @@ export default {
     transform: translateX(-50%);
     z-index: 2;
 }
+
 </style>

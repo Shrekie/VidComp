@@ -57,12 +57,14 @@ const routes = [
             }, {
 
                 path: 'upload/:projectName',
-                component:assetRelocator
+                component:assetRelocator,
+                props: true
 
             },{
 
                 path: 'media/:projectName',
-                component:mediaLibrary
+                component:mediaLibrary,
+                props: true
 
             }]
         }]
@@ -84,7 +86,7 @@ testProject.createLayer({
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?mv=m&source=youtube&ms=au%2Conr&requiressl=yes&ip=167.99.91.144&expire=1536438946&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mt=1536417250&ipbits=0&mn=sn-aigl6nl7%2Csn-5hnekn7z&mm=31%2C26&pl=24&mime=video%2Fmp4&id=o-ADwnZX_xdphtH8ifc017suU7nY5zwdHTnCp0adF4f3Lj&fvip=2&lmt=1471812821364858&key=yt6&itag=22&initcwndbps=135000&c=WEB&ratebypass=yes&ei=Qt6TW_uPA5WahAfAjImwCQ&signature=8C521343A4FB2B706A0B015E817A23C56B98DB.05730C8D1F9021FD44E06883AB0AF85E1636C20F&dur=280.915',
+        resourceLink: 'https://r1---sn-aigzrn7s.googlevideo.com/videoplayback?expire=1536466079&id=o-ANBbkcwl22lb-PccPLdJDRCOezJviQUeYcDkTuXMqeSw&signature=1E7E1EB8BB6AF5B62100E79D9ABD97AE37323FB8.3DAAF0A041BCF211BDDC7D26E6DC5A70C2BF87EC&ms=au%2Crdu&pl=24&ipbits=0&initcwndbps=153750&mv=m&mt=1536444346&itag=22&mm=31%2C29&key=yt6&ip=167.99.91.144&fvip=1&dur=1150.479&source=youtube&ratebypass=yes&requiressl=yes&lmt=1521383875269200&mime=video%2Fmp4&c=WEB&ei=P0iUW7SAJtGC1gbwyLaIBA&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mn=sn-aigzrn7s%2Csn-aigl6nl7',
         resourceType: 'video'
     }
 

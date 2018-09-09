@@ -74,7 +74,7 @@ export default {
         this.dragMotion = new MotionEvents().enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
             
             console.log('dropped element');
-            var nextLayerPixels = 40;
+            var nextLayerPixels = 60;
 
             var newLayerIndex = Math.sign((top/nextLayerPixels)) * 
             Math.floor(Math.abs((top/nextLayerPixels)));
@@ -103,17 +103,16 @@ export default {
 
 <style>
 
-.mediaContainer:hover{
-    opacity: 0.5 !important;
-}
-
 .mediaContainer{
     display: inline-block;
     position: absolute;
     background-color: #1c4ec1;
-    height: 40px;
+    height: 60px;
     width: 0px;
     user-select: none;
+    border: 1px solid black;
+    border-radius: 3px;
+
     z-index: 1;
 }
 

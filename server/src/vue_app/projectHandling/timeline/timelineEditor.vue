@@ -55,6 +55,7 @@ export default {
     
     methods: {
 
+        //TODO: maybe put this on rimDrag or something
         determineSnaps: function(){
 
             MotionEvents.prototype.snapCalculation = function(mediaElement, elementToSnap){
@@ -183,8 +184,7 @@ export default {
     background-color: #C5C5C5;
     margin: 10px auto;
     width: 100%;
-    height: 150px;
-    max-height: 240px;
+    height: 30vh;
     position: relative;
     overflow:hidden;
     transform: translateZ(0);

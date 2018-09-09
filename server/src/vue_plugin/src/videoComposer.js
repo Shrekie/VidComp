@@ -108,6 +108,10 @@ export default function () {
         videoProjection.setTarget(canvas);
     };
 
+    this.getAllResources = function(){
+        return resourceImporter.getAllResources();
+    };
+
     this.getAllMedia = function (layerIndex) {
         return timeline.getLayer(layerIndex).getAllMedia();
     };

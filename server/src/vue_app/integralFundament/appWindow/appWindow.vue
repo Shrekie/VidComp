@@ -9,10 +9,11 @@
 	<router-view name="sidebar"></router-view>
 </v-navigation-drawer>
 -->
+<!--
 <v-toolbar app dense flat>
-	<!--<v-btn color="pink" @click.stop="drawer = !drawer">Toggle</v-btn>-->
 	<v-toolbar-title>Progressive Video Editor</v-toolbar-title>
 </v-toolbar>
+-->
 <v-content>
 	<v-container grid-list-md text-xs-center>
 		<router-view name="workspace"></router-view>
@@ -26,7 +27,7 @@ export default {
 	name: "appWindow",
 	data() {
 		return {
-			drawer: null
+
 		}
 	}
 };

@@ -139,7 +139,7 @@ export default {
     vertical-align:bottom;
     margin-top: 10px;
     background-color: #DADADA;
-    height: 40px;
+    height: 60px;
     width: 0px;
     margin-right: 50%;
     margin-left: 50%;

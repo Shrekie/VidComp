@@ -12,6 +12,10 @@ export default function () {
         return fetch(proxyurl + resourceLink);
     };
 
+    this.getAllResources = function(){
+        return store.resources;
+    }
+
     this.existingResource = function (name) {
         return store.resources.find(function(element){
             return element.name == name;
