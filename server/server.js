@@ -23,8 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Expose public sources
-app.use(express.static(__dirname + '/public/'));
-app.use('/bower_components', express.static(path.join(__dirname, '/../bower_components')))
+app.use(express.static(__dirname + '/../public/'));
 
 // Register application routes
 app.use(application);
@@ -35,7 +34,7 @@ app.get('/error', (req, res) => {
 });
 
 app.get('/*', (req, res) => {
-    res.sendFile(path.resolve('./server/public', 'index.html'));
+    res.sendFile(path.resolve('./public', 'index.html'));
 })
 
 // Initialize server

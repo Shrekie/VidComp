@@ -4,8 +4,8 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "build": "poi build server/src/vue_app/main.js",
-    "hotreload": "poi watch server/src/vue_app/main.js",
+    "build": "poi build src/vue_app/main.js",
+    "hotreload": "poi watch src/vue_app/main.js",
     "start": "nodemon & npm run hotreload"
   },
   "engines": {

@@ -5,8 +5,8 @@
         "node_modules/*",
         ".vscode/*",
         "bower_components/*",
-        "server/public/*",
-        "server/src/*",
+        "public/*",
+        "src/*",
         "nodemon.json",
         "data/"
     ],
