@@ -27,7 +27,7 @@ import sidebarContent from './pageSection/sidebarContent/sidebarContent.vue';
 import assetComposer from './pageContent/assetComposer/assetComposer.vue';
 import assetRelocator from './pageContent/assetRelocator/assetRelocator.vue';
 import timelineEditor from './projectHandling/timeline/timelineEditor.vue';
-import mediaLibrary from './resourceImport/mediaLibrary.vue';
+import resourceLibrary from './resourceImport/resourceLibrary.vue';
 // Stores
 import pve_store from './stores/pve_store.js';
 
@@ -62,8 +62,8 @@ const routes = [
 
             },{
 
-                path: 'media/:projectName',
-                component:mediaLibrary,
+                path: 'resources/:projectName',
+                component:resourceLibrary,
                 props: true
 
             }]
@@ -86,7 +86,7 @@ testProject.createLayer({
 
     newResource: {
         name: 'BunnyVideo',
-        resourceLink: 'https://r1---sn-aigzrn7s.googlevideo.com/videoplayback?expire=1536466079&id=o-ANBbkcwl22lb-PccPLdJDRCOezJviQUeYcDkTuXMqeSw&signature=1E7E1EB8BB6AF5B62100E79D9ABD97AE37323FB8.3DAAF0A041BCF211BDDC7D26E6DC5A70C2BF87EC&ms=au%2Crdu&pl=24&ipbits=0&initcwndbps=153750&mv=m&mt=1536444346&itag=22&mm=31%2C29&key=yt6&ip=167.99.91.144&fvip=1&dur=1150.479&source=youtube&ratebypass=yes&requiressl=yes&lmt=1521383875269200&mime=video%2Fmp4&c=WEB&ei=P0iUW7SAJtGC1gbwyLaIBA&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mn=sn-aigzrn7s%2Csn-aigl6nl7',
+        resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?ipbits=0&signature=5619E5C6ECC73AD58011FAE1C38E8B40223C2A56.40F2B5CE728C7812C6D32BC103D14DF67A9665F3&itag=22&requiressl=yes&key=yt6&mm=31%2C26&mn=sn-aigl6nl7%2Csn-5hne6nse&ms=au%2Conr&mt=1536531817&mv=m&source=youtube&ip=167.99.91.144&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ei=Hp6VW5vJAoTlxgKnmJLgAQ&id=o-AD2odha-aA1B5Dw23a5k25QxJDNvHRgZNMdIbZcEnGXU&initcwndbps=130000&mime=video%2Fmp4&fvip=14&lmt=1471812821364858&nh=%2CIgpwZjAxLmFtczE1Kg04MC4yMzkuMTI4LjE2&ratebypass=yes&c=WEB&dur=280.915&expire=1536553598&pl=24',
         resourceType: 'video'
     }
 

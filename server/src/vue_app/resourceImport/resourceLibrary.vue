@@ -1,5 +1,6 @@
 <!-- 
-    Button sheet media importer manager
+    Resource importer manager
+    #TODO: This file should be named resourceImporter, same with URL.
 -->
 
 <template>
@@ -29,14 +30,12 @@
                                 <v-icon class="addBox">mdi-plus</v-icon>
                             </v-card>
 
-                            <v-card flat tile width="130px" height="130px" 
-                            class="mediaBox"
-                            v-for="resource in allResources" 
-                            :key='resource.name'>
-                                <v-card-title>
-                                    <p>{{resource.name}}</p>
-                                </v-card-title>
-                            </v-card>
+                            <Resource v-bind:resource="resource"
+                            v-for="resource in allResources"
+                            :key="resource.name"
+                            ref="mediaBox" v-on:resource-select="resourceSelect">
+                            
+                            </Resource>
 
                         </v-layout>
 
@@ -62,8 +61,15 @@
 
 <script>
 
+import Resource from './resource.vue';
+
 export default {
-    name: "mediaLibrary",
+
+    name: "resourceLibrary",
+
+    components: {
+        Resource
+    },
 
     props: ['projectName'],
 
@@ -74,6 +80,19 @@ export default {
     },
 
     methods: {
+
+        resourceSelect (childRef) {
+
+            //TODO: maybe not have the unique ID be the name of resource?
+            this.$refs.mediaBox.forEach(resourceComponent => {
+                if(childRef.name != resourceComponent.resource.name){
+                    resourceComponent.unselectResource();
+                }else{
+                    resourceComponent.selectResource();
+                }
+            });
+
+        },
 
         getMedia () {
             
@@ -111,15 +130,14 @@ export default {
         
 	}
 };
+
 </script>
 
 <style>
-.mediaBox{
-    background-color: #C5C5C5 !important;
-    margin-right:5px;
-}
+
 .addBox{
     margin-top: 32% !important;
     font-size: 40px;
 }
+
 </style>
