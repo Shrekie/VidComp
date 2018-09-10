@@ -8,20 +8,33 @@
     <v-layout>
 
         <v-flex xs12 text-xs-center>
-
+            
             <v-card flat>
                 <v-btn icon :to="'/compose/' + this.projectName">
                     <v-icon>mdi-minus-circle</v-icon>
                 </v-btn>
             </v-card>
 
+            
+
             <v-layout>
+
                 <v-flex xs12 text-xs-center>
                 <v-card flat>
 
+                    <v-btn icon :to="'/compose/' + this.projectName" disabled>
+                        <v-icon>mdi-video-image</v-icon>
+                    </v-btn>
+                    <v-btn icon :to="'/compose/' + this.projectName">
+                        <v-icon>mdi-image</v-icon>
+                    </v-btn>
+                    <v-btn icon :to="'/compose/' + this.projectName">
+                        <v-icon>mdi-volume-high</v-icon>
+                    </v-btn>
+
                     <v-container>
 
-                        <v-layout row wrap >
+                        <v-layout row wrap text-xs-center>
 
                             <v-card flat tile width="130px" height="130px"
                             :to="'/compose/' + this.projectName"
@@ -52,6 +65,18 @@
                 </v-card >
                 </v-flex>
             </v-layout>
+
+            <v-card flat>
+                <v-btn icon disabled :to="'/compose/' + this.projectName">
+                    <v-icon>mdi-check</v-icon>
+                </v-btn>
+                <v-btn icon disabled :to="'/compose/' + this.projectName">
+                    <v-icon>mdi-delete</v-icon>
+                </v-btn>
+                <v-btn icon disabled :to="'/compose/' + this.projectName">
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+            </v-card>
 
         </v-flex>
 

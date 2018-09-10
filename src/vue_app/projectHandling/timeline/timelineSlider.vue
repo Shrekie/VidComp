@@ -38,7 +38,7 @@ export default {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
+    z-index: 100000;
 }
 
 </style>

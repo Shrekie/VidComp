@@ -1,17 +1,21 @@
-version: '2'
+version: '3'
 services:
   server:
-    image: node:8.10.0
-    command: npm start
+    build: .
     working_dir: /app
     volumes:
       - .:/app
-    environment:
-      PORT: 8000
     ports:
       - "8000:8000"
     links:
         - mongodb
+    depends_on:
+        - mongodb
+    environment:
+      PORT: 8000
+      WAIT_HOSTS: mongodb:27017
+      WAIT_HOSTS_TIMEOUT: 120
+      WAIT_BEFORE_HOSTS: 2
   mongodb:
     image: mongo
     container_name: "mongodb"

@@ -62,6 +62,10 @@ export default {
 .mediaBox{
     background-color: #C5C5C5 !important;
     margin-right:5px;
+    margin-bottom:5px;
+}
+.mediaBox:hover{
+    cursor:pointer;
 }
 
 </style>

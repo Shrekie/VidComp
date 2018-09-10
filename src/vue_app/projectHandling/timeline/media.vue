@@ -112,7 +112,6 @@ export default {
     user-select: none;
     border: 1px solid #2f2f2f;
     border-radius: 3px;
-
     z-index: 1;
 }
 

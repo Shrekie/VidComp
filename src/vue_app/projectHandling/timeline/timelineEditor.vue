@@ -196,6 +196,7 @@ export default {
     height: 100%;
     position: relative;
     z-index: 3;
+    touch-action: pan-y pan-x;
     /*
         #TODO: remove scrollbar support entirely, implement own "scrollbars"
         Scrolling will still be based on "scrolling" just always hide the overflow.

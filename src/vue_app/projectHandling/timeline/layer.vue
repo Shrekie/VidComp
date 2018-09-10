@@ -10,7 +10,7 @@
     <Media ref="mediaElements" v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
     v-for="media in allLayerMedia" 
-    :key='media.timelineTime[0] + " - " + media.mediaIndex + " - " + layerSize'>
+    :key='media.timelineTime[0] + " - " + media.mediaIndex + " - " + layerSize + " - " + media.timelineTime[1]'>
     </Media> <!-- #TODO: this key man, maybe just do indexshift always -->
 
 </div>
@@ -62,7 +62,7 @@ export default {
     methods: {
 
         updateLayer () {
-
+            
             this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
             this.allLayerMedia.splice(this.allLayerMedia.length);
             this.setLayerSize();
