@@ -56,7 +56,7 @@
 		</router-view>
 
 		<v-card flat>
-			<v-btn icon :to="'/resources/' + this.projectName">
+			<v-btn icon :to="'/resources/' + this.projectName + '/video'">
 				<v-icon>mdi-plus-circle</v-icon>
 			</v-btn>
 		</v-card>

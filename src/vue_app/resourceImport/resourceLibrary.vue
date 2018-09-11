@@ -15,20 +15,27 @@
                 </v-btn>
             </v-card>
 
-            
-
             <v-layout>
 
                 <v-flex xs12 text-xs-center>
                 <v-card flat>
 
-                    <v-btn icon :to="'/compose/' + this.projectName" disabled>
+                    <v-btn icon 
+                    :to="'/resources/' + this.projectName + '/video'" 
+                    :disabled="resourceTypeView == 'video'"
+                    @click="activeResource=0">
                         <v-icon>mdi-video-image</v-icon>
                     </v-btn>
-                    <v-btn icon :to="'/compose/' + this.projectName">
+                    <v-btn icon 
+                    :to="'/resources/' + this.projectName + '/image'" 
+                    :disabled="resourceTypeView == 'image'"
+                    @click="activeResource=0">
                         <v-icon>mdi-image</v-icon>
                     </v-btn>
-                    <v-btn icon :to="'/compose/' + this.projectName">
+                    <v-btn icon 
+                    :to="'/resources/' + this.projectName + '/audio'" 
+                    :disabled="resourceTypeView == 'audio'"
+                    @click="activeResource=0">
                         <v-icon>mdi-volume-high</v-icon>
                     </v-btn>
 
@@ -46,7 +53,8 @@
                             <Resource v-bind:resource="resource"
                             v-for="resource in allResources"
                             :key="resource.name"
-                            ref="mediaBox" v-on:resource-select="resourceSelect">
+                            ref="mediaBox" v-on:resource-select="resourceSelect"
+                            v-if="resource.type == resourceTypeView">
                             
                             </Resource>
 
@@ -54,26 +62,22 @@
 
                     </v-container>
 
-                <!--
-                <v-card flat>
-                    <v-text-field
-                    label="Data URL"
-                    box></v-text-field>
-                    <v-btn small color="primary" @click="getMedia">Get media</v-btn>
-                </v-card>
-                -->
                 </v-card >
                 </v-flex>
+                
             </v-layout>
 
             <v-card flat>
-                <v-btn icon disabled :to="'/compose/' + this.projectName">
+                <v-btn icon :disabled="activeResource == 0" 
+                @click="getMedia">
                     <v-icon>mdi-check</v-icon>
                 </v-btn>
-                <v-btn icon disabled :to="'/compose/' + this.projectName">
+                <v-btn icon :disabled="activeResource == 0" 
+                :to="'/compose/' + this.projectName">
                     <v-icon>mdi-delete</v-icon>
                 </v-btn>
-                <v-btn icon disabled :to="'/compose/' + this.projectName">
+                <v-btn icon :disabled="activeResource == 0" 
+                :to="'/compose/' + this.projectName">
                     <v-icon>mdi-pencil</v-icon>
                 </v-btn>
             </v-card>
@@ -96,7 +100,7 @@ export default {
         Resource
     },
 
-    props: ['projectName'],
+    props: ['projectName', 'resourceTypeView'],
 
     computed:{
         timeSliderTime (){
@@ -114,23 +118,22 @@ export default {
                     resourceComponent.unselectResource();
                 }else{
                     resourceComponent.selectResource();
+                    this.activeResource = resourceComponent.resource;
                 }
             });
 
         },
 
         getMedia () {
-            
-            console.log(this.timeSliderTime);
 
             var mediaMeta = this.$vcomp(this.projectName).addMedia({
                 layerIndex: 0,
-                size: [100, 100],
+                size: [300, 160],
                 timelineTime: [(this.timeSliderTime/1000), ( (this.timeSliderTime/1000) + 0.1 )],
-                position: [40, 40],
-                videoStartTime: 0.03,
+                position: [0, 0],
+                videoStartTime: 0,
                 resource: {
-                    name: 'catvideoTwo'
+                    name: this.activeResource.name
                 }
             });
 
@@ -141,6 +144,9 @@ export default {
                     layerIndex: 0,
                     timelineStartTime: this.timeSliderTime/1000
             });
+
+            this.$router.push({ path: `/compose/${this.projectName}`});
+
         }
 
     },
@@ -148,8 +154,10 @@ export default {
 	data() {
 
         var allResources = this.$vcomp(this.projectName).getAllResources();
+        var activeResource = 0;
 
 		return {
+            activeResource,
             allResources
         }
         

@@ -11,7 +11,7 @@
         width="130px" height="130px" 
         class="mediaBox" ref="mediaBox">
             <v-card-title>
-                <p>{{this.resource.name}}</p>
+                {{this.resource.name}}
             </v-card-title>
         </v-card>
 
@@ -29,10 +29,6 @@ export default {
 
     computed: {
 
-    },
-
-    event:{
-        
     },
 
     methods: {

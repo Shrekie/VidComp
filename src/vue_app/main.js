@@ -62,7 +62,7 @@ const routes = [
 
             },{
 
-                path: 'resources/:projectName',
+                path: 'resources/:projectName/:resourceTypeView',
                 component:resourceLibrary,
                 props: true
 
@@ -85,8 +85,8 @@ testProject.createLayer({
     },
 
     newResource: {
-        name: 'BunnyVideo',
-        resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?ipbits=0&signature=5619E5C6ECC73AD58011FAE1C38E8B40223C2A56.40F2B5CE728C7812C6D32BC103D14DF67A9665F3&itag=22&requiressl=yes&key=yt6&mm=31%2C26&mn=sn-aigl6nl7%2Csn-5hne6nse&ms=au%2Conr&mt=1536531817&mv=m&source=youtube&ip=167.99.91.144&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&ei=Hp6VW5vJAoTlxgKnmJLgAQ&id=o-AD2odha-aA1B5Dw23a5k25QxJDNvHRgZNMdIbZcEnGXU&initcwndbps=130000&mime=video%2Fmp4&fvip=14&lmt=1471812821364858&nh=%2CIgpwZjAxLmFtczE1Kg04MC4yMzkuMTI4LjE2&ratebypass=yes&c=WEB&dur=280.915&expire=1536553598&pl=24',
+        name: 'Blender animation',
+        resourceLink: 'https://r2---sn-aigzrn7z.googlevideo.com/videoplayback?mm=31%2C26&key=yt6&mn=sn-aigzrn7z%2Csn-5hne6nse&itag=22&dur=280.915&signature=60EA9AC1BCC74653B64B878CCC6F89428CCC9903.8A751E3D443AC98AABF3F49F88F97A2E1D3654EA&mt=1536690109&mv=m&ms=au%2Conr&ip=167.99.91.144&lmt=1471812821364858&ei=DgiYW-37GbL0xgKZ94uoAw&id=o-AIPAEYvM_Ni-ntnzro9NhA8jTt6gT-Ex5yI9xu6PM2qo&expire=1536711790&c=WEB&nh=%2CIgpwZjAxLmFtczE1Kg04MC4yMzkuMTI4LjE2&pl=24&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&source=youtube&initcwndbps=130000&requiressl=yes&ratebypass=yes&mime=video%2Fmp4&ipbits=0&fvip=14',
         resourceType: 'video'
     }
 
@@ -99,7 +99,7 @@ testProject.addMedia({
     position: [0,0],
     videoStartTime: 1.20,
     resource: {
-        name: 'BunnyVideo'
+        name: 'Blender animation'
     }
 });
 
@@ -110,7 +110,7 @@ testProject.addMedia({
     position: [0,40],
     videoStartTime: 0.2,
     resource: {
-        name: 'BunnyVideo'
+        name: 'Blender animation'
     }
 });
 
@@ -121,7 +121,7 @@ testProject.addMedia({
     position: [0,0],
     videoStartTime: 2.25,
     resource: {
-        name: 'BunnyVideo'
+        name: 'Blender animation'
     }
 });
 
@@ -132,7 +132,7 @@ testProject.addMedia({
     position: [0,0],
     videoStartTime: 2.10,
     resource: {
-        name: 'BunnyVideo'
+        name: 'Blender animation'
     }
 });
 
@@ -147,7 +147,7 @@ testProject.createLayer({
     },
 
     newResource: {
-        name: 'catvideoTwo',
+        name: 'Cat playing',
         resourceLink: 'https://i.imgur.com/Q5PBbSW.mp4',
         resourceType: 'video'
     }
@@ -161,7 +161,7 @@ testProject.addMedia({
     position: [40, 40],
     videoStartTime: 0.03,
     resource: {
-        name: 'catvideoTwo'
+        name: 'Cat playing'
     }
 });
 
@@ -172,7 +172,7 @@ testProject.addMedia({
     position: [40, 40],
     videoStartTime: 0.06,
     resource: {
-        name: 'BunnyVideo'
+        name: 'Blender animation'
     }
 });
 
@@ -183,8 +183,27 @@ testProject.addMedia({
     position: [50, 40],
     videoStartTime: 0.7,
     resource: {
-        name: 'catvideoTwo'
+        name: 'Cat playing'
     }
+});
+
+
+testProject.createLayer({
+
+    newMedia: {
+        layerIndex: 2,
+        size: [200, 100],
+        timelineTime: [0.00, 0.10],
+        position: [0,0],
+        videoStartTime: 0
+    },
+
+    newResource: {
+        name: 'Colorful city',
+        resourceLink: 'https://i.imgur.com/AjybU6j.jpg',
+        resourceType: 'image'
+    }
+
 });
 
 // Store init config
