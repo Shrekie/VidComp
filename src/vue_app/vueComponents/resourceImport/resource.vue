@@ -11,7 +11,7 @@
         width="130px" height="130px" 
         class="mediaBox" ref="mediaBox">
             <v-card-title>
-                {{this.resource.name}}
+                <p style="word-break: break-all;">{{this.resource.name}}</p>
             </v-card-title>
         </v-card>
 
@@ -59,6 +59,7 @@ export default {
     background-color: #C5C5C5 !important;
     margin-right:5px;
     margin-bottom:5px;
+    text-align: left;
 }
 .mediaBox:hover{
     cursor:pointer;

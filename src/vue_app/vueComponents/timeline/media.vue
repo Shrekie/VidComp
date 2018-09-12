@@ -26,7 +26,7 @@ v-bind:style="{ width: mediaWidth, left: mediaLeft }" >
 
 <script>
 
-import MotionEvents from './../../dragResizeMotion/motionEvents.js';
+import MotionEvents from './../../library/dragResizeMotion/motionEvents.js';
 import RimDrag from './rimDrag.vue';
 
 export default {

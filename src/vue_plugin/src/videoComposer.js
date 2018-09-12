@@ -64,9 +64,11 @@ export default function () {
         if ( newMedia.newResource ){
 
             // add new resource to new media in existing layer
-            var layer = timeline.getLayer(newMedia.layerIndex);
-            newMedia.resource = resourceImporter.importResource(newMedia.newResource,sourceLoader);
-            let mediaIndex = layer.addMedia(newMedia);
+            console.log(newMedia.newMedia.layerIndex);
+            var layer = timeline.getLayer(newMedia.newMedia.layerIndex);
+            newMedia.newMedia.resource = resourceImporter.importResource(newMedia.newResource,sourceLoader);
+            console.log(layer);
+            let mediaIndex = layer.addMedia(newMedia.newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
             
             return {

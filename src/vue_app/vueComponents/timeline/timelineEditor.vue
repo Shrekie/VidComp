@@ -22,7 +22,7 @@
 <script>
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
-import MotionEvents from './../../dragResizeMotion/motionEvents.js';
+import MotionEvents from './../../library/dragResizeMotion/motionEvents.js';
 
 export default {
 

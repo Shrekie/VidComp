@@ -3,11 +3,11 @@
 -->
 
 <template>
-<v-layout>
+
 	<v-flex xs12 text-xs-center>
 
 		<v-toolbar app dense flat>
-			<v-btn icon>
+		<v-btn icon>
 			<v-icon>mdi-arrow-left</v-icon>
 		</v-btn>
 
@@ -62,7 +62,7 @@
 		</v-card>
 
 	</v-flex>
-</v-layout>
+
 </template>
 
 <script>
@@ -71,7 +71,7 @@
 // TODO: pass projectName from props
 
 export default {
-	name: "assetComposer",
+	name: "mediaEditor",
 	props: ['projectName'],
 	
 	data() {

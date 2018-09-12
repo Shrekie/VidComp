@@ -10,7 +10,7 @@
 </template>
 <script>
 
-import MotionEvents from './../../dragResizeMotion/motionEvents.js';
+import MotionEvents from './../../library/dragResizeMotion/motionEvents.js';
 
 export default {
     
