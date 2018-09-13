@@ -95,6 +95,9 @@ export default function () {
 
         changedMedia.timelineTime[0] = newTimelinePos.timelineStartTime;
         changedMedia.timelineTime[1] = newTimelinePos.timelineStartTime + changedMediaSize;
+
+        mediaShift.formatTimelineValue(changedMedia);
+        console.log(changedMedia.timelineTime[0]);
         
         if(changedMedia.timelineTime[0] < 0){
             mediaShift.negativePush(affectedLayerMedia, changedMedia);

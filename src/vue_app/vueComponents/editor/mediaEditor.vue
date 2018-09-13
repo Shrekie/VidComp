@@ -43,10 +43,10 @@
 			<v-btn icon>
 				<v-icon>mdi-redo</v-icon>
 			</v-btn>
-			<v-btn icon>
+			<v-btn icon @click="$store.dispatch('expandZoom')">
 				<v-icon>mdi-magnify-plus-outline</v-icon>
 			</v-btn>
-			<v-btn icon>
+			<v-btn icon @click="$store.dispatch('shrinkZoom')">
 				<v-icon>mdi-magnify-minus-outline</v-icon>
 			</v-btn>
 		</v-card>
@@ -71,13 +71,22 @@
 // TODO: pass projectName from props
 
 export default {
+	
 	name: "mediaEditor",
+
 	props: ['projectName'],
 	
 	data() {
 		return {
 		}
 	},
+
+	computed:{
+        zoomScale (){
+            return this.$store.getters.zoomScale;
+        }
+	},
+	
 	methods: {
 		playVideo () {
 			this.$vcomp(this.projectName).play();

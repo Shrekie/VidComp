@@ -6,8 +6,8 @@ function MediaShift() {
     var formatTimelineValue = function(targetMedia){
 
         // make sure timelineTime is at 3 decimal places.
-        targetMedia.timelineTime[0] = Math.round(targetMedia.timelineTime[0] * 1000) / 1000;
-        targetMedia.timelineTime[1] = Math.round(targetMedia.timelineTime[1] * 1000) / 1000;
+        targetMedia.timelineTime[0] =  Math.round(targetMedia.timelineTime[0] * 1000) / 1000;
+        targetMedia.timelineTime[1] =  Math.round(targetMedia.timelineTime[1] * 1000) / 1000;
 
     }
 
@@ -37,8 +37,13 @@ function MediaShift() {
 
             predictedLength = targetMedia.timelineTime[1] + shiftPos;
             predictedLength = Math.round(predictedLength * 1000) / 1000;
-
+            console.log("FORWARDS");
+            console.log("predictedLength: " +predictedLength);
+            console.log("targetMedia.timelineTime[0]: " + targetMedia.timelineTime[0]);
+            console.log("targetMedia.timelineTime[1]: " + targetMedia.timelineTime[1]);
             affectedLayerMedia.forEach(function(media){
+                console.log("media.timelineTime[0]: " + media.timelineTime[1]);
+                console.log("media.timelineTime[1]: " + media.timelineTime[1]);
                 if(media.timelineTime[0] >= targetMedia.timelineTime[1] && 
                     predictedLength > media.timelineTime[0]){
                     checkCascade(affectedLayerMedia, direction, media, shiftPos);
@@ -51,8 +56,13 @@ function MediaShift() {
 
             predictedLength = targetMedia.timelineTime[0] - shiftPos;
             predictedLength = Math.round(predictedLength * 1000) / 1000;
-
+            console.log("BACK");
+            console.log("predictedLength: " +predictedLength);
+            console.log("targetMedia.timelineTime[0]: " + targetMedia.timelineTime[0]);
+            console.log("targetMedia.timelineTime[1]: " + targetMedia.timelineTime[1]);
             affectedLayerMedia.forEach(function(media){
+                console.log("media.timelineTime[0]: " + media.timelineTime[1]);
+                console.log("media.timelineTime[1]: " + media.timelineTime[1]);
                 if(media.timelineTime[1] <= targetMedia.timelineTime[0] && 
                     predictedLength < media.timelineTime[1]){
                     checkCascade(affectedLayerMedia, direction, media, shiftPos);
@@ -68,6 +78,7 @@ function MediaShift() {
     var shiftMedia = function(affectedLayerMedia, direction, shiftPos, targetMedia) {
         
         // end and start pattern of cascading media shifting
+        console.log("DROP SHIFTPOS: " + shiftPos);
 
         checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
         setShiftPos(direction, targetMedia, shiftPos)
@@ -98,7 +109,7 @@ function MediaShift() {
         }else{
             shiftPos =  targetMedia.timelineTime[0] - timelineTime;
         }
-
+        console.log("DRAG SHIFTPOS: " + shiftPos);
         checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
 
         if(direction=="forwards"){
@@ -106,6 +117,8 @@ function MediaShift() {
         }else{
             targetMedia.timelineTime[0] = timelineTime;
         }
+        
+        formatTimelineValue(targetMedia);
 
         let negativeMedia = [];
         
@@ -309,7 +322,6 @@ function MediaShift() {
         }
 
         */
-
         affectedLayerMedia.forEach(function(media){
             media.timelineTime[0] = media.timelineTime[0] + shiftPos;
             media.timelineTime[1] = media.timelineTime[1] + shiftPos;
@@ -329,7 +341,8 @@ function MediaShift() {
         negativePush,
         checkShift,
         checkCascade,
-        setShiftPos
+        setShiftPos,
+        formatTimelineValue
 
     }
 

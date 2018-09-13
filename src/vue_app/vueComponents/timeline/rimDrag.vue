@@ -25,7 +25,11 @@ export default {
             leftDirection:0
 		}
     },
-
+    computed: {
+        zoomScale (){
+            return this.$store.getters.zoomScale;
+        }
+    },
     methods: {
 
         setDirection () {
@@ -47,7 +51,6 @@ export default {
     mounted: function () {
         
         var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        
         this.resizeMotion = new MotionEvents().enableResize(media, this.$refs.rimPoint, 
         this.elementToResize.mediaContainer, function(top, left){
             
@@ -56,14 +59,14 @@ export default {
             var timelineTime = 0;
 
             if(this.direction == "right"){
-                timelineTime = (this.elementToResize.mediaContainer.offsetWidth + 
-                this.elementToResize.mediaContainer.offsetLeft) / 1000;
+                timelineTime = ((this.elementToResize.mediaContainer.offsetWidth + 
+                this.elementToResize.mediaContainer.offsetLeft) / this.zoomScale);
                 direction = "forwards";
             }else{
-                timelineTime = this.elementToResize.mediaContainer.offsetLeft / 1000;
+                timelineTime = this.elementToResize.mediaContainer.offsetLeft / this.zoomScale;
                 direction = "backwards";
             }
-            
+            console.log(timelineTime);
             this.$vcomp(this.projectName)
             .adjustMediaTimeShift(direction, 
             this.layerIndex, this.mediaIndex, timelineTime);

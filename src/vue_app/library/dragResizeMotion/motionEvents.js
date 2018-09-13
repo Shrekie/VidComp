@@ -186,7 +186,7 @@ var MotionEvents = function () {
                 this.resizeElement);
                 
                 //TODO: this.widthGhost > 30 check not smoothest minimum decrease
-                if(this.widthGhost > 60){
+                if(this.widthGhost > 80){
                     if(this.direction == "right"){
                         if(!checkSnap.right.snapped){
                             this.resizeElement.style.width =  this.widthGhost + "px";

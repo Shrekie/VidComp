@@ -89,6 +89,25 @@ testProject.createLayer({
     },
 
     newResource: {
+        name: 'Throwing axe',
+        resourceLink: 'https://i.imgur.com/3MWMuww.mp4',
+        resourceType: 'video'
+    }
+
+});
+
+/*
+testProject.createLayer({
+
+    newMedia: {
+        layerIndex: 0,
+        size: [200, 100],
+        timelineTime: [0.00, 0.10],
+        position: [0,0],
+        videoStartTime: 0
+    },
+
+    newResource: {
         name: 'Blender animation',
         resourceLink: 'https://r2---sn-aigl6nl7.googlevideo.com/videoplayback?source=youtube&initcwndbps=146250&c=WEB&expire=1536809841&ratebypass=yes&lmt=1471812821364858&ei=EYeZW7mvH4SjxgKE05noDA&fvip=2&dur=280.915&key=yt6&ipbits=0&sparams=dur%2Cei%2Cid%2Cinitcwndbps%2Cip%2Cipbits%2Citag%2Clmt%2Cmime%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cratebypass%2Crequiressl%2Csource%2Cexpire&mv=m&mt=1536788159&ms=au%2Conr&mime=video%2Fmp4&requiressl=yes&ip=167.99.91.144&signature=1F1F31896DD2FB116E9300773C08BCC6134F3257.A718F9661BA99A6D008F8E3E36DADC640880071A&mn=sn-aigl6nl7%2Csn-5hnekn7z&mm=31%2C26&id=o-AJZus3HUnM37ryzhAUnP4x7emSCfbQKCjhyVcT9WRul_&pl=23&itag=22',
         resourceType: 'video'
@@ -139,7 +158,7 @@ testProject.addMedia({
         name: 'Blender animation'
     }
 });
-
+*/
 testProject.createLayer({
 
     newMedia: {
@@ -157,7 +176,7 @@ testProject.createLayer({
     }
 
 });
-
+/*
 testProject.addMedia({
     layerIndex: 1,
     size: [100, 100],
@@ -168,7 +187,8 @@ testProject.addMedia({
         name: 'Cat playing'
     }
 });
-
+*/
+/*
 testProject.addMedia({
     layerIndex: 1,
     size: [100, 100],
@@ -209,7 +229,7 @@ testProject.createLayer({
     }
 
 });
-
+*/
 // Store init config
 const store = new Vuex.Store(pve_store);
 

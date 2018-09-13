@@ -79,7 +79,7 @@ export default function () {
 
             // add new media with existing resource
             var layer = timeline.getLayer(newMedia.layerIndex);
-            newMedia.resource = resourceImporter.existingResource(newMedia.resource.name);
+            newMedia.resource = resourceImporter.importResource(newMedia.resource, sourceLoader);
             let mediaIndex = layer.addMedia(newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 

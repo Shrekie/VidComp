@@ -10,7 +10,7 @@
     <Media ref="mediaElements" v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
     v-for="media in allLayerMedia" 
-    :key='media.timelineTime[0] + " - " + media.mediaIndex + " - " + layerSize + " - " + media.timelineTime[1]'>
+    :key='media.timelineTime[0] + " - " + media.mediaIndex + " - " + layerSize + " - " + media.timelineTime[1] + " - " + updateTimeline'>
     </Media> <!-- #TODO: this key man, maybe just do indexshift always -->
 
 </div>
@@ -39,16 +39,18 @@ export default {
             allLayerMedia,
             width: "100px",
             horizontalMediaChange,
-            verticalMediaChange
+            verticalMediaChange,
+            updateTimeline:false
         }
         
     },
 
     computed: {
         layerSize: function () {
-
             return this.width;
-
+        },
+        zoomScale (){
+            return this.$store.getters.zoomScale;
         }
     },
 
@@ -77,7 +79,7 @@ export default {
                 if(element.timelineTime[1] > currentTotal)
                 currentTotal = element.timelineTime[1];
             });
-            this.width = (currentTotal*1000) + 'px';
+            this.width = Math.round((currentTotal * this.zoomScale)) + 'px';
 
         },
 
@@ -94,6 +96,7 @@ export default {
                 if(context.layerIndex == this.layerIndex){
                     console.log('reload media' + this.layerIndex );
                     this.updateLayer();
+                    this.updateTimeline = !this.updateTimeline;
                 }
             }.bind(this));
 
@@ -103,6 +106,7 @@ export default {
                 if(this.layerIndex <= context.maxLength){
                     console.log('reload media' + this.layerIndex );
                     this.updateLayer();
+                    this.updateTimeline = !this.updateTimeline;
                 }
             }.bind(this));
 

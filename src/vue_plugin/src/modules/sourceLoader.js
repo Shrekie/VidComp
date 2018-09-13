@@ -65,6 +65,7 @@ export default function () {
         }
           
         store.sources.sort(compare);
+        console.log(store.sources);
 
     }
 
@@ -79,7 +80,6 @@ export default function () {
         while (i--) {
             if( store.sources[i].media.resource.name == resource.name ){
                 decastMedia(store.sources[i]);
-                console.log(resource);
                 castMedia(store.sources[i].media);
                 store.sources.splice(i, 1);
             }
@@ -91,6 +91,7 @@ export default function () {
     
     this.loadMedia = function (media) {
         castMedia(media);
+        this.sortMediaLayers();
     };
 
 };

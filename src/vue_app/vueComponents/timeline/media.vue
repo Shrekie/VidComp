@@ -5,17 +5,17 @@
 <template>
 
 <div class="mediaContainer" ref="mediaContainer"
-v-bind:style="{ width: mediaWidth, left: mediaLeft }" >
+v-bind:style="{ width: `${mediaWidth}px`, left: `${mediaLeft}px` }" >
 
     <RimDrag v-bind:media-index="mediaIndex" 
     v-bind:layer-index="layerIndex" v-bind:project-name="projectName"
     v-bind:element-to-resize="this.$refs"
-    v-bind:direction='"right"'></RimDrag>
+    v-bind:direction='"right"' v-if="mediaWidth > 70"></RimDrag>
 
     <RimDrag v-bind:media-index="mediaIndex" 
     v-bind:layer-index="layerIndex" v-bind:project-name="projectName"
     v-bind:element-to-resize="this.$refs"
-    v-bind:direction='"left"'></RimDrag>
+    v-bind:direction='"left"' v-if="mediaWidth > 70"></RimDrag>
 
     <div class="media" ref="media"> </div>
 
@@ -53,9 +53,8 @@ export default {
 
         setMediaSize () {
             // FIXME: change name, it also positions.
-            this.mediaWidth = ((this.timelineTime[1]-this.timelineTime[0])*1000) + 'px';
-            this.mediaLeft = (this.timelineTime[0]*1000) + 'px';
-
+            this.mediaWidth = ((this.timelineTime[1]-this.timelineTime[0]) * this.zoomScale);
+            this.mediaLeft = (this.timelineTime[0] * this.zoomScale);
         },
 
         updateElement () {
@@ -65,6 +64,11 @@ export default {
     },
 
     computed: {
+        
+        zoomScale (){
+            return this.$store.getters.zoomScale;
+        }
+        
     },
 
     mounted: function () {
@@ -75,7 +79,7 @@ export default {
             
             console.log('dropped element');
             var nextLayerPixels = 60;
-
+            console.log(left/this.zoomScale);
             var newLayerIndex = Math.sign((top/nextLayerPixels)) * 
             Math.floor(Math.abs((top/nextLayerPixels)));
 
@@ -84,8 +88,10 @@ export default {
                     layerIndex: this.layerIndex, mediaIndex:this.mediaIndex
                 },{
                     layerIndex:newLayerIndex,
-                    timelineStartTime: (left/1000)
+                    timelineStartTime: (left/this.zoomScale)
             });
+
+            this.setMediaSize();
 
             this.$refs.mediaContainer.style.top = "0px";
             this.$refs.mediaContainer.style.left = this.mediaLeft

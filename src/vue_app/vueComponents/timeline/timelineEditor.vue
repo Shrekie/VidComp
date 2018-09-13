@@ -10,7 +10,7 @@
                 <TimelineSlider ref="timelineSlider"></TimelineSlider>
         
                 <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
-                v-for="layer in allLayers" :key="layer.layerIndex">
+                v-for="layer in allLayers" :key="layer.layerIndex + ' ' + zoomScale">
                 </Layer>
 
         </div>
@@ -37,14 +37,27 @@ export default {
         console.log(allLayers);
 
 		return {
-            allLayers
+            allLayers,
+            playing:false
         }
         
     },
 
     computed:{
+
         timeSliderTime (){
             return this.$store.getters.sliderTime;
+        },
+
+        zoomScale (){
+            return this.$store.getters.zoomScale;
+        }
+
+    },
+
+    watch: {
+        zoomScale (newVal, oldVal) {
+            this.$refs.timeline.scrollLeft = this.$refs.timeline.scrollLeft * (newVal / oldVal);
         }
     },
 
@@ -63,13 +76,18 @@ export default {
                 let rangeOfSnap = 4;
                 let snapPoints = [];
 
+                snapPoints.push({
+                    snapRange:[0, 0],
+                    snapPosition:0,
+                    layerPos:0
+                });
+
                 this.allLayers.forEach(function(layer){
 
                     let allLayerMedia = layer.getAllMedia();
 
                     allLayerMedia.forEach(function(media){
                         if(media !== mediaElement){
-
 
                             let layerPos = media.layerIndex;
 
@@ -81,20 +99,20 @@ export default {
                                     layerPos:0
                                 };
 
-                                let frontSnap = (timelineTime*1000) + rangeOfSnap
-                                let backSnap = (timelineTime*1000) - rangeOfSnap
-                                let snapPosition = timelineTime*1000;
+                                let frontSnap = ((timelineTime*this.zoomScale) + rangeOfSnap);
+                                let backSnap = ((timelineTime*this.zoomScale) - rangeOfSnap);
+                                let snapPosition = timelineTime*this.zoomScale;
                                 snapPoint.snapRange = [backSnap, frontSnap];
                                 snapPoint.snapPosition = snapPosition;
                                 snapPoint.layerPos = layerPos;
                                 snapPoints.push(snapPoint);
 
-                            });
+                            }.bind(this));
 
                         }
-                    })
+                    }.bind(this))
 
-                });
+                }.bind(this));
 
                 MotionEvents.prototype.snapPoints = snapPoints;
                 
@@ -107,9 +125,7 @@ export default {
             this.$vcomp(this.projectName).videoControl('beforeActionStart', function(context){
                 
                 if(context.action == 'play'){
-                    var startTime = (this.$refs.timeline.scrollLeft*100)
-                    console.log(startTime);
-                    console.log(context);
+                    var startTime = (this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000);
                     context.timeTracker.elapsedDateTime = startTime;
                     // FIXME: will probably not use scrollbars so fix these
                     this.$refs.timeline.style.overflow = "hidden";
@@ -139,7 +155,7 @@ export default {
             this.$vcomp(this.projectName).videoControl('drawingUpdate', function(context){
 
                 if(context.timeTracker.isPlaying){
-                    var currentSliderTime = ((context.timeTracker.convertTimeInteger(context.timeTracker.elapsed))*10);
+                    var currentSliderTime = context.timeTracker.elapsed * this.zoomScale;
                     this.$refs.timeline.scrollLeft = currentSliderTime;
                 }
     
