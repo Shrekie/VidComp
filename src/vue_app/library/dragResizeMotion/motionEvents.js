@@ -1,15 +1,6 @@
 
 var MotionEvents = function () {
 
-    /*
-    
-        #TODO: dragElement.style.zIndex = 1; <- How this is implemented is blatant
-        proof of the pattern in here is not proper. 
-        
-        Make sure this does not duplicate such.
-
-    */
-
     var cursorHandler = function(e, cb){
 
         e = e || window.event;
@@ -31,33 +22,30 @@ var MotionEvents = function () {
 
         var dragMouseDown = function(e) {
 
-            dragElement.style.zIndex = 10000;
-
             cursorHandler(e, function(e){
                 MotionEvents.prototype.
                 snapCalculation(this.media, this.dragElement);
                 // get the mouse cursor position at startup:
+                dragElement.style.zIndex = 10000;
                 this.ghostLeft = (this.dragElement.offsetLeft - this.pos1);
                 this.ghostRight = this.ghostLeft + this.dragElement.offsetWidth;
                 this.pos3 = e.clientX;
                 this.pos4 = e.clientY;
-        
-                document.onmouseup = function(){closeDragElement(function(){
+
+                document.onmouseup = function(){closeDragElement(dragElement, function(){
                     this.onDragClose(
                         this.dragElement.offsetTop, 
                         (this.dragElement.offsetLeft)
                     );
-                    dragElement.style.zIndex = 1;
                 }.bind(this))}.bind(this);
 
                 document.onmousemove = elementDrag;
         
-                document.ontouchend = function(){closeDragElement(function(){
+                document.ontouchend = function(){dragElement, closeDragElement(dragElement, function(){
                     this.onDragClose(
                         this.dragElement.offsetTop, 
                         (this.dragElement.offsetLeft)
                     );
-                    dragElement.style.zIndex = 1;
                 }.bind(this))}.bind(this);
 
                 document.ontouchmove = elementDrag;
@@ -126,10 +114,10 @@ var MotionEvents = function () {
 
             cursorHandler(e, function(e){
 
-                resizeElement.style.zIndex = 10000;
                 MotionEvents.prototype.
                 snapCalculation(this.media, this.resizeElement);
-    
+
+                resizeElement.style.zIndex = 10000;
                 this.widthGhost = this.resizeElement.offsetWidth;
                 this.ghostLeftResize = this.resizeElement.offsetLeft;
                 this.ghostRightResize = this.ghostLeft + this.widthGhost;
@@ -139,22 +127,20 @@ var MotionEvents = function () {
                 this.dragElement.style.left = this.ghostLeft + "px";
                 this.pos3 = e.clientX;
                 
-                document.onmouseup = function(){closeDragElement(function(){
+                document.onmouseup = function(){closeDragElement(resizeElement, function(){
                     this.onDragClose(
                         this.dragElement.offsetTop, 
                         (this.dragElement.offsetLeft)
                     );
-                    resizeElement.style.zIndex = 1;
                 }.bind(this))}.bind(this);
 
                 document.onmousemove = elementResize;
     
-                document.ontouchend = function(){closeDragElement(function(){
+                document.ontouchend = function(){closeDragElement(resizeElement, function(){
                     this.onDragClose(
                         this.dragElement.offsetTop, 
                         (this.dragElement.offsetLeft)
                     );
-                    resizeElement.style.zIndex = 1;
                 }.bind(this))}.bind(this);
 
                 document.ontouchmove = elementResize;
@@ -257,7 +243,7 @@ var MotionEvents = function () {
         this.dragElement.ontouchstart = resizeMouseDown;
     };
 
-    var closeDragElement = function(cb) {
+    var closeDragElement = function(moveElement, cb) {
 
         document.onmouseup = null;
         document.onmousemove = null;
@@ -266,7 +252,7 @@ var MotionEvents = function () {
         document.ontouchmove = null;
 
         //#TODO: just like closeDragElement, make a startDragElement
-
+        moveElement.style.zIndex = 1;
         cb();
 
     };

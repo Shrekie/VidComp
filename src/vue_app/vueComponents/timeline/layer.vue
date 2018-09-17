@@ -3,14 +3,12 @@
 -->
 
 <template>
-<div class="layerContainer" v-bind:style="{ width: layerSize }">
-
-    <!-- <v-btn small color="primary" @click="showInsertMedia">add Media</v-btn> -->
+<div class="layerContainer" v-bind:style="{ width: `${layerWidth}px` }">
 
     <Media ref="mediaElements" v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
     v-for="media in allLayerMedia" 
-    :key='media.timelineTime[0] + " - " + media.mediaIndex + " - " + layerSize + " - " + media.timelineTime[1] + " - " + updateTimeline'>
+    :key='media.timelineTime[0] + " - " + updateLayer'>
     </Media> <!-- #TODO: this key man, maybe just do indexshift always -->
 
 </div>
@@ -37,41 +35,41 @@ export default {
 
         return {
             allLayerMedia,
-            width: "100px",
             horizontalMediaChange,
             verticalMediaChange,
-            updateTimeline:false
+            updateLayer:false,
+            width:"0"
         }
         
     },
 
     computed: {
-        layerSize: function () {
-            return this.width;
+
+        layerWidth: function () {
+            return this.setLayerWidth();
         },
+
         zoomScale (){
             return this.$store.getters.zoomScale;
         }
+
     },
 
     watch:{
         
-        allLayerMedia(){
+        updateLayer(){
+
+            //TODO: this is not top level hack
             this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
+            this.setLayerWidth();
+
         }
 
     },
+    
     methods: {
 
-        updateLayer () {
-            
-            this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
-            this.allLayerMedia.splice(this.allLayerMedia.length);
-            this.setLayerSize();
-
-        },
-
-        setLayerSize () {
+        setLayerWidth (){
 
             if(!this.allLayerMedia.length) return "100px";
             var currentTotal = 0;
@@ -79,34 +77,32 @@ export default {
                 if(element.timelineTime[1] > currentTotal)
                 currentTotal = element.timelineTime[1];
             });
-            this.width = Math.round((currentTotal * this.zoomScale)) + 'px';
+            this.width = Math.round((currentTotal * this.zoomScale));
+            
+            return this.width;
 
         },
 
-        showInsertMedia () {
-            this.$router.push({ path: `${this.projectName}/addmedia/${this.layerIndex}`});
-        },
-
-        layerUpdate () {
+        registerLayerHooks () {
 
             // TODO: reloading is so forced, dont like it
+            // Change is only horizontal, only shift exact layer index.
             this.horizontalMediaChange = this.$vcomp(this.projectName)
             .layerControl('mediaShift', 
             function(context){
                 if(context.layerIndex == this.layerIndex){
                     console.log('reload media' + this.layerIndex );
-                    this.updateLayer();
-                    this.updateTimeline = !this.updateTimeline;
+                    this.updateLayer = !this.updateLayer;
                 }
             }.bind(this));
 
+             // Change is vertical, shift layer cascadingly.
             this.verticalMediaChange = this.$vcomp(this.projectName)
             .layerControl('indexShift', 
             function(context){
                 if(this.layerIndex <= context.maxLength){
                     console.log('reload media' + this.layerIndex );
-                    this.updateLayer();
-                    this.updateTimeline = !this.updateTimeline;
+                    this.updateLayer = !this.updateLayer;
                 }
             }.bind(this));
 
@@ -116,9 +112,8 @@ export default {
     mounted: function () {
         
         console.log("LAYER MOUNTED");
-        this.setLayerSize();
-        this.layerUpdate();
-
+        this.registerLayerHooks();
+ 
     },
 
     beforeDestroy: function () {

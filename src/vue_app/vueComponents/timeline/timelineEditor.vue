@@ -10,7 +10,7 @@
                 <TimelineSlider ref="timelineSlider"></TimelineSlider>
         
                 <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
-                v-for="layer in allLayers" :key="layer.layerIndex + ' ' + zoomScale">
+                v-for="layer in allLayers" :key="layer.layerIndex + ' ' + zoomScale + '' + layer.updateLayer">
                 </Layer>
 
         </div>
@@ -38,6 +38,7 @@ export default {
 
 		return {
             allLayers,
+            //TODO: implement this better
             playing:false
         }
         
@@ -69,6 +70,7 @@ export default {
     methods: {
 
         //TODO: maybe put this on rimDrag or something
+        // calculates and registers snap points for all layers.
         determineSnaps: function(){
 
             MotionEvents.prototype.snapCalculation = function(mediaElement, elementToSnap){
@@ -77,7 +79,7 @@ export default {
                 let snapPoints = [];
 
                 snapPoints.push({
-                    snapRange:[0, 0],
+                    snapRange:[-4, 4],
                     snapPosition:0,
                     layerPos:0
                 });
@@ -119,7 +121,7 @@ export default {
             }.bind(this);
         },
 
-        setVideoStartTime: function (){
+        registerVideoControlEvents: function (){
 
             // TODO: move this behaviour more to component?
             this.$vcomp(this.projectName).videoControl('beforeActionStart', function(context){
@@ -144,7 +146,7 @@ export default {
 
         },
 
-        updateScrolling: function () {
+        registerScrollHooks: function () {
 
             // set the scrollLeft to stored value
             this.$nextTick(function () {
@@ -175,8 +177,8 @@ export default {
     mounted: function () {
         
         console.log("TIMELINE MOUNTED");
-        this.setVideoStartTime();
-        this.updateScrolling();
+        this.registerVideoControlEvents();
+        this.registerScrollHooks();
         this.determineSnaps();
         //this.$eventHub.$on('edit-enabled', this.editEnabled);
         
