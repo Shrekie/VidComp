@@ -129,7 +129,7 @@ export default {
             var mediaMeta = this.$vcomp(this.projectName).addMedia({
                 layerIndex: 0,
                 size: [300, 160],
-                timelineTime: [(this.timeSliderTime/this.zoomScale), ( (this.timeSliderTime/this.zoomScale) + 0.1 )],
+                timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
                 position: [0, 0],
                 videoStartTime: 0,
                 resource: {
@@ -142,7 +142,7 @@ export default {
                     layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
                 },{
                     layerIndex: 0,
-                    timelineStartTime: this.timeSliderTime/this.zoomScale
+                    timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
 
             this.$router.push({ path: `/compose/${this.projectName}`});

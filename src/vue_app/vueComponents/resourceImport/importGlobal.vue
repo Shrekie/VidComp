@@ -46,7 +46,10 @@ export default {
     computed: {
         timeSliderTime (){
             return this.$store.getters.sliderTime;
-        } 
+        },
+        zoomScale (){
+            return this.$store.getters.zoomScale;
+        }
     },
 
     methods: {
@@ -58,7 +61,7 @@ export default {
                 newMedia: {
                     layerIndex: 0,
                     size: [300, 160],
-                    timelineTime: [(this.timeSliderTime/1000), ( (this.timeSliderTime/1000) + 0.1 )],
+                    timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
                     position: [0,0],
                     videoStartTime: 0
                 },
@@ -76,7 +79,7 @@ export default {
                     layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
                 },{
                     layerIndex: 0,
-                    timelineStartTime: this.timeSliderTime/1000
+                    timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
 
             this.$router.push({ path: `/compose/${this.projectName}`});

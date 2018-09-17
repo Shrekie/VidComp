@@ -168,6 +168,7 @@ export default function () {
     };
 
     this.unbindFrameHook = function (frameHookParent, hookIndex) {
+        //#TODO: add this onto the contexthook class
         switch(frameHookParent) {
             case "layerControl":
                 timeline.contextHooks.unregisterHook(hookIndex);

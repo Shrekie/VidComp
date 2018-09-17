@@ -56,6 +56,8 @@ export default function () {
         this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: layerIndex});
 
     };
+    
+    //TODO: Change name of adjustMediaTimeShift and adjustMediaShift
 
     this.adjustMediaShift = function(currentTimelinePos, newTimelinePos, sourceLoader){
 
