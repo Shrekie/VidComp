@@ -5,6 +5,8 @@
 */
 
 import Axios from 'axios';
+var projects = [{name:"test"}];
+
 export default {
 
     getUsers(cb){
@@ -29,6 +31,14 @@ export default {
         .catch(function (error) {
             cb(error);
         });
+    },
+
+    getProjects(cb){
+        cb(projects);
+    },
+
+    createProject(name, cb){
+        cb(projects.push({name}));
     }
 
 };

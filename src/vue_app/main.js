@@ -23,6 +23,8 @@ Vue.use(VidComp);
 import appHook from './vueComponents/fundament/appHook.vue';
 import appWindow from './vueComponents/fundament/appWindow.vue';
 import workspace from './vueComponents/pageSection/workspace.vue';
+import projectLibrary from './vueComponents/project/projectLibrary.vue';
+import projectCreate from './vueComponents/project/projectCreate.vue';
 import mediaEditor from './vueComponents/editor/mediaEditor.vue';
 import assetRelocator from './vueComponents/editor/assetRelocator.vue';
 import timelineEditor from './vueComponents/timeline/timelineEditor.vue';
@@ -37,12 +39,27 @@ import pve_store from './stores/pve_store.js';
 const routes = [
     { 
         path: '/', component:appWindow,
+
         children: [{
+
             path: '',
+
             components: {
+
                 workspace: workspace
+
             },
             children: [{
+
+                path: '',
+                component:projectLibrary,
+
+            },{
+
+                path: 'new',
+                component:projectCreate,
+
+            }, {
 
                 path: 'compose/:projectName',
                 component:mediaEditor,
@@ -76,8 +93,8 @@ const routes = [
 ];
 
 // VideoComposer init
-var testProject = VidComp.videoProject('test');
-
+var testProject = VidComp.videoProject.new('test');
+console.log(VidComp.videoProject.project("test"));
 testProject.createLayer({
 
     newMedia: {
@@ -159,6 +176,7 @@ testProject.addMedia({
     }
 });
 */
+
 testProject.createLayer({
 
     newMedia: {
@@ -176,6 +194,7 @@ testProject.createLayer({
     }
 
 });
+
 /*
 testProject.addMedia({
     layerIndex: 1,
@@ -230,6 +249,7 @@ testProject.createLayer({
 
 });
 */
+
 // Store init config
 const store = new Vuex.Store(pve_store);
 
@@ -248,4 +268,3 @@ new Vue({
     store,
     router
 }).$mount('#app');
-

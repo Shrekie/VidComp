@@ -50,7 +50,7 @@ export default {
 
     mounted: function () {
         
-        var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
+        var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
         this.resizeMotion = new MotionEvents().enableResize(media, this.$refs.rimPoint, 
         this.elementToResize.mediaContainer, function(top, left){
             
@@ -67,7 +67,7 @@ export default {
                 direction = "backwards";
             }
             console.log(timelineTime);
-            this.$vcomp(this.projectName)
+            this.$vcomp.project(this.projectName)
             .adjustMediaTimeShift(direction, 
             this.layerIndex, this.mediaIndex, timelineTime);
             

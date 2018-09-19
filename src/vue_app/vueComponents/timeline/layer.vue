@@ -28,7 +28,7 @@ export default {
 
     data() {
 
-        var allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
+        var allLayerMedia = this.$vcomp.project(this.projectName).getAllMedia(this.layerIndex);
 
         var horizontalMediaChange = null;
         var verticalMediaChange = null;
@@ -60,7 +60,7 @@ export default {
         updateLayer(){
 
             //TODO: this is not top level hack
-            this.allLayerMedia = this.$vcomp(this.projectName).getAllMedia(this.layerIndex);
+            this.allLayerMedia = this.$vcomp.project(this.projectName).getAllMedia(this.layerIndex);
             this.setLayerWidth();
 
         }
@@ -87,7 +87,7 @@ export default {
 
             // TODO: reloading is so forced, dont like it
             // Change is only horizontal, only shift exact layer index.
-            this.horizontalMediaChange = this.$vcomp(this.projectName)
+            this.horizontalMediaChange = this.$vcomp.project(this.projectName)
             .layerControl('mediaShift', 
             function(context){
                 if(context.layerIndex == this.layerIndex){
@@ -97,7 +97,7 @@ export default {
             }.bind(this));
 
              // Change is vertical, shift layer cascadingly.
-            this.verticalMediaChange = this.$vcomp(this.projectName)
+            this.verticalMediaChange = this.$vcomp.project(this.projectName)
             .layerControl('indexShift', 
             function(context){
                 if(this.layerIndex <= context.maxLength){
@@ -118,9 +118,9 @@ export default {
 
     beforeDestroy: function () {
 
-        this.$vcomp(this.projectName).
+        this.$vcomp.project(this.projectName).
         unbindFrameHook('layerControl', this.horizontalMediaChange);
-        this.$vcomp(this.projectName)
+        this.$vcomp.project(this.projectName)
         .unbindFrameHook('layerControl', this.verticalMediaChange);
 
         console.log('beforeDestroy');

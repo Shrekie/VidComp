@@ -74,7 +74,7 @@ export default {
     mounted: function () {
         
         console.log("MOUNTED MEDIA: LAYERINDEX: " + this.layerIndex + " MEDIAINDEX: " + this.mediaIndex);
-        var media = this.$vcomp(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
+        var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
         this.dragMotion = new MotionEvents().enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
             
             console.log('dropped element');
@@ -83,7 +83,7 @@ export default {
             var newLayerIndex = Math.sign((top/nextLayerPixels)) * 
             Math.floor(Math.abs((top/nextLayerPixels)));
 
-            this.$vcomp(this.projectName)
+            this.$vcomp.project(this.projectName)
             .adjustMediaShift({
                     layerIndex: this.layerIndex, mediaIndex:this.mediaIndex
                 },{

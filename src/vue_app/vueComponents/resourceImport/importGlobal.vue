@@ -23,7 +23,7 @@
 
                         <v-flex xs8 offset-xs2>
                             <v-text-field v-model="mediaURL"
-                            label="URL"
+                            append-icon="mdi-link-variant"
                             outline
                             ></v-text-field>
                         </v-flex>
@@ -56,7 +56,7 @@ export default {
 
         importMedia() {
 
-            var mediaMeta = this.$vcomp(this.projectName).addMedia({
+            var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
 
                 newMedia: {
                     layerIndex: 0,
@@ -74,7 +74,7 @@ export default {
 
             });
 
-            this.$vcomp(this.projectName)
+            this.$vcomp.project(this.projectName)
             .adjustMediaShift({
                     layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
                 },{

@@ -5,36 +5,45 @@
 import VideoComposerManager from './src/videoComposerManager.js';
 var videoComposerManager = new VideoComposerManager();
 
-var videoProjectDir = function (projectName){
-    return videoComposerManager.getProject(projectName);
+var videoProject =  {
+    
+    project: (projectName) => {
+        return videoComposerManager.getProject(projectName)
+    },
+    new: (projectName) => {
+        videoComposerManager.newProject(projectName);
+        return videoComposerManager.getProject(projectName);
+    }
+    
 };
 
 export default {
-    videoProject (projectName) {
-        videoComposerManager.newProject(projectName);
-        return videoProjectDir(projectName);
-    },
+
+    videoProject:videoProject,
+
     install(Vue, options) {
 
         Vue.directive('project-composition', {
             bind (el, binding, vnode, oldVnode) {
-                console.log('bound');
-                videoProjectDir(binding.value).setTarget(el);
+                console.log(videoProject.project(binding.value));
+                console.log(videoProject.project("test"));
+                videoProject.project(binding.value).setTarget(el);
             },
             unbind (el, binding, vnode, oldVnode) {
                 console.log('unbound');
                 // Cleanup for new instance of canvas
-                videoProjectDir(binding.value).stop();
+                videoProject.project(binding.value).stop();
                 /*
                     every component hooking up should also bind to unbind,
                     so this might be overkill:
                 */
-               videoProjectDir(binding.value).unbindAllFrameHooks();
+               videoProject.project(binding.value).unbindAllFrameHooks();
             }
 
         });
 
-        Vue.prototype.$vcomp = videoProjectDir
+        Vue.prototype.$vcomp = videoProject
 
     }
+
 };

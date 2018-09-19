@@ -32,7 +32,7 @@ export default {
 
 	data() {
 
-        var allLayers = this.$vcomp(this.projectName).getAllLayers();
+        var allLayers = this.$vcomp.project(this.projectName).getAllLayers();
 
         console.log(allLayers);
 
@@ -124,7 +124,7 @@ export default {
         registerVideoControlEvents: function (){
 
             // TODO: move this behaviour more to component?
-            this.$vcomp(this.projectName).videoControl('beforeActionStart', function(context){
+            this.$vcomp.project(this.projectName).videoControl('beforeActionStart', function(context){
                 
                 if(context.action == 'play'){
                     var startTime = (this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000);
@@ -154,7 +154,7 @@ export default {
             });
             
             // scrollLeft update hook loop
-            this.$vcomp(this.projectName).videoControl('drawingUpdate', function(context){
+            this.$vcomp.project(this.projectName).videoControl('drawingUpdate', function(context){
 
                 if(context.timeTracker.isPlaying){
                     var currentSliderTime = context.timeTracker.elapsed * this.zoomScale;
@@ -186,7 +186,7 @@ export default {
 
     beforeDestroy: function () {
 
-        this.$vcomp(this.projectName).unbindAllFrameHooks();
+        this.$vcomp.project(this.projectName).unbindAllFrameHooks();
         //this.$eventHub.$off('edit-enabled');
         console.log('beforeDestroy');
 

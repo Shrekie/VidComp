@@ -7,7 +7,7 @@
 	<v-flex xs12 text-xs-center>
 
 		<v-toolbar app dense flat>
-		<v-btn icon>
+		<v-btn icon :to="'/'">
 			<v-icon>mdi-arrow-left</v-icon>
 		</v-btn>
 
@@ -89,13 +89,13 @@ export default {
 	
 	methods: {
 		playVideo () {
-			this.$vcomp(this.projectName).play();
+			this.$vcomp.project(this.projectName).play();
 		},
 		stopVideo () {
-			this.$vcomp(this.projectName).stop();
+			this.$vcomp.project(this.projectName).stop();
 		},
 		resetVideo () {
-			this.$vcomp(this.projectName).reset();
+			this.$vcomp.project(this.projectName).reset();
 		},
 		importVideo () {
 			console.log("import media");

@@ -126,7 +126,7 @@ export default {
 
         getMedia () {
 
-            var mediaMeta = this.$vcomp(this.projectName).addMedia({
+            var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
                 layerIndex: 0,
                 size: [300, 160],
                 timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
@@ -137,7 +137,7 @@ export default {
                 }
             });
 
-            this.$vcomp(this.projectName)
+            this.$vcomp.project(this.projectName)
             .adjustMediaShift({
                     layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
                 },{
@@ -153,7 +153,7 @@ export default {
 
 	data() {
 
-        var allResources = this.$vcomp(this.projectName).getAllResources();
+        var allResources = this.$vcomp.project(this.projectName).getAllResources();
         var activeResource = 0;
 
 		return {
