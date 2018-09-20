@@ -57,16 +57,12 @@ export default {
             this.mediaLeft = (this.timelineTime[0] * this.zoomScale);
         },
 
-        updateElement () {
-            this.$forceUpdate();
-        },
-
     },
 
     computed: {
         
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
         }
         
     },

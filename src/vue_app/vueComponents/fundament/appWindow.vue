@@ -5,11 +5,11 @@
 <template>
 <v-app dark>
 <v-content>
-	<v-container grid-list-md text-xs-center>
+	<v-container grid-list-md text-xs-center v-if="this.ready">
 		<router-view name="workspace"></router-view>
 	</v-container>
 </v-content>
-		<Authenticate>
+	<Authenticate>
 	</Authenticate>
 </v-app>
 </template>
@@ -23,6 +23,12 @@ export default {
 	
 	components: {
         Authenticate
+	},
+
+	computed:{
+		ready() {
+			return this.$store.getters.ready;
+		}
 	},
 	
 	data() {

@@ -10,9 +10,14 @@ var videoProject =  {
     project: (projectName) => {
         return videoComposerManager.getProject(projectName)
     },
+    
     new: (projectName) => {
         videoComposerManager.newProject(projectName);
         return videoComposerManager.getProject(projectName);
+    },
+
+    loadProject: (project) => {
+        videoComposerManager.loadProject(project);
     }
     
 };

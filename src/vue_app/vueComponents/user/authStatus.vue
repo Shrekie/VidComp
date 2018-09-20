@@ -36,12 +36,6 @@ export default {
 		return {
 		}
     },
-    
-    watch: {
-        zoomScale (newVal, oldVal) {
-            this.$refs.timeline.scrollLeft = this.$refs.timeline.scrollLeft * (newVal / oldVal);
-        }
-    },
 
 	computed: {
 		authenticated () {

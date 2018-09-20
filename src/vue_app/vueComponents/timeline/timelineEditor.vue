@@ -32,12 +32,7 @@ export default {
 
 	data() {
 
-        var allLayers = this.$vcomp.project(this.projectName).getAllLayers();
-
-        console.log(allLayers);
-
 		return {
-            allLayers,
             //TODO: set things to disabled when this is true
             playing:false
         }
@@ -47,11 +42,15 @@ export default {
     computed:{
 
         timeSliderTime (){
-            return this.$store.getters.sliderTime;
+            return this.$store.getters.sliderTime(this.projectName);
         },
 
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
+        },
+
+        allLayers (){
+            return this.$store.getters.layers(this.projectName);
         }
 
     },
@@ -84,37 +83,34 @@ export default {
                     layerPos:0
                 });
 
-                this.allLayers.forEach(function(layer){
+                let allLayerMedia = 
+                this.$vcomp.project(this.projectName).getAllMedia()
 
-                    let allLayerMedia = layer.getAllMedia();
+                allLayerMedia.forEach(function(media){
+                    if(media !== mediaElement){
 
-                    allLayerMedia.forEach(function(media){
-                        if(media !== mediaElement){
+                        let layerPos = media.layerIndex;
 
-                            let layerPos = media.layerIndex;
+                        media.timelineTime.forEach(function(timelineTime){
 
-                            media.timelineTime.forEach(function(timelineTime){
+                            let snapPoint = {
+                                snapRange:[],
+                                snapPosition:0,
+                                layerPos:0
+                            };
 
-                                let snapPoint = {
-                                    snapRange:[],
-                                    snapPosition:0,
-                                    layerPos:0
-                                };
+                            let frontSnap = ((timelineTime*this.zoomScale) + rangeOfSnap);
+                            let backSnap = ((timelineTime*this.zoomScale) - rangeOfSnap);
+                            let snapPosition = timelineTime*this.zoomScale;
+                            snapPoint.snapRange = [backSnap, frontSnap];
+                            snapPoint.snapPosition = snapPosition;
+                            snapPoint.layerPos = layerPos;
+                            snapPoints.push(snapPoint);
 
-                                let frontSnap = ((timelineTime*this.zoomScale) + rangeOfSnap);
-                                let backSnap = ((timelineTime*this.zoomScale) - rangeOfSnap);
-                                let snapPosition = timelineTime*this.zoomScale;
-                                snapPoint.snapRange = [backSnap, frontSnap];
-                                snapPoint.snapPosition = snapPosition;
-                                snapPoint.layerPos = layerPos;
-                                snapPoints.push(snapPoint);
+                        }.bind(this));
 
-                            }.bind(this));
-
-                        }
-                    }.bind(this))
-
-                }.bind(this));
+                    }
+                }.bind(this))
 
                 MotionEvents.prototype.snapPoints = snapPoints;
                 
@@ -165,7 +161,7 @@ export default {
 
             // update stored scollLeft value on scroll
             this.$refs.timeline.onscroll = function(event){
-                this.$store.dispatch('setSliderTime', this.$refs.timeline.scrollLeft);
+                this.$store.dispatch('setSliderTime', {name: this.projectName, timeSliderTime: this.$refs.timeline.scrollLeft});
             }.bind(this)
 
 

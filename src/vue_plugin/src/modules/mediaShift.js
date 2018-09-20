@@ -323,6 +323,7 @@ function MediaShift() {
 
         */
         affectedLayerMedia.forEach(function(media){
+            console.log(media);
             media.timelineTime[0] = media.timelineTime[0] + shiftPos;
             media.timelineTime[1] = media.timelineTime[1] + shiftPos;
             formatTimelineValue(media);

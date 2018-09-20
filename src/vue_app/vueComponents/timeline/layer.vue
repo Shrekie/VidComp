@@ -28,13 +28,10 @@ export default {
 
     data() {
 
-        var allLayerMedia = this.$vcomp.project(this.projectName).getAllMedia(this.layerIndex);
-
         var horizontalMediaChange = null;
         var verticalMediaChange = null;
 
         return {
-            allLayerMedia,
             horizontalMediaChange,
             verticalMediaChange,
             updateLayer:false,
@@ -50,7 +47,11 @@ export default {
         },
 
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
+        },
+
+        allLayerMedia (){
+            return this.$store.getters.mediaByLayer(this.projectName, this.layerIndex);
         }
 
     },
@@ -60,7 +61,15 @@ export default {
         updateLayer(){
 
             //TODO: this is not top level hack
-            this.allLayerMedia = this.$vcomp.project(this.projectName).getAllMedia(this.layerIndex);
+            //this.allLayerMedia = this.$vcomp.project(this.projectName).getAllMedia(this.layerIndex);
+            this.$store.dispatch('setMedia',{name: this.projectName,
+            media: this.$vcomp.project(this.projectName).getAllMedia()});
+            console.log(this.$vcomp.project(this.projectName).getAllMedia());
+
+            this.$store.dispatch('setLayers',{name: this.projectName,
+            layers: this.$vcomp.project(this.projectName).getAllLayers()});
+            console.log(this.$vcomp.project(this.projectName).getAllLayers());
+            
             this.setLayerWidth();
 
         }
@@ -70,8 +79,8 @@ export default {
     methods: {
 
         setLayerWidth (){
-
-            if(!this.allLayerMedia.length) return "100px";
+            console.log(this.allLayerMedia);
+            if(this.allLayerMedia.length == 0 ) return "100px";
             var currentTotal = 0;
             this.allLayerMedia.forEach(element => {
                 if(element.timelineTime[1] > currentTotal)

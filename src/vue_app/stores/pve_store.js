@@ -1,6 +1,6 @@
 /*
     Vuex store for entire app
-    TODO: Remove and split this file up.
+    TODO: Split this file up.
 */
 
 import Appapi from './../../vue_api/application_api.js';
@@ -8,52 +8,95 @@ import clientAuth from './../library/clientAuthentication/clientAuth.js'
 import createMutationsSharer from 'vuex-shared-mutations'
 
 export default {
+
     state: {
-        users: [],
-        projects: [],
-        count: 0,
-        timeSliderTime: 0,
-        zoomScale: 1000,
-        authenticated: false
+        projects:[],
+        ready:false,
+        authenticated: false,
+        zoomAmount: 10
     },
+
     actions:{
 
-        getUsers ({ commit }) {
-            Appapi.getUsers(users => {
-                commit('setusers', users);
+        getProjects ({commit}) {
+            return new Promise((resolve, reject) => {
+                Appapi.getProjects(projects => {
+                    commit('setProjects', projects);
+                    resolve(projects);
+                });
             });
         },
 
-        createUser ({dispatch}, payload) {
-            Appapi.createUser(payload.name, (response) => {
-                console.log(response);
-                dispatch('getUsers');
-            });
-        },
-
-        createProject({dispatch}, payload){
-            Appapi.createProject(payload.name, (response) =>{
-                console.log(response);
+        setProject ({dispatch, getters} , payload) {
+            Appapi.setProject(getters.projectByName(payload.name), (response) => {
                 dispatch('getProjects');
             });
         },
 
-        getProjects ({ commit }) {
-            Appapi.getProjects(projects =>{
-                commit('setProjects', projects)
+        createProject ({dispatch}, payload) {
+
+            return new Promise((resolve, reject) => {
+
+                var newProject = {
+                    name: payload.name,
+                    timeSliderTime: 0,
+                    zoomScale: 1000,
+                    layers: [{
+                        layerIndex: 0
+                    }],
+                    media: [],
+                    resources: []
+
+                }
+    
+                Appapi.setProject(newProject, (response) => {
+
+                    dispatch('getProjects').then(response => {
+                        resolve(response);
+                    }, error => {
+                        console.log(error);
+                    });
+
+                });
+
             });
+
         },
 
-        setSliderTime ({ commit }, sliderTime) {
-            commit('setSlider', sliderTime);
+        setLayers ({commit, dispatch, getters}, payload){
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('setLayers', payload);
+            dispatch('setProject',payload);
         },
 
-        expandZoom ({ commit }) {
-            commit('increaseZoom', 10);
+        setMedia ({commit, dispatch, getters}, payload){
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('setMedia', payload);
+            dispatch('setProject', payload);
         },
 
-        shrinkZoom ({ commit }) {
-            commit('decreaseZoom', 10);
+        setResources ({commit, dispatch, getters}, payload){
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('setResources', payload);
+            dispatch('setProject', payload);
+        },
+
+        setSliderTime ({ commit, dispatch, getters }, payload) {
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('setSlider', payload);
+            //dispatch('setProject', payload);
+        },
+
+        expandZoom ({ commit, dispatch, getters}, payload) {
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('increaseZoom', payload);
+            dispatch('setProject', payload);
+        },
+
+        shrinkZoom ({ commit, dispatch, getters }, payload) {
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('decreaseZoom', payload);
+            dispatch('setProject', payload);
         },
 
         getAuthenticated ({commit}) {
@@ -62,68 +105,107 @@ export default {
             });
         },
 
-        googleLogin({ commit }) {
+        isReady({commit}){
+            commit('setReadyStatus', true);
+        },
+
+        authenticate (){
             clientAuth.authenticate();
         }
 
     },
-    mutations: {
 
-        setusers (state, users) {
-            state.users = users;
-        },
+    mutations: {
 
         setProjects (state, projects) {
             state.projects = projects;
         },
 
+        setLayers (state, payload){
+            state.projects[payload.projectId].layers = payload.layers;
+        },
+
+        setMedia (state, payload){
+            state.projects[payload.projectId].media = payload.media;
+        },
+
+        setResources (state, payload){
+            state.projects[payload.projectId].resources = payload.resources;
+        },
+
+        setSlider (state, payload) {
+            state.projects[payload.projectId].timeSliderTime = payload.timeSliderTime;
+        },
+
+        increaseZoom (state, payload) {
+            state.projects[payload.projectId].zoomScale += 
+            state.projects[payload.projectId].zoomScale/state.zoomAmount
+        },
+
+        decreaseZoom (state, payload) {
+            state.projects[payload.projectId].zoomScale -= 
+            state.projects[payload.projectId].zoomScale/state.zoomAmount
+        },
+
+        setReadyStatus (state, payload){
+            state.ready = payload
+        },
+        
         setAuthenticated (state, response) {
             state.authenticated = response;
-        },
-
-        incrementCount (state) {
-            state.count++;
-        },
-
-        setSlider (state, sliderTime) {
-            state.timeSliderTime = sliderTime;
-        },
-
-        increaseZoom (state, zoomAmount) {
-            state.zoomScale += state.zoomScale/zoomAmount;
-        },
-
-        decreaseZoom (state, zoomAmount) {
-            state.zoomScale -= state.zoomScale/zoomAmount;
         }
-        
+
     },
+
     getters: {
 
-        getAllUsers (state) {
-            return state.users;
-        },
-
-        getAllProjects (state) {
+        projects (state) {
             return state.projects;
         },
 
-        getTotalCount (state) {
-            return state.count;
+        layers: (state) => (name) => { 
+            return state.projects.find(projects => projects.name === name).layers;
         },
 
-        sliderTime (state) {
-            return state.timeSliderTime;
+        mediaByLayer: (state) => (name, layerIndex) => { 
+            return (state.projects.find(projects => projects.name === name).media)
+            .filter(media => media.layerIndex == layerIndex );
         },
 
-        zoomScale (state) {
-            return state.zoomScale;
+        media: (state) => (name) => { 
+            return state.projects.find(projects => projects.name === name).media;
         },
 
-        authenticated (state){
+        resources: (state) => (name) => { 
+            return state.projects.find(projects => projects.name === name).resources;
+        },
+
+        projectByName: (state) => (name) => {
+            return state.projects.find(projects => projects.name === name);
+        },
+
+        projectIdByName: (state) => (name) => {
+            return state.projects.findIndex(projects => projects.name === name);
+        },
+
+        sliderTime: (state) => (name) => {
+            return state.projects.find(projects => projects.name === name).timeSliderTime;
+        },
+
+        zoomScale: (state) => (name) => {
+            return state.projects.find(projects => projects.name === name).zoomScale;
+        },
+
+        ready (state) {
+            return state.ready
+        },
+
+        authenticated (state) {
             return state.authenticated
         }
 
     },
+
     plugins: [createMutationsSharer({ predicate: ['setAuthenticated'] })]
+
 };

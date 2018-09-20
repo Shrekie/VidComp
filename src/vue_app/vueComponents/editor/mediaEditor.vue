@@ -43,10 +43,10 @@
 			<v-btn icon>
 				<v-icon>mdi-redo</v-icon>
 			</v-btn>
-			<v-btn icon @click="$store.dispatch('expandZoom')">
+			<v-btn icon @click="$store.dispatch('expandZoom', {name: projectName})">
 				<v-icon>mdi-magnify-plus-outline</v-icon>
 			</v-btn>
-			<v-btn icon @click="$store.dispatch('shrinkZoom')">
+			<v-btn icon @click="$store.dispatch('shrinkZoom', {name: projectName})">
 				<v-icon>mdi-magnify-minus-outline</v-icon>
 			</v-btn>
 		</v-card>
@@ -83,7 +83,7 @@ export default {
 
 	computed:{
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
         }
 	},
 	

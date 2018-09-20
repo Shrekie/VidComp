@@ -56,7 +56,7 @@ export default {
     computed:{
 
 		allProjects () {
-			return this.$store.getters.getAllProjects;
+			return this.$store.getters.projects;
         }
         
     },
@@ -94,10 +94,6 @@ export default {
             activeProject
         }
         
-    },
-    
-    created: function(){
-    	this.$store.dispatch('getProjects');
     }
       
 };

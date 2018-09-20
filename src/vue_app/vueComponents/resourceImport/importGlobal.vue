@@ -45,10 +45,10 @@ export default {
 
     computed: {
         timeSliderTime (){
-            return this.$store.getters.sliderTime;
+            return this.$store.getters.sliderTime(this.projectName);
         },
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
         }
     },
 
@@ -74,6 +74,8 @@ export default {
 
             });
 
+            console.log(mediaMeta);
+
             this.$vcomp.project(this.projectName)
             .adjustMediaShift({
                     layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
@@ -81,6 +83,14 @@ export default {
                     layerIndex: 0,
                     timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
+            
+            this.$store.dispatch('setResources',{name: this.projectName,
+            resources: this.$vcomp.project(this.projectName).getAllResources()});
+
+            this.$store.dispatch('setMedia',{name: this.projectName,
+            media: this.$vcomp.project(this.projectName).getAllMedia()});
+
+            console.log(this.$vcomp.project(this.projectName).getAllMedia())
 
             this.$router.push({ path: `/compose/${this.projectName}`});
 

@@ -37,28 +37,24 @@ export default {
     name: "projectCreate",
 
     computed: {
-
+        project (){
+            return this.$store.getters.projectByName(this.projectName);
+        }
     },
 
     methods: {
 
         createProject() {
-            
-            //TODO: make sure the promise is proper
-            const promise = new Promise((resolve, reject) => {
-                if (this.$store.dispatch('createProject', { name: this.projectName })) {
-                    this.$vcomp.new(this.projectName).createLayer({layerIndex:0});
-                    resolve();
-                } else {
-                    reject(Error('it broke'));
-                }
-            });
 
-            promise.then(result => {
+            this.$store.dispatch('createProject', { name: this.projectName }).then(response => {
+
+                this.$vcomp.loadProject(this.project);
+                console.log(this.project);
                 this.$router.push({ path: `/compose/${this.projectName}`});
-            }, err => {
+
+            }, error => {
                 console.log(err);
-            });
+			});
 
         }
 

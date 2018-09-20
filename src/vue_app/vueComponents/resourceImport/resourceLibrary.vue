@@ -99,12 +99,17 @@ export default {
     props: ['projectName', 'resourceTypeView'],
 
     computed:{
+
         timeSliderTime (){
-            return this.$store.getters.sliderTime;
+            return this.$store.getters.sliderTime(this.projectName);
         },
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
+        },
+        allResources (){
+            return this.$store.getters.resources(this.projectName);
         }
+
     },
 
     methods: {
@@ -127,11 +132,13 @@ export default {
         getMedia () {
 
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
-                layerIndex: 0,
-                size: [300, 160],
-                timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
-                position: [0, 0],
-                videoStartTime: 0,
+                newMedia: {
+                    layerIndex: 0,
+                    size: [300, 160],
+                    timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
+                    position: [0, 0],
+                    videoStartTime: 0,
+                },
                 resource: {
                     name: this.activeResource.name
                 }
@@ -145,6 +152,9 @@ export default {
                     timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
 
+            this.$store.dispatch('setMedia',{name: this.projectName,
+            media: this.$vcomp.project(this.projectName).getAllMedia()});
+
             this.$router.push({ path: `/compose/${this.projectName}`});
 
         }
@@ -153,12 +163,9 @@ export default {
 
 	data() {
 
-        var allResources = this.$vcomp.project(this.projectName).getAllResources();
         var activeResource = 0;
-
 		return {
             activeResource,
-            allResources
         }
         
 	}

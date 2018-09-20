@@ -63,7 +63,8 @@ export default function () {
             var resource = {
                 name: newResource.name,
                 url: 'fetching',
-                type: newResource.resourceType
+                type: newResource.resourceType,
+                resourceLink: newResource.resourceLink
             };
 
             store.resources.push(resource);

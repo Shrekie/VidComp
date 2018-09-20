@@ -78,9 +78,9 @@ export default function () {
         }else if ( newMedia.resource ) {
 
             // add new media with existing resource
-            var layer = timeline.getLayer(newMedia.layerIndex);
-            newMedia.resource = resourceImporter.importResource(newMedia.resource, sourceLoader);
-            let mediaIndex = layer.addMedia(newMedia);
+            var layer = timeline.getLayer(newMedia.newMedia.layerIndex);
+            newMedia.newMedia.resource = resourceImporter.importResource(newMedia.resource, sourceLoader);
+            let mediaIndex = layer.addMedia(newMedia.newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
             return {
@@ -102,6 +102,10 @@ export default function () {
 
     };
 
+    this.addResource = function(resource) {
+        resourceImporter.importResource(resource, sourceLoader);
+    }
+
     this.changeResource = function(resourceChange){
         resourceImporter.changeResource(resourceChange, sourceLoader);
     };
@@ -114,8 +118,14 @@ export default function () {
         return resourceImporter.getAllResources();
     };
 
-    this.getAllMedia = function (layerIndex) {
-        return timeline.getLayer(layerIndex).getAllMedia();
+    this.getAllMedia = function () {
+        var allMedia = [];
+        timeline.getAllLayers().forEach(function(layer){
+            layer.getAllMedia().forEach(function(media){
+                allMedia.push(media);
+            })
+        });
+        return allMedia;
     };
 
     this.getAllLayers = function () {
@@ -180,3 +190,22 @@ export default function () {
     };
 
 };
+
+/*
+    #TODO: This needs to be the same here, server side and anywhere else.
+
+    newMedia: {
+        layerIndex: ,
+        size: [, ],
+        timelineTime:
+        position: [,],
+        videoStartTime: 0
+    },
+
+    newResource: {
+        name:,
+        resourceLink:,
+        resourceType: 'image'
+    }
+
+*/

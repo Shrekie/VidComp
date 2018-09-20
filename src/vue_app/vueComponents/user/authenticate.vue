@@ -1,5 +1,5 @@
 <!-- 
-	Main user interaction section
+	Authenticates and initializes user
 -->
 
 <template>
@@ -26,26 +26,52 @@ export default {
 
 	data() {
 		return {
+			ready:false
 		}
 	},
 
+    watch: {
+        authenticated (newVal, oldVal) {
+			if(newVal){
+
+				this.$store.dispatch('getProjects').then(response => {
+
+					this.projects.forEach(project => {
+						console.log(project.name);
+						this.$vcomp.loadProject(project);
+					});
+
+					this.$store.dispatch('isReady');
+
+				}, error => {
+					console.log(error);
+
+				});
+
+			}
+        }
+	},
+	
 	computed: {
 
 		authenticated () {
 			return this.$store.getters.authenticated;
+		},
+
+		projects () {
+			return this.$store.getters.projects;
 		}
 
     },
 
 	methods: {
 		googleLogin (){
-			this.$store.dispatch('googleLogin');
-			console.log(this.authenticated);
+			this.$store.dispatch('authenticate');
 		}
 	},
 	  
 	mounted: function () {
-        //this.$store.dispatch('getAuthenticated');
+        this.$store.dispatch('getAuthenticated');
     }
 	
 };

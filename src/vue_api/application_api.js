@@ -5,7 +5,6 @@
 */
 
 import Axios from 'axios';
-var projects = [{name:"Tutorial"}];
 
 export default {
 
@@ -21,6 +20,7 @@ export default {
     },
 
     createUser(name, cb) {
+
         Axios.post('/newUser', {
             name
         })
@@ -31,14 +31,35 @@ export default {
         .catch(function (error) {
             cb(error);
         });
+
     },
 
     getProjects(cb){
-        cb(projects);
+
+        Axios.get('/projects',{})
+        .then(function (response) {
+            console.log(response.data);
+            cb(response.data);
+        })
+        .catch(function (error) {
+            cb(error);
+        });
+
     },
 
-    createProject(name, cb){
-        cb(projects.push({name}));
+    setProject(project, cb){
+
+        Axios.post('/setProject', {
+            project
+        })
+        .then(function (response) {
+            console.log(response);
+            cb(response.data);
+        })
+        .catch(function (error) {
+            cb(error);
+        });
+
     }
 
 };

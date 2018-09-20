@@ -51,8 +51,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../public/'));
 
 // Register application routes
-app.use(application);
 app.use(google_oauth);
+app.use(application);
 
 // Static routes
 app.get('/error', (req, res) => {

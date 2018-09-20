@@ -27,7 +27,7 @@ export default {
     },
     computed: {
         zoomScale (){
-            return this.$store.getters.zoomScale;
+            return this.$store.getters.zoomScale(this.projectName);
         }
     },
     methods: {
