@@ -38,7 +38,7 @@ export default {
 
 		return {
             allLayers,
-            //TODO: implement this better
+            //TODO: set things to disabled when this is true
             playing:false
         }
         

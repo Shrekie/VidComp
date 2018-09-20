@@ -5,7 +5,7 @@
 */
 
 import Axios from 'axios';
-var projects = [{name:"test"}];
+var projects = [{name:"Tutorial"}];
 
 export default {
 

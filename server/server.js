@@ -10,12 +10,37 @@ require('./config/db_connect.js');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
 
 // Route imports
 const application = require('./routes/application');
+const google_oauth = require('./routes/google_oauth');
 
 var app = express();
 app.set('trust proxy', true);
+
+//Session storage settings
+var store = new MongoDBStore({
+    uri: process.env.MONGO_URL,
+    databaseName: 'pve-application',
+    collection: 'mySessions'
+});
+
+store.on('error', function(error) {
+    throw error;
+});
+
+app.use(session({
+    secret: process.env.sessionSecret,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    },
+    store: store,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: env_config.env != 'development' }
+}));
 
 // Middleware
 // Parse requests as json and encode urls
@@ -27,6 +52,7 @@ app.use(express.static(__dirname + '/../public/'));
 
 // Register application routes
 app.use(application);
+app.use(google_oauth);
 
 // Static routes
 app.get('/error', (req, res) => {

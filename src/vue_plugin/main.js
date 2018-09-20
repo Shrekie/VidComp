@@ -26,7 +26,6 @@ export default {
         Vue.directive('project-composition', {
             bind (el, binding, vnode, oldVnode) {
                 console.log(videoProject.project(binding.value));
-                console.log(videoProject.project("test"));
                 videoProject.project(binding.value).setTarget(el);
             },
             unbind (el, binding, vnode, oldVnode) {

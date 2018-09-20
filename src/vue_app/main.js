@@ -30,6 +30,7 @@ import assetRelocator from './vueComponents/editor/assetRelocator.vue';
 import timelineEditor from './vueComponents/timeline/timelineEditor.vue';
 import resourceLibrary from './vueComponents/resourceImport/resourceLibrary.vue';
 import importGlobal from './vueComponents/resourceImport/importGlobal.vue';
+import authStatus from './vueComponents/user/authStatus.vue';
 
 // Stores
 import pve_store from './stores/pve_store.js';
@@ -37,8 +38,16 @@ import pve_store from './stores/pve_store.js';
 // Routes
 // TODO: Add to file
 const routes = [
-    { 
-        path: '/', component:appWindow,
+    {          
+        path: '/authStatus',
+
+        component:authStatus
+
+    }, { 
+
+        path: '/', 
+        
+        component:appWindow,
 
         children: [{
 
@@ -50,6 +59,11 @@ const routes = [
 
             },
             children: [{
+
+                path: '/authStatus',
+                component:authStatus,
+
+            },{
 
                 path: '',
                 component:projectLibrary,
@@ -93,8 +107,8 @@ const routes = [
 ];
 
 // VideoComposer init
-var testProject = VidComp.videoProject.new('test');
-console.log(VidComp.videoProject.project("test"));
+var testProject = VidComp.videoProject.new('Tutorial');
+
 testProject.createLayer({
 
     newMedia: {
@@ -106,8 +120,8 @@ testProject.createLayer({
     },
 
     newResource: {
-        name: 'Throwing axe',
-        resourceLink: 'https://i.imgur.com/3MWMuww.mp4',
+        name: 'Showcase',
+        resourceLink: 'cdn-b-east.streamable.com/video/mp4/my6zy_1.mp4?token=ADZG5jsp57u35dxTphT5JA&expires=1537408394',
         resourceType: 'video'
     }
 

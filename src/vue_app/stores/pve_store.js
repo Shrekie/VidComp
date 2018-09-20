@@ -4,6 +4,8 @@
 */
 
 import Appapi from './../../vue_api/application_api.js';
+import clientAuth from './../library/clientAuthentication/clientAuth.js'
+import createMutationsSharer from 'vuex-shared-mutations'
 
 export default {
     state: {
@@ -11,7 +13,8 @@ export default {
         projects: [],
         count: 0,
         timeSliderTime: 0,
-        zoomScale: 1000
+        zoomScale: 1000,
+        authenticated: false
     },
     actions:{
 
@@ -51,6 +54,16 @@ export default {
 
         shrinkZoom ({ commit }) {
             commit('decreaseZoom', 10);
+        },
+
+        getAuthenticated ({commit}) {
+            clientAuth.checkAuthentication(function(response){
+                commit('setAuthenticated', response);
+            });
+        },
+
+        googleLogin({ commit }) {
+            clientAuth.authenticate();
         }
 
     },
@@ -62,6 +75,10 @@ export default {
 
         setProjects (state, projects) {
             state.projects = projects;
+        },
+
+        setAuthenticated (state, response) {
+            state.authenticated = response;
         },
 
         incrementCount (state) {
@@ -101,7 +118,12 @@ export default {
 
         zoomScale (state) {
             return state.zoomScale;
+        },
+
+        authenticated (state){
+            return state.authenticated
         }
 
-    }
+    },
+    plugins: [createMutationsSharer({ predicate: ['setAuthenticated'] })]
 };
