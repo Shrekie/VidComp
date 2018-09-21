@@ -13,7 +13,8 @@ export default {
         projects:[],
         ready:false,
         authenticated: false,
-        zoomAmount: 10
+        zoomAmount: 10,
+        mediaChange: false
     },
 
     actions:{
@@ -63,6 +64,13 @@ export default {
 
         },
 
+        setLayersAndMedia({commit, dispatch, getters}, payload){
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('setLayers', payload);
+            commit('setMedia', payload);
+            dispatch('setProject',payload)
+        },
+
         setLayers ({commit, dispatch, getters}, payload){
             payload.projectId = getters.projectIdByName(payload.name);
             commit('setLayers', payload);
@@ -90,19 +98,23 @@ export default {
         expandZoom ({ commit, dispatch, getters}, payload) {
             payload.projectId = getters.projectIdByName(payload.name);
             commit('increaseZoom', payload);
-            dispatch('setProject', payload);
+            //dispatch('setProject', payload);
         },
 
         shrinkZoom ({ commit, dispatch, getters }, payload) {
             payload.projectId = getters.projectIdByName(payload.name);
             commit('decreaseZoom', payload);
-            dispatch('setProject', payload);
+            //dispatch('setProject', payload);
         },
 
         getAuthenticated ({commit}) {
             clientAuth.checkAuthentication(function(response){
                 commit('setAuthenticated', response);
             });
+        },
+
+        mediaHasChanged({commit, getters}){
+            commit('setMediaChange', !getters.mediaChange);
         },
 
         isReady({commit}){
@@ -145,6 +157,10 @@ export default {
         decreaseZoom (state, payload) {
             state.projects[payload.projectId].zoomScale -= 
             state.projects[payload.projectId].zoomScale/state.zoomAmount
+        },
+
+        setMediaChange (state, payload){
+            state.mediaChange = payload
         },
 
         setReadyStatus (state, payload){
@@ -200,12 +216,16 @@ export default {
             return state.ready
         },
 
+        mediaChange (state) {
+            return state.mediaChange;
+        },
+
         authenticated (state) {
             return state.authenticated
         }
 
     },
-
+    
     plugins: [createMutationsSharer({ predicate: ['setAuthenticated'] })]
 
 };

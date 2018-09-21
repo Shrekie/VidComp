@@ -128,6 +128,10 @@ export default function () {
         return allMedia;
     };
 
+    this.getAllLayerMedia = function (layerIndex) {
+        return timeline.getLayer(layerIndex).getAllMedia();
+    };
+
     this.getAllLayers = function () {
         return timeline.getAllLayers();
     };

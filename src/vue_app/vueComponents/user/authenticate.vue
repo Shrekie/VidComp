@@ -4,17 +4,15 @@
 
 <template>
 
-    <v-footer app flat height="60" color="grey darken-3" v-if="this.authenticated == false">
-        <v-spacer></v-spacer>
+		<v-card app flat color="grey darken-3" v-if="this.authenticated == false">
+			<v-container>
+				<v-btn  large round @click="googleLogin" color="grey darken-2">
+					<v-icon large >mdi-google</v-icon>
+					<v-icon large flip>mdi-content-save</v-icon>
+				</v-btn>
+			</v-container>
 
-        <v-btn icon large @click="googleLogin" color="red lighten-2">
-            <v-icon normal>mdi-account-edit</v-icon>
-            <v-icon small flip>mdi-content-save</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-    </v-footer>
-
+		</v-card>
 
 </template>
 
@@ -37,7 +35,6 @@ export default {
 				this.$store.dispatch('getProjects').then(response => {
 
 					this.projects.forEach(project => {
-						console.log(project.name);
 						this.$vcomp.loadProject(project);
 					});
 
@@ -71,7 +68,7 @@ export default {
 	},
 	  
 	mounted: function () {
-        this.$store.dispatch('getAuthenticated');
+    	this.$store.dispatch('getAuthenticated');
     }
 	
 };

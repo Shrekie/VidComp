@@ -7,11 +7,11 @@
     <div class="timelineContainer">
         <div ref="timeline" class="viewport">
 
-                <TimelineSlider ref="timelineSlider"></TimelineSlider>
-        
-                <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
-                v-for="layer in allLayers" :key="layer.layerIndex + ' ' + zoomScale + '' + layer.updateLayer">
-                </Layer>
+            <TimelineSlider ref="timelineSlider"></TimelineSlider>
+    
+            <Layer ref="layers" v-bind:layer-index="layer.layerIndex" v-bind:project-name="projectName" 
+            v-for="layer in allLayers" :key="layer.layerIndex + ' ' + mediaChange + '' + zoomScale">
+            </Layer>
 
         </div>
     </div>
@@ -50,7 +50,11 @@ export default {
         },
 
         allLayers (){
-            return this.$store.getters.layers(this.projectName);
+            return  this.$vcomp.project(this.projectName).getAllLayers();
+        },
+
+        mediaChange (){
+            return this.$store.getters.mediaChange;
         }
 
     },
@@ -67,6 +71,25 @@ export default {
     },
     
     methods: {
+
+        registerShiftHooks: function(){
+
+            this.$vcomp.project(this.projectName)
+            .layerControl('mediaShift', 
+            function(context){
+
+                // local immedate
+                this.$store.dispatch('mediaHasChanged');
+                
+                // autosave
+                this.$store.dispatch('setLayersAndMedia',{name: this.projectName,
+                media: this.$vcomp.project(this.projectName).getAllMedia(),
+                layers: this.$vcomp.project(this.projectName).getAllLayers()});
+            
+
+            }.bind(this));
+
+        },
 
         //TODO: maybe put this on rimDrag or something
         // calculates and registers snap points for all layers.
@@ -173,9 +196,11 @@ export default {
     mounted: function () {
         
         console.log("TIMELINE MOUNTED");
+        // TODO: split these to components
         this.registerVideoControlEvents();
         this.registerScrollHooks();
         this.determineSnaps();
+        this.registerShiftHooks();
         //this.$eventHub.$on('edit-enabled', this.editEnabled);
         
     },

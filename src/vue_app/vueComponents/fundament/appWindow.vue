@@ -5,12 +5,12 @@
 <template>
 <v-app dark>
 <v-content>
-	<v-container grid-list-md text-xs-center v-if="this.ready">
-		<router-view name="workspace"></router-view>
+	<v-container grid-list-md text-xs-center>
+		<Authenticate>
+		</Authenticate>
+		<router-view name="workspace" v-if="this.ready"></router-view>
 	</v-container>
 </v-content>
-	<Authenticate>
-	</Authenticate>
 </v-app>
 </template>
 

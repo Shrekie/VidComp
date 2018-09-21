@@ -8,7 +8,7 @@
     <Media ref="mediaElements" v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
     v-for="media in allLayerMedia" 
-    :key='media.timelineTime[0] + " - " + updateLayer'>
+    :key='media.timelineTime[0] + "-" + mediaChange'>
     </Media> <!-- #TODO: this key man, maybe just do indexshift always -->
 
 </div>
@@ -28,14 +28,9 @@ export default {
 
     data() {
 
-        var horizontalMediaChange = null;
-        var verticalMediaChange = null;
-
         return {
-            horizontalMediaChange,
-            verticalMediaChange,
-            updateLayer:false,
-            width:"0"
+            width:"0",
+            updateLayer:false
         }
         
     },
@@ -51,27 +46,11 @@ export default {
         },
 
         allLayerMedia (){
-            return this.$store.getters.mediaByLayer(this.projectName, this.layerIndex);
-        }
+            return this.$vcomp.project(this.projectName).getAllLayerMedia(this.layerIndex);
+        },
 
-    },
-
-    watch:{
-        
-        updateLayer(){
-
-            //TODO: this is not top level hack
-            //this.allLayerMedia = this.$vcomp.project(this.projectName).getAllMedia(this.layerIndex);
-            this.$store.dispatch('setMedia',{name: this.projectName,
-            media: this.$vcomp.project(this.projectName).getAllMedia()});
-            console.log(this.$vcomp.project(this.projectName).getAllMedia());
-
-            this.$store.dispatch('setLayers',{name: this.projectName,
-            layers: this.$vcomp.project(this.projectName).getAllLayers()});
-            console.log(this.$vcomp.project(this.projectName).getAllLayers());
-            
-            this.setLayerWidth();
-
+        mediaChange (){
+            return this.$store.getters.mediaChange;
         }
 
     },
@@ -79,7 +58,7 @@ export default {
     methods: {
 
         setLayerWidth (){
-            console.log(this.allLayerMedia);
+            
             if(this.allLayerMedia.length == 0 ) return "100px";
             var currentTotal = 0;
             this.allLayerMedia.forEach(element => {
@@ -90,51 +69,9 @@ export default {
             
             return this.width;
 
-        },
-
-        registerLayerHooks () {
-
-            // TODO: reloading is so forced, dont like it
-            // Change is only horizontal, only shift exact layer index.
-            this.horizontalMediaChange = this.$vcomp.project(this.projectName)
-            .layerControl('mediaShift', 
-            function(context){
-                if(context.layerIndex == this.layerIndex){
-                    console.log('reload media' + this.layerIndex );
-                    this.updateLayer = !this.updateLayer;
-                }
-            }.bind(this));
-
-             // Change is vertical, shift layer cascadingly.
-            this.verticalMediaChange = this.$vcomp.project(this.projectName)
-            .layerControl('indexShift', 
-            function(context){
-                if(this.layerIndex <= context.maxLength){
-                    console.log('reload media' + this.layerIndex );
-                    this.updateLayer = !this.updateLayer;
-                }
-            }.bind(this));
-
         }
+
     },
-
-    mounted: function () {
-        
-        console.log("LAYER MOUNTED");
-        this.registerLayerHooks();
- 
-    },
-
-    beforeDestroy: function () {
-
-        this.$vcomp.project(this.projectName).
-        unbindFrameHook('layerControl', this.horizontalMediaChange);
-        this.$vcomp.project(this.projectName)
-        .unbindFrameHook('layerControl', this.verticalMediaChange);
-
-        console.log('beforeDestroy');
-
-    }
 
 };
 </script>

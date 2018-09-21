@@ -16,7 +16,7 @@
 
         <v-card flat dark style="margin-top: 20px;">
 
-            <v-btn large @click="closeWindow">
+            <v-btn large @click="closeWindow" color="grey darken-3">
                 <v-icon x-large >mdi-arrow-right-bold-circle</v-icon>
             </v-btn>
 

@@ -24,7 +24,6 @@ var Media = new Schema({
 
 });
 
-// PVE video project
 var Project = new Schema({
     profileID: Number,
     name: String,

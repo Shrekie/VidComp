@@ -53,7 +53,7 @@ export default function () {
             mediaShift.shiftTimeMedia(affectedLayerMedia, direction, changedMedia, timelineTime);
         }
 
-        this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: layerIndex});
+        this.contextHooks.runContextHooks({name:'mediaShift'});
 
     };
     
@@ -117,7 +117,7 @@ export default function () {
 
             // same layer
             mediaShift.checkShift(affectedLayerMedia, changedMedia);
-            this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: newTimelinePos.layerIndex});
+            this.contextHooks.runContextHooks({name:'mediaShift'});
 
         }else{
 
@@ -136,15 +136,14 @@ export default function () {
 
                 // layer media moved from has 0 media, delete the layer
                 this.deleteLayer(currentTimelinePos.layerIndex);
-                this.contextHooks.runContextHooks({name:'indexShift', maxLength: store.layers.length -1});
+                this.contextHooks.runContextHooks({name:'mediaShift'});
                 if(changedMedia.layerIndex == newTimelinePos.layerIndex){
                     console.log(store.layers);
                 }
 
             }else{
 
-                this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: newTimelinePos.layerIndex});
-                this.contextHooks.runContextHooks({name:'mediaShift', layerIndex: currentTimelinePos.layerIndex});
+                this.contextHooks.runContextHooks({name:'mediaShift'});
 
             }
 

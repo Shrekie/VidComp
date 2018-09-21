@@ -58,7 +58,6 @@ router.get('/projects', (req, res)=>{
 router.post('/setProject', (req, res)=>{
 
     const project = req.body.project;
-    console.log(project);
     project.profileID = req.user.profileID;
     
     if(req.isAuthenticated()){
@@ -66,11 +65,6 @@ router.post('/setProject', (req, res)=>{
         var searchQuery = {
             'name': project.name,
             'profileID': project.profileID
-        };
-
-        var updates = {
-            'project.layers': project.layers,
-            'project.media': project.media
         };
 
         var options = {
