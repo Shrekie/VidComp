@@ -48,9 +48,7 @@ export default {
 
             this.$store.dispatch('createProject', { name: this.projectName }).then(response => {
 
-                this.$vcomp.loadProject(this.project);
-                console.log(this.project);
-                this.$router.push({ path: `/compose/${this.projectName}`});
+                this.$router.push({ path: `/project/${this.projectName}`});
 
             }, error => {
                 console.log(err);

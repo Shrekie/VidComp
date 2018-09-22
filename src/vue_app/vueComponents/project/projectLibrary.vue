@@ -80,7 +80,7 @@ export default {
 
         getMedia () {
 
-            this.$router.push({ path: `/compose/${this.activeProject.name}`});
+            this.$router.push({ path: `project/${this.activeProject.name}`});
 
         }
 

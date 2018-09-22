@@ -7,7 +7,7 @@
         <v-flex xs12 text-xs-center>
 
             <v-card flat>
-                <v-btn icon :to="'/resources/' + this.projectName + '/video'">
+                <v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
                     <v-icon>mdi-arrow-left-bold-circle</v-icon>
                 </v-btn>
                 
@@ -92,7 +92,7 @@ export default {
 
             this.$vcomp.project(this.projectName).log();
 
-            this.$router.push({ path: `/compose/${this.projectName}`});
+            this.$router.push({ path: `/project/${this.projectName}`});
 
         }
 

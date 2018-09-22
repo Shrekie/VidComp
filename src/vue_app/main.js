@@ -37,44 +37,37 @@ import pve_store from './stores/pve_store.js';
 // Routes
 // TODO: Add to file
 const routes = [
-    {          
-        path: '/authStatus',
+    { 
 
-        component:authStatus
-
-    }, { 
-
-        path: '/', 
+        path: '', 
         
         component:appWindow,
 
         children: [{
 
-            path: '',
-
-            components: {
-
-                workspace: workspace
-
-            },
-            children: [{
-
-                path: '/authStatus',
+            path: '/authStatus',
                 component:authStatus,
-
+    
             },{
-
+    
                 path: '',
                 component:projectLibrary,
-
+    
+            },{
+    
+                path: '/new',
+                component:projectCreate,
+    
             },{
 
-                path: 'new',
-                component:projectCreate,
+            path: '/project/:projectName',
 
-            }, {
+            component: workspace,
+            props: true,
 
-                path: 'compose/:projectName',
+            children: [{
+
+                path: '',
                 component:mediaEditor,
                 props: true,
 
@@ -86,12 +79,12 @@ const routes = [
 
             },{
 
-                path: 'resources/:projectName/:resourceTypeView',
+                path: '/project/:projectName/resources/:resourceTypeView',
                 component:resourceLibrary,
                 props: true
 
             },{
-                path: 'import/:projectName',
+                path: '/project/:projectName/import',
                 component: importGlobal,
                 props: true
             }]

@@ -17,7 +17,6 @@ export default function () {
     }
 
     this.deleteAllLayers = function () {
-        //store.layers = [];
         store.layers.splice(0,store.layers.length)
     }
 
@@ -27,10 +26,6 @@ export default function () {
             layer.layerIndex = index;
         });
         this.sortLayers();
-    }
-
-    this.setLayers = function (layers) {
-        store.layers = layers;
     }
 
     this.getAllLayers = function () {

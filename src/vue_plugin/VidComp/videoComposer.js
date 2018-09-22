@@ -60,8 +60,6 @@ export default function () {
     };
 
     this.addMedia = function (newMedia) {
-
-        console.log(newMedia);
         
         if ( newMedia.newResource ){
 
@@ -102,6 +100,47 @@ export default function () {
 
         }
 
+    };
+
+    this.adjustMediaTimeShift = function (direction, layerIndex, mediaIndex, timelineTime) {
+        timeline.adjustMediaTimeShift(direction, layerIndex, mediaIndex, timelineTime);
+    }
+
+    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos) {
+        timeline.adjustMediaShift(currentTimelinePos, newTimelinePos, sourceLoader);
+    }
+
+    this.layerControl = function (frameHookName, frameHook) {
+        return timeline.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
+    };
+
+    this.videoControl = function (frameHookName, frameHook) {
+
+        videoProjection.mediaDrawer.contextHooks
+        .registerHooks({name:frameHookName, callbackHook:frameHook});
+
+        if(frameHookName == 'drawingUpdate'){
+            videoProjection.mediaDrawer.contextHooks
+            .initializeContextHook({name:frameHookName, callbackHook:frameHook});
+        }
+
+    };
+
+    this.unbindAllFrameHooks = function () {
+        videoProjection.mediaDrawer.contextHooks.unregisterAllHooks();
+        timeline.contextHooks.unregisterAllHooks();
+    };
+
+    this.unbindFrameHook = function (frameHookParent, hookIndex) {
+        //#TODO: add this onto the contexthook class
+        switch(frameHookParent) {
+            case "layerControl":
+                timeline.contextHooks.unregisterHook(hookIndex);
+                break;
+            case "videoControl":
+                videoProjection.mediaDrawer.contextHooks.unregisterHook(hookIndex);
+                break;
+        }
     };
 
     this.undo = function (){
@@ -158,47 +197,6 @@ export default function () {
 
     this.reset = function () {
         videoProjection.resetPlayer(sourceLoader);
-    };
-    
-    this.adjustMediaTimeShift = function (direction, layerIndex, mediaIndex, timelineTime) {
-        timeline.adjustMediaTimeShift(direction, layerIndex, mediaIndex, timelineTime);
-    }
-
-    this.adjustMediaShift = function (currentTimelinePos, newTimelinePos) {
-        timeline.adjustMediaShift(currentTimelinePos, newTimelinePos, sourceLoader);
-    }
-
-    this.layerControl = function (frameHookName, frameHook) {
-        return timeline.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
-    };
-
-    this.videoControl = function (frameHookName, frameHook) {
-
-        videoProjection.mediaDrawer.contextHooks
-        .registerHooks({name:frameHookName, callbackHook:frameHook});
-
-        if(frameHookName == 'drawingUpdate'){
-            videoProjection.mediaDrawer.contextHooks
-            .initializeContextHook({name:frameHookName, callbackHook:frameHook});
-        }
-
-    };
-
-    this.unbindAllFrameHooks = function () {
-        videoProjection.mediaDrawer.contextHooks.unregisterAllHooks();
-        timeline.contextHooks.unregisterAllHooks();
-    };
-
-    this.unbindFrameHook = function (frameHookParent, hookIndex) {
-        //#TODO: add this onto the contexthook class
-        switch(frameHookParent) {
-            case "layerControl":
-                timeline.contextHooks.unregisterHook(hookIndex);
-                break;
-            case "videoControl":
-                videoProjection.mediaDrawer.contextHooks.unregisterHook(hookIndex);
-                break;
-        }
     };
 
 };

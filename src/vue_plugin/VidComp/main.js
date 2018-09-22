@@ -19,7 +19,7 @@ var videoProject =  {
     },
 
     loadProject: (project) => {
-        videoComposerManager.loadProject(project);
+        return videoComposerManager.loadProject(project);
     }
     
 };

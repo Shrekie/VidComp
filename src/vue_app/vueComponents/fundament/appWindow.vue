@@ -8,7 +8,7 @@
 	<v-container grid-list-md text-xs-center>
 		<Authenticate>
 		</Authenticate>
-		<router-view name="workspace" v-if="this.ready"></router-view>
+		<router-view v-if="this.projectsReady"></router-view>
 	</v-container>
 </v-content>
 </v-app>
@@ -26,9 +26,12 @@ export default {
 	},
 
 	computed:{
-		ready() {
-			return this.$store.getters.ready;
+
+		projectsReady() {
+			console.log(this.$store.getters.projectsReady);
+			return this.$store.getters.projectsReady;
 		}
+
 	},
 	
 	data() {

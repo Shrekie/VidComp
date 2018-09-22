@@ -56,7 +56,7 @@
 		</router-view>
 
 		<v-card flat>
-			<v-btn icon :to="'/resources/' + this.projectName + '/video'">
+			<v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
 				<v-icon>mdi-plus-circle</v-icon>
 			</v-btn>
 		</v-card>
@@ -66,9 +66,6 @@
 </template>
 
 <script>
-
-
-// TODO: pass projectName from props
 
 export default {
 	
@@ -128,6 +125,10 @@ export default {
 		importVideo () {
 			console.log("import media");
 		}
+	},
+
+	created (){
+		console.log("HELLO");
 	}
 };
 </script>

@@ -11,7 +11,7 @@ export default {
 
     state: {
         projects:[],
-        ready:false,
+        projectsReady:false,
         authenticated: false,
         zoomAmount: 10,
         mediaChange: false
@@ -117,8 +117,13 @@ export default {
             commit('setMediaChange', !getters.mediaChange);
         },
 
-        isReady({commit}){
-            commit('setReadyStatus', true);
+        projectLoaded({commit, getters}, payload){
+            payload.projectId = getters.projectIdByName(payload.name);
+            commit('setProjectLoaded', payload);
+        },
+
+        projectsReady({commit}){
+            commit('setProjectsReady');
         },
 
         authenticate (){
@@ -163,8 +168,12 @@ export default {
             state.mediaChange = payload
         },
 
-        setReadyStatus (state, payload){
-            state.ready = payload
+        setProjectLoaded (payload){
+            state.projects[payload.projectId].projectLoaded = true;
+        },
+
+        setProjectsReady (state){
+            state.projectsReady = true;
         },
         
         setAuthenticated (state, response) {
@@ -212,8 +221,12 @@ export default {
             return state.projects.find(projects => projects.name === name).zoomScale;
         },
 
-        ready (state) {
-            return state.ready
+        projectLoaded(state) {
+            return state.projects.find(projects => projects.name === name).projectLoaded;
+        },
+
+        projectsReady (state) {
+            return state.projectsReady
         },
 
         mediaChange (state) {

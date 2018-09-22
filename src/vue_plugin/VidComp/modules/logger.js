@@ -23,7 +23,7 @@ export default  function (vidProject, timeline, sourceLoader) {
     };
 
     var addState = function (state){
-        stack.add(state);
+        stack.add(_.cloneDeep(state));
     };
 
     var setState = function (state){
@@ -66,8 +66,8 @@ export default  function (vidProject, timeline, sourceLoader) {
     
     this.log = function(){
         addState({
-            media: _.cloneDeep(timeline.getAllMedia()),
-            layers: _.cloneDeep(timeline.getAllLayers())
+            media: timeline.getAllMedia(),
+            layers: timeline.getAllLayers()
         });
     }
     

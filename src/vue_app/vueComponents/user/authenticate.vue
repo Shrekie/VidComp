@@ -29,24 +29,21 @@ export default {
 	},
 
     watch: {
+
         authenticated (newVal, oldVal) {
 			if(newVal){
 
 				this.$store.dispatch('getProjects').then(response => {
 
-					this.projects.forEach(project => {
-						this.$vcomp.loadProject(project);
-					});
-
-					this.$store.dispatch('isReady');
+					this.$store.dispatch('projectsReady');
 
 				}, error => {
-					console.log(error);
 
 				});
 
 			}
-        }
+		}
+		
 	},
 	
 	computed: {

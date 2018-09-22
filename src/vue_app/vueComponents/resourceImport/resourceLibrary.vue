@@ -8,7 +8,7 @@
     <v-flex xs12 text-xs-center>
         
         <v-card flat>
-            <v-btn icon :to="'/compose/' + this.projectName">
+            <v-btn icon :to="'/project/' + this.projectName">
                 <v-icon>mdi-arrow-left-bold-circle</v-icon>
             </v-btn>
         </v-card>
@@ -19,19 +19,19 @@
             <v-card flat>
 
                 <v-btn icon 
-                :to="'/resources/' + this.projectName + '/video'" 
+                :to="'/project/' + this.projectName + '/resources/video'" 
                 :disabled="resourceTypeView == 'video'"
                 @click="activeResource=0">
                     <v-icon>mdi-video-image</v-icon>
                 </v-btn>
                 <v-btn icon 
-                :to="'/resources/' + this.projectName + '/image'" 
+                :to="'/project/' + this.projectName + '/resources/image'" 
                 :disabled="resourceTypeView == 'image'"
                 @click="activeResource=0">
                     <v-icon>mdi-image</v-icon>
                 </v-btn>
                 <v-btn icon 
-                :to="'/resources/' + this.projectName + '/audio'" 
+                :to="'/project/' + this.projectName + '/resources/audio'" 
                 :disabled="resourceTypeView == 'audio'"
                 @click="activeResource=0">
                     <v-icon>mdi-volume-high</v-icon>
@@ -42,7 +42,7 @@
                     <v-layout row wrap text-xs-center>
 
                         <v-card flat tile width="130px" height="130px"
-                        :to="'/import/' + this.projectName"
+                        :to="'/project/' + this.projectName + '/import'"
                         class="mediaBox" style="text-align: center !important;"
                         >
                             <v-icon class="addBox">mdi-plus</v-icon>
@@ -71,11 +71,11 @@
                 <v-icon>mdi-check</v-icon>
             </v-btn>
             <v-btn icon :disabled="activeResource == 0" 
-            :to="'/compose/' + this.projectName">
+            :to="'/project/' + this.projectName">
                 <v-icon>mdi-delete</v-icon>
             </v-btn>
             <v-btn icon :disabled="activeResource == 0" 
-            :to="'/compose/' + this.projectName">
+            :to="'/project/' + this.projectName">
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>
         </v-card>
@@ -157,7 +157,7 @@ export default {
 
             this.$vcomp.project(this.projectName).log();
 
-            this.$router.push({ path: `/compose/${this.projectName}`});
+            this.$router.push({ path: `/project/${this.projectName}`});
 
         }
 
