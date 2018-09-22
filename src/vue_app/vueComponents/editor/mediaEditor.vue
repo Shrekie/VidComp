@@ -37,10 +37,10 @@
 		</v-btn>
 
 		<v-card flat>
-			<v-btn icon>
+			<v-btn icon @click="undoEdit">
 				<v-icon>mdi-undo</v-icon>
 			</v-btn>
-			<v-btn icon>
+			<v-btn icon @click="redoEdit">
 				<v-icon>mdi-redo</v-icon>
 			</v-btn>
 			<v-btn icon @click="$store.dispatch('expandZoom', {name: projectName})">
@@ -88,15 +88,43 @@ export default {
 	},
 	
 	methods: {
+
 		playVideo () {
 			this.$vcomp.project(this.projectName).play();
 		},
+
 		stopVideo () {
 			this.$vcomp.project(this.projectName).stop();
 		},
+
 		resetVideo () {
 			this.$vcomp.project(this.projectName).reset();
 		},
+
+		logRestoreSave(){
+
+			this.$store.dispatch('setLayersAndMedia',{name: this.projectName,
+			media: this.$vcomp.project(this.projectName).getAllMedia(),
+			layers: this.$vcomp.project(this.projectName).getAllLayers()});
+
+			this.$store.dispatch('mediaHasChanged');
+
+		},
+
+		undoEdit (){
+
+			this.$vcomp.project(this.projectName).undo();
+			this.logRestoreSave();
+
+		},
+
+		redoEdit (){
+
+			this.$vcomp.project(this.projectName).redo();
+			this.logRestoreSave();
+
+		},
+		
 		importVideo () {
 			console.log("import media");
 		}

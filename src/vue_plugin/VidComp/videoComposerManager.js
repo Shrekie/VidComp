@@ -42,6 +42,8 @@ export default function (){
             });
         }
 
+        console.log(project.media);
+
         if(project.media.length > 0){
             project.media.forEach(media => {
                 vidProject.addMedia({
@@ -61,6 +63,8 @@ export default function (){
                 });
             });
         }
+
+        vidProject.log();
     };
 
     return{

@@ -9,7 +9,7 @@ Vue.config.devtools = true;
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
-import VidComp from './../vue_plugin/main.js';
+import VidComp from '../vue_plugin/VidComp/main.js';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/dist/vuetify.min.css';
 
@@ -99,46 +99,6 @@ const routes = [
     }
 ];
 
-// VideoComposer init
-/*
-var testProject = VidComp.videoProject.new('Tutorial');
-
-testProject.createLayer({
-
-    newMedia: {
-        layerIndex: 0,
-        size: [200, 100],
-        timelineTime: [0.00, 0.10],
-        position: [0,0],
-        videoStartTime: 0
-    },
-
-    newResource: {
-        name: 'Showcase',
-        resourceLink: 'cdn-b-east.streamable.com/video/mp4/my6zy_1.mp4?token=ADZG5jsp57u35dxTphT5JA&expires=1537408394',
-        resourceType: 'video'
-    }
-
-});
-
-testProject.createLayer({
-
-    newMedia: {
-        layerIndex: 1,
-        size: [200, 100],
-        timelineTime: [0.00, 0.10],
-        position: [0,0],
-        videoStartTime: 0
-    },
-
-    newResource: {
-        name: 'Cat playing',
-        resourceLink: 'https://i.imgur.com/Q5PBbSW.mp4',
-        resourceType: 'video'
-    }
-
-});
-*/
 // Store init config
 const store = new Vuex.Store(pve_store);
 

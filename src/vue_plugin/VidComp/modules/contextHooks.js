@@ -26,6 +26,7 @@ export default  function (context) {
     };
 
     this.registerHooks = function (newHook){
+        console.log(newHook);
         return this.frameContextHooks.push(newHook) - 1;
     };
 

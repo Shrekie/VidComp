@@ -5,6 +5,7 @@ import Timeline from './modules/timeline.js';
 import ResourceImporter from './modules/resourceImporter.js';
 import SourceLoader from './modules/sourceLoader.js';
 import Layer from './modules/layer.js';
+import Logger from './modules/logger.js';
 
 export default function () {
 
@@ -12,6 +13,7 @@ export default function () {
     var timeline = new Timeline();
     var resourceImporter = new ResourceImporter();
     var sourceLoader = new SourceLoader();
+    var logger = new Logger(this, timeline, sourceLoader);
 
     this.createLayer = function (newLayer) {
 
@@ -102,6 +104,18 @@ export default function () {
 
     };
 
+    this.undo = function (){
+        logger.undo();
+    }
+
+    this.redo = function () {
+        logger.redo();
+    }
+
+    this.log = function (){
+        logger.log();
+    };
+
     this.addResource = function(resource) {
         resourceImporter.importResource(resource, sourceLoader);
     }
@@ -119,13 +133,7 @@ export default function () {
     };
 
     this.getAllMedia = function () {
-        var allMedia = [];
-        timeline.getAllLayers().forEach(function(layer){
-            layer.getAllMedia().forEach(function(media){
-                allMedia.push(media);
-            })
-        });
-        return allMedia;
+        return timeline.getAllMedia();
     };
 
     this.getAllLayerMedia = function (layerIndex) {

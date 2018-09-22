@@ -78,14 +78,24 @@ export default {
             .layerControl('mediaShift', 
             function(context){
 
-                // local immedate
+                let layerMedia = {
+                    name: this.projectName,
+                    media: this.$vcomp.project(this.projectName).getAllMedia(),
+                    layers: this.$vcomp.project(this.projectName).getAllLayers()
+                };
+
+                console.log("MEDIASHIFT");
+
+                // log
+                this.$vcomp.project(this.projectName).log();
+
+                // render
                 this.$store.dispatch('mediaHasChanged');
                 
                 // autosave
-                this.$store.dispatch('setLayersAndMedia',{name: this.projectName,
-                media: this.$vcomp.project(this.projectName).getAllMedia(),
-                layers: this.$vcomp.project(this.projectName).getAllLayers()});
-            
+                this.$store.dispatch('setLayersAndMedia',layerMedia);
+
+
 
             }.bind(this));
 
@@ -195,21 +205,17 @@ export default {
 
     mounted: function () {
         
-        console.log("TIMELINE MOUNTED");
         // TODO: split these to components
         this.registerVideoControlEvents();
         this.registerScrollHooks();
         this.determineSnaps();
         this.registerShiftHooks();
-        //this.$eventHub.$on('edit-enabled', this.editEnabled);
         
     },
 
     beforeDestroy: function () {
 
         this.$vcomp.project(this.projectName).unbindAllFrameHooks();
-        //this.$eventHub.$off('edit-enabled');
-        console.log('beforeDestroy');
 
     }
     

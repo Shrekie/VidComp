@@ -1,8 +1,10 @@
 /*
+    Thomas Lindauer
+
     Entry point of plugin, install to vue app space.
 */
 
-import VideoComposerManager from './src/videoComposerManager.js';
+import VideoComposerManager from './videoComposerManager.js';
 var videoComposerManager = new VideoComposerManager();
 
 var videoProject =  {

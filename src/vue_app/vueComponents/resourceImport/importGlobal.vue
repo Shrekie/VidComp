@@ -90,7 +90,7 @@ export default {
             this.$store.dispatch('setMedia',{name: this.projectName,
             media: this.$vcomp.project(this.projectName).getAllMedia()});
 
-            console.log(this.$vcomp.project(this.projectName).getAllMedia())
+            this.$vcomp.project(this.projectName).log();
 
             this.$router.push({ path: `/compose/${this.projectName}`});
 

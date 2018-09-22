@@ -4,8 +4,8 @@
 */
 
 import Appapi from './../../vue_api/application_api.js';
-import clientAuth from './../library/clientAuthentication/clientAuth.js'
-import createMutationsSharer from 'vuex-shared-mutations'
+import clientAuth from './../library/clientAuthentication/clientAuth.js';
+import createMutationsSharer from 'vuex-shared-mutations';
 
 export default {
 
@@ -169,7 +169,7 @@ export default {
         
         setAuthenticated (state, response) {
             state.authenticated = response;
-        }
+        },
 
     },
 
@@ -226,6 +226,8 @@ export default {
 
     },
     
-    plugins: [createMutationsSharer({ predicate: ['setAuthenticated'] })]
+    plugins: [
+        createMutationsSharer({ predicate: ['setAuthenticated'] })
+    ]
 
 };

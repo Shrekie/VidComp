@@ -23,4 +23,5 @@ services:
       - ./data/db:/data/db
     ports:
       - 27017:27017
-#TODO: This compose does not seem to work on windows env.
+      
+#TODO: Does start and run on windows, but webpack watch does not trigger

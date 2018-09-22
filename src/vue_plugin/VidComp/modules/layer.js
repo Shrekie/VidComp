@@ -41,6 +41,10 @@ export default function (layerIndex, newMedia) {
         sortMedia();
     };
 
+    this.deleteAllMedia = function () {
+        store.media = [];
+    }
+
     this.changeMedia = function (mediaChange) {
         store.media[mediaChange.mediaIndex] = mediaChange;
     };
@@ -49,6 +53,10 @@ export default function (layerIndex, newMedia) {
         newMedia.mediaIndex = store.media.length;
         store.media.push(new Media(newMedia));
         return newMedia.mediaIndex;
+    };
+
+    this.setMedia = function (media){
+        store.media = media;
     };
 
     this.pushMediaIndex = function(fromIndex){

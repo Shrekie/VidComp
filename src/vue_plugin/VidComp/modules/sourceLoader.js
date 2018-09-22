@@ -94,4 +94,20 @@ export default function () {
         this.sortMediaLayers();
     };
 
+    this.loadMediaArray = function (mediaList){
+
+        store.sources = [];
+
+        mediaList.forEach(media => {
+            castMedia(media);
+        });
+
+        this.sortMediaLayers();
+
+    }
+
+    this.clearSources = function () {
+        store.sources.splice(0,store.sources.length)
+    }
+
 };

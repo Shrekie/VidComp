@@ -54,7 +54,6 @@ export default {
         this.resizeMotion = new MotionEvents().enableResize(media, this.$refs.rimPoint, 
         this.elementToResize.mediaContainer, function(top, left){
             
-            console.log('dropped RIM');
             var direction = 0;
             var timelineTime = 0;
 
@@ -86,7 +85,7 @@ export default {
 
 <style>
 
-.rimDrag{
+.rimDrag {
     width: 25px;
     position: absolute;
     height: 60px;

@@ -66,7 +66,6 @@ export default {
                 currentTotal = element.timelineTime[1];
             });
             this.width = Math.round((currentTotal * this.zoomScale));
-            
             return this.width;
 
         }

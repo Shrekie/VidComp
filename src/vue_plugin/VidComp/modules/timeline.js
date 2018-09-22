@@ -16,6 +16,11 @@ export default function () {
         });
     }
 
+    this.deleteAllLayers = function () {
+        //store.layers = [];
+        store.layers.splice(0,store.layers.length)
+    }
+
     this.deleteLayer = function (layerIndex) {
         store.layers.splice(layerIndex, 1);
         store.layers.forEach(function(layer, index){
@@ -24,8 +29,26 @@ export default function () {
         this.sortLayers();
     }
 
+    this.setLayers = function (layers) {
+        store.layers = layers;
+    }
+
     this.getAllLayers = function () {
         return store.layers;
+    }
+
+    this.setAllLayers = function (cb) {
+        store.layers.forEach((layer, index)=>{cb(layer, index)});
+    }
+
+    this.getAllMedia = function () {
+        var allMedia = [];
+        this.getAllLayers().forEach(function(layer){
+            layer.getAllMedia().forEach(function(media){
+                allMedia.push(media);
+            })
+        });
+        return allMedia;
     }
 
     this.addLayer = function (layer) {
