@@ -58,6 +58,7 @@ export default {
     margin-right:5px;
     margin-bottom:5px;
     text-align: left;
+    overflow: hidden;
 }
 .mediaBox:hover{
     cursor:pointer;

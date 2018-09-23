@@ -43,7 +43,7 @@ export default {
                     every component hooking up should also bind to unbind,
                     so this might be overkill:
                 */
-               videoProject.project(binding.value).unbindAllFrameHooks();
+                videoProject.project(binding.value).unbindAllFrameHooks();
             }
 
         });

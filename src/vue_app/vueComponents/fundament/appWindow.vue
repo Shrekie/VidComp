@@ -28,7 +28,6 @@ export default {
 	computed:{
 
 		projectsReady() {
-			console.log(this.$store.getters.projectsReady);
 			return this.$store.getters.projectsReady;
 		}
 

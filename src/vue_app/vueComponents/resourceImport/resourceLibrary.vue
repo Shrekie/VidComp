@@ -134,7 +134,7 @@ export default {
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
                 newMedia: {
                     layerIndex: 0,
-                    size: [300, 160],
+                    size: [1280, 720],
                     timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
                     position: [0, 0],
                     videoStartTime: 0,

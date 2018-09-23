@@ -167,6 +167,10 @@ export default function () {
         videoProjection.setTarget(canvas);
     };
 
+    this.render = function (){
+        videoProjection.renderComposition(sourceLoader);
+    }
+
     this.getAllResources = function(){
         return resourceImporter.getAllResources();
     };

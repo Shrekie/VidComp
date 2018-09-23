@@ -1,10 +1,12 @@
 import MediaDrawer from './mediaDrawer.js';
+import CompositionRenderer from './compositionRenderer.js';
 
 export default function () {
 
     this.videoOutput = {};
 
     this.mediaDrawer = new MediaDrawer();
+    this.compositionRenderer = new CompositionRenderer();
 
     this.setTarget = function (canvas) {
         this.videoOutput = {ctx: canvas.getContext('2d'), el: canvas};
@@ -21,5 +23,9 @@ export default function () {
     this.stopPlaying = function (sourceLoader) {
         this.mediaDrawer.stopDrawSources(sourceLoader);
     };
+
+    this.renderComposition = function (sourceLoader) {
+        this.compositionRenderer.render(sourceLoader, this.videoOutput, this);
+    }
 
 };

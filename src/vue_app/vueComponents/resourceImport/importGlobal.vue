@@ -7,6 +7,7 @@
         <v-flex xs12 text-xs-center>
 
             <v-card flat>
+
                 <v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
                     <v-icon>mdi-arrow-left-bold-circle</v-icon>
                 </v-btn>
@@ -60,7 +61,7 @@ export default {
 
                 newMedia: {
                     layerIndex: 0,
-                    size: [300, 160],
+                    size: [1280, 720],
                     timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
                     position: [0,0],
                     videoStartTime: 0
@@ -69,7 +70,7 @@ export default {
                 newResource: {
                     name: this.mediaURL,
                     resourceLink: this.mediaURL,
-                    resourceType: 'image'
+                    resourceType: 'video'
                 }
 
             });

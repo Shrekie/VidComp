@@ -88,23 +88,16 @@ export default function () {
         this.sortMediaLayers();
 
     };
+
+    this.getControlledSources = function (){
+        console.log(store.sources.filter(source => source.type == "video" || source.type == "audio"))
+        return store.sources.filter(source => source.type == "video" || source.type == "audio");
+    }
     
     this.loadMedia = function (media) {
         castMedia(media);
         this.sortMediaLayers();
     };
-
-    this.loadMediaArray = function (mediaList){
-
-        store.sources = [];
-
-        mediaList.forEach(media => {
-            castMedia(media);
-        });
-
-        this.sortMediaLayers();
-
-    }
 
     this.clearSources = function () {
         store.sources.splice(0,store.sources.length)

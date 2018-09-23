@@ -113,10 +113,6 @@ export default function () {
 
         // apply position change to moved media
         var changedMedia = this.getLayer(currentTimelinePos.layerIndex).getMedia(currentTimelinePos.mediaIndex);
-        console.log(currentTimelinePos.mediaIndex);
-        console.log(currentTimelinePos.layerIndex);
-        console.log(this.getLayer(currentTimelinePos.layerIndex));
-        console.log(changedMedia);
         var changedMediaSize = changedMedia.timelineTime[1] - changedMedia.timelineTime[0];
 
         changedMedia.timelineTime[0] = newTimelinePos.timelineStartTime;

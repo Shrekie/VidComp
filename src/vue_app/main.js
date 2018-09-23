@@ -25,7 +25,8 @@ import appWindow from './vueComponents/fundament/appWindow.vue';
 import workspace from './vueComponents/pageSection/workspace.vue';
 import projectLibrary from './vueComponents/project/projectLibrary.vue';
 import projectCreate from './vueComponents/project/projectCreate.vue';
-import mediaEditor from './vueComponents/editor/mediaEditor.vue';
+import editor from './vueComponents/composer/editor.vue';
+import render from './vueComponents/composer/render.vue';
 import timelineEditor from './vueComponents/timeline/timelineEditor.vue';
 import resourceLibrary from './vueComponents/resourceImport/resourceLibrary.vue';
 import importGlobal from './vueComponents/resourceImport/importGlobal.vue';
@@ -68,7 +69,7 @@ const routes = [
             children: [{
 
                 path: '',
-                component:mediaEditor,
+                component:editor,
                 props: true,
 
                 children: [{
@@ -84,9 +85,17 @@ const routes = [
                 props: true
 
             },{
+
                 path: '/project/:projectName/import',
                 component: importGlobal,
                 props: true
+
+            },{
+
+                path: '/project/:projectName/render',
+                component: render,
+                props: true
+
             }]
         }]
     }
