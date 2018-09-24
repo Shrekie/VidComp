@@ -48,7 +48,7 @@ export default {
 
 	data() {
 		return {
-			loadedProject:false
+            loadedProject:false
 		}
     },
     
@@ -56,7 +56,7 @@ export default {
         renderVideo(){
             this.$vcomp.project(this.projectName).render();
         }
-    }
+    },
 
 	
 };

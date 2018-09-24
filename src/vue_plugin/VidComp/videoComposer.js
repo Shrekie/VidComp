@@ -168,7 +168,7 @@ export default function () {
     };
 
     this.render = function (){
-        videoProjection.renderComposition(sourceLoader);
+        return videoProjection.renderComposition(sourceLoader);
     }
 
     this.getAllResources = function(){

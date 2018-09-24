@@ -25,7 +25,7 @@ export default function () {
     };
 
     this.renderComposition = function (sourceLoader) {
-        this.compositionRenderer.render(sourceLoader, this.videoOutput, this);
+        return this.compositionRenderer.render(sourceLoader, this.videoOutput, this);
     }
 
 };
