@@ -32,7 +32,21 @@ export default  function () {
         mediaRecorder.start(100);
 
         mediaRecorder.onstop = function (event){
-            done(new Blob(recordedBlobs, {type: options.mimeType}));
+            var videoBlob = new Blob(recordedBlobs, {type: options.mimeType})
+            var fileReader = new FileReader();
+            fileReader.onload = function() {
+                var view1 = new DataView(this.result, 1, 500);              
+                for(var i = 0; i < view1.byteLength; i++){
+                    console.log(view1.getInt32(i).toString(16));
+                    if(view1.getInt32(i).toString(16).includes("2ad7b1")){
+                        view1.setUint32(i+4, 76800077);
+                        break;
+                    }
+                }
+                done(new Blob([new Uint8Array(view1.buffer)]));
+                
+            };
+            fileReader.readAsArrayBuffer(videoBlob);
         };
 
         setTimeout(function(){ 
@@ -55,17 +69,20 @@ export default  function () {
         }
     
         var controlledSources = []
-        // Tap into the streams of canvas and controlled video and audio
         sourceLoader.getControlledSources().forEach(function(source){
+            source.cast.playbackRate = 0.3;
             controlledSources.push(source.cast.captureStream());
         });
 
         stageStreams(controlledSources, videoOutput.el.captureStream(), function(stream){
 
-            recordStream(30000, stream, options, videoProjection, sourceLoader, function(file){
+            recordStream(20000, stream, options, videoProjection, sourceLoader, function(file){
+
+                sourceLoader.getControlledSources().forEach(function(source){
+                    source.cast.playbackRate = 1.0;
+                });
  
                 var url = window.URL.createObjectURL(file);
-
                 var downloadLink = document.createElement("a");
                 downloadLink.download = 'file.webm';
                 downloadLink.href = url 

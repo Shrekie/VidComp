@@ -73,9 +73,11 @@ const routes = [
                 props: true,
 
                 children: [{
+
                     path: '',
                     component: timelineEditor,
                     props: true
+
                 },]
 
             },{
@@ -97,7 +99,9 @@ const routes = [
                 props: true
 
             }]
+
         }]
+        
     }
 ];
 
