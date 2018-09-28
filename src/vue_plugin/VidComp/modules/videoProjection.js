@@ -28,4 +28,8 @@ export default function () {
         return this.compositionRenderer.render(sourceLoader, this.videoOutput, this);
     }
 
+    this.setTimeDelay = function (time) {
+        this.mediaDrawer.setTimeDelay(time);
+    }
+
 };

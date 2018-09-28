@@ -1,19 +1,54 @@
 export default  function () {
 
-    var stageStreams = function (controlledSources, canvasStream, done){
+    var webmParser = {
 
-        var audioTracks = [];
+        searchBinary: function (videoBlob, tagname, done){
+
+            this.findBinary(videoBlob, tagname, false, function(currentIndex, dataView){
+                done(currentIndex, dataView);
+            })
+
+        },
+
+        setTimecodeScale: function (videoBlob, done){
+
+            this.findBinary(videoBlob, '2ad7b1', true, function(currentIndex, dataView){
+                dataView.setUint32(currentIndex+4, 85333325, false);
+                done(new Blob([new Uint8Array(dataView.buffer)]));
+            })
+
+        },
+
+        findBinary: function(videoBlob, tagname, breakFlag, done){
+            var fileReader = new FileReader();
+            fileReader.onload = function() {
+                var videoBuffer = this.result;
+                var dataView = new DataView(videoBuffer, 0, videoBuffer.byteLength);        
+                for(var i = 0; i < dataView.byteLength; i++){
+                    try{     
+                        if(dataView.getInt32(i).toString(16).includes(tagname)){
+                            done(i, dataView);
+                            if(breakFlag) break;
+                        }
+                    } catch(e) {
+                        console.log(e);
+                    }
+                }
+            };
+            fileReader.readAsArrayBuffer(videoBlob);
+        }
+
+    }
+
+    var combineAudio = function (audioTracks, done){
+
         const audioContext = new AudioContext();
-        controlledSources.forEach(function(source){
-            audioTracks.push(source.getAudioTracks()[0]);
-        });
-        const streamSource = audioTracks.map(tracks => 
-            audioContext.createMediaStreamSource(new MediaStream([tracks])));
+        
+        const streamSource = audioTracks.map(track =>
+            audioContext.createMediaStreamSource(new MediaStream([track])));
         const combined = audioContext.createMediaStreamDestination();
         streamSource.forEach(source => source.connect(combined));
-        combined.stream.addTrack(canvasStream.getVideoTracks()[0]);
-
-        done(combined.stream);
+        done(combined);
 
     }
 
@@ -22,76 +57,84 @@ export default  function () {
         var recordedBlobs = [];
         var mediaRecorder = new MediaRecorder(stream, options);
         mediaRecorder.ondataavailable = function (event) {
-            if(!event || !event.data || !event.data.size) alert('Failed.');
+            if(!event || !event.data || !event.data.size) alert('Failed fetching stream data..');
             if (event.data && event.data.size > 0) {
                 recordedBlobs.push(event.data);
             }
         }
 
         videoProjection.startPlaying(sourceLoader);
-        mediaRecorder.start(100);
+        mediaRecorder.start(10);
 
         mediaRecorder.onstop = function (event){
-            var videoBlob = new Blob(recordedBlobs, {type: options.mimeType})
-            var fileReader = new FileReader();
-            fileReader.onload = function() {
-                var view1 = new DataView(this.result, 1, 500);              
-                for(var i = 0; i < view1.byteLength; i++){
-                    console.log(view1.getInt32(i).toString(16));
-                    if(view1.getInt32(i).toString(16).includes("2ad7b1")){
-                        view1.setUint32(i+4, 76800077);
-                        break;
-                    }
-                }
-                done(new Blob([new Uint8Array(view1.buffer)]));
-                
-            };
-            fileReader.readAsArrayBuffer(videoBlob);
+            done(new Blob(recordedBlobs, {type: options.mimeType}), done);
         };
 
         setTimeout(function(){ 
+
             videoProjection.stopPlaying(sourceLoader);
             videoProjection.resetPlayer(sourceLoader);
             mediaRecorder.stop();
-        }, time);
+            stream.getTracks().forEach(track => track.stop());
 
+        }, time);
+        
+        /*
+        setTimeout(function(){ 
+
+            sourceLoader.stopUnreadyAudio();
+            //stream.getAudioTracks().forEach(track => {track.stop(); console.log(track);});
+
+        }, time/3);
+        */
     }
 
     this.render = function (sourceLoader, videoOutput, videoProjection){
         
         var options = {};
 
-        if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
-            options = {mimeType: 'video/webm; codecs=vp9'};
-        } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
-            options = {mimeType: 'video/webm; codecs=vp8'};
+        if (MediaRecorder.isTypeSupported('video/webm;codecs=H264')) {
+            options = {mimeType: 'video/webm;codecs=H264'};
         } else {
+            alert('video/webm;codecs=H264 NOT SUPPORTED');
         }
-    
-        var controlledSources = []
-        sourceLoader.getControlledSources().forEach(function(source){
-            source.cast.playbackRate = 0.3;
-            controlledSources.push(source.cast.captureStream());
+ 
+        sourceLoader.getVideoSources().forEach(function(source){
+            source.cast.playbackRate = 0.33;
         });
 
-        stageStreams(controlledSources, videoOutput.el.captureStream(), function(stream){
+        videoProjection.setTimeDelay(0.33);
 
-            recordStream(20000, stream, options, videoProjection, sourceLoader, function(file){
+        videoProjection.resetPlayer(sourceLoader);
 
-                sourceLoader.getControlledSources().forEach(function(source){
+        combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
+
+            //combinedStream.addTrack(streamDest.stream.getAudioTracks()[0]);
+
+            recordStream(28350, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
+
+                sourceLoader.getVideoSources().forEach(function(source){
                     source.cast.playbackRate = 1.0;
                 });
- 
-                var url = window.URL.createObjectURL(file);
-                var downloadLink = document.createElement("a");
-                downloadLink.download = 'file.webm';
-                downloadLink.href = url 
-                downloadLink.click();
+
+                sourceLoader.getAudioSources().forEach(function(source){
+                    source.cast.muted = false;
+                });
+
+                videoProjection.setTimeDelay(1);
+                
+                webmParser.setTimecodeScale(blob, function(file){
+                    var url = window.URL.createObjectURL(file);
+                    var downloadLink = document.createElement("a");
+                    downloadLink.download = 'file.webm';
+                    downloadLink.href = url;
+                    downloadLink.click();    
+                })
 
             });
-
+  
         });
-        
+      
     }
-
+    
 };

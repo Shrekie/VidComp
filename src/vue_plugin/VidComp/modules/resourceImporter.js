@@ -6,7 +6,7 @@ export default function () {
         resources: []
     };
     
-    const proxyurl = ""; // TODO: make my own proxy
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxy
     
     var fetchResource = function (resourceLink) {
         return fetch(proxyurl + resourceLink);

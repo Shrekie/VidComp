@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default function () {
 
     var store = {
@@ -17,20 +19,37 @@ export default function () {
             // TODO: do something better while fetching
             var image = new Image();
             image.src = 'https://i.imgur.com/IaS4CqB.png';
-            store.sources.push({media:media, cast:image, type: 'image'});
+            store.sources.push({media:media, cast:image, type: 'image', status:"ready"});
 
         }else{
 
+            // TODO: in future just make a includes branch for audio
+
             if(media.resource.type == 'image'){
+
                 var image = new Image();
                 image.src = media.resource.url;
-                store.sources.push({media:media, cast:image, type:media.resource.type});
+                store.sources.push({media:media, cast:image, type:media.resource.type, status:"ready"});
+
             }
     
             if(media.resource.type == 'video'){
+
                 var video = document.createElement("video");
                 video.src = media.resource.url;
-                store.sources.push({media:media, cast:video, type:media.resource.type});
+                video.muted = true;
+
+                video.onloadeddata = function() {
+
+                    var audio = document.createElement("audio");
+                    audio.muted = true;
+                    audio.src = media.resource.url;
+                    store.sources.push({media:media, cast:audio, type:'audio-throw', status:"ready"});
+
+                };
+
+                store.sources.push({media:media, cast:video, type:media.resource.type, status:"ready"});
+
             }
 
         }
@@ -42,15 +61,20 @@ export default function () {
 
         // hey gc get these pls
         // seems to be working nicely
-        if(source.type == 'video'){
+        if(source.type.includes('video')){
             source.cast.pause();
             source.cast.src = '';
         }
-        if(source.type == 'image'){
+        if(source.type.includes('image')){
             source.cast.src = '';
         }
-        delete source.type;
+        if(source.type.includes('audio')){
+            source.cast.pause();
+            source.cast.src = '';
+        }
+        //delete source.type;
         delete source.cast;
+        delete source.status;
 
     };
  
@@ -80,7 +104,8 @@ export default function () {
         while (i--) {
             if( store.sources[i].media.resource.name == resource.name ){
                 decastMedia(store.sources[i]);
-                castMedia(store.sources[i].media);
+                if(store.sources[i].type.includes("throw") == false ) castMedia(store.sources[i].media);
+                console.log(store.sources[i]);
                 store.sources.splice(i, 1);
             }
         }
@@ -89,11 +114,62 @@ export default function () {
 
     };
 
-    this.getControlledSources = function (){
-        console.log(store.sources.filter(source => source.type == "video" || source.type == "audio"))
+    this.getVideoSources = function (){
         return store.sources.filter(source => source.type == "video" || source.type == "audio");
-    }
-    
+    };
+
+    this.getAudioSources = function (){
+        return store.sources.filter(source => source.type.includes("audio"));
+    };
+
+    this.stopUnreadyAudio = function (){
+
+        store.sources.forEach(function(source){
+            
+            if(source.type.includes('audio')){
+
+                source.status = "unready";
+
+                if(!source.cast.paused){
+
+                    // pause audio
+                    console.log(source.cast);
+                    if(source.cast.playPromise){
+
+                        source.cast.playPromise.then(_ => {
+                            source.cast.pause();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
+                    }else{
+
+                        source.cast.pause();
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    };
+
+    this.readyAudio = function (){
+
+        store.sources.forEach(function(source){
+            
+            if(source.type.includes('audio')){
+
+                source.status = "ready";
+
+            }
+
+        });
+    };
+
     this.loadMedia = function (media) {
         castMedia(media);
         this.sortMediaLayers();

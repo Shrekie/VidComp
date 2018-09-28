@@ -9,15 +9,16 @@ export default function () {
 
         var startTime = 0;
         var nowTime = 0;
+        this.timeDelay = 1;
         this.elapsed = 0;
         this.elapsedDateTime = 0;
         this.isPlaying = false;
         
         this.trackTime = function () {
-            nowTime = new Date();
-            this.elapsedDateTime = (nowTime - startTime)
-            this.elapsed = this.elapsedDateTime;
-            this.elapsed = this.elapsed/100000;
+            nowTime = performance.now();
+            this.elapsedDateTime = (nowTime - startTime);
+            this.elapsed = (this.elapsedDateTime);
+            this.elapsed = (this.elapsed/100000);
         };
 
         this.resetTime = function () {
@@ -25,12 +26,17 @@ export default function () {
         };
 
         this.startTime = function(){
-            startTime = (new Date() - this.elapsedDateTime);
+            startTime = (performance.now() - (this.elapsedDateTime));
         }
 
         this.convertTimeInteger = function (time) {
             var Newtime = time*100;
             return parseFloat(Newtime);
+        }
+
+        this.setTimeDelay = function(time){
+            this.timeDelay = time;
+            console.log(time);
         }
 
     };
@@ -44,7 +50,7 @@ export default function () {
 
         sourceLoader.eachSource.forEach(function(source){
 
-            if(source.type == 'video'){
+            if(source.type == 'video' || source.type.includes('audio')){
 
                 if(!source.cast.paused){
 
@@ -80,61 +86,67 @@ export default function () {
         loadingBuffer = false;
 
         sourceLoader.eachSource.forEach(function(source){
-            
-            if(source.type == 'image'){
-                if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
-                    videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
-                    source.media.size[0], source.media.size[1]);
+
+            let elapsed = timeTracker.elapsed;
+            if(source.type.includes('audio')!=true) elapsed *= timeTracker.timeDelay;
+
+            if(source.status == "ready"){
+
+                if(source.type == 'image'){
+                    if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+                        videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
+                        source.media.size[0], source.media.size[1]);
+                    }
                 }
-            }
 
-            if(source.type == 'video'){
-                if( timeTracker.elapsed >= source.media.timelineTime[0] && timeTracker.elapsed <= source.media.timelineTime[1]){
-                
+                if(source.type == 'video' || source.type.includes('audio')){
 
-                    // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
-                    if(source.cast.paused){
+                    if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+                    
 
-                        // if paused, shift currentTime to correct pos
-                        source.cast.currentTime = timeTracker.convertTimeInteger(source.media.videoStartTime) + 
-                        (timeTracker.convertTimeInteger(timeTracker.elapsed)- 
-                        timeTracker.convertTimeInteger(source.media.timelineTime[0]));
+                        // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
+                        if(source.cast.paused){
 
-                        source.cast.playPromise = source.cast.play();
+                            // if paused, shift currentTime to correct pos
+                            source.cast.currentTime = timeTracker.convertTimeInteger(source.media.videoStartTime) + 
+                            (timeTracker.convertTimeInteger(elapsed)- 
+                            timeTracker.convertTimeInteger(source.media.timelineTime[0]));
 
-                        source.cast.playPromise.then(_ => {
-                            source.cast.playPromise = false;
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                            source.cast.playPromise = source.cast.play();
 
-                    } 
+                            source.cast.playPromise.then(_ => {
+                                source.cast.playPromise = false;
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
 
-                    videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
-                    source.media.size[0], source.media.size[1]);
+                        } 
 
-                }else if(!source.cast.paused){
+                        if(source.type == 'video'){videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
+                        source.media.size[0], source.media.size[1]);}
 
-                    // video stops displaying
-                    if(source.cast.playPromise){
+                    }else if(!source.cast.paused){
 
-                        source.cast.playPromise.then(_ => {
+                        // video stops displaying
+                        if(source.cast.playPromise){
+
+                            source.cast.playPromise.then(_ => {
+                                source.cast.pause();
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+
+                        }else{
+
                             source.cast.pause();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
 
-                    }else{
-
-                        source.cast.pause();
+                        }
 
                     }
-
                 }
             }
-
         });
 
         var loadingBufferCheck = function(){
@@ -217,5 +229,9 @@ export default function () {
         }
 
     };
+
+    this.setTimeDelay = function (time){
+        timeTracker.setTimeDelay(time);
+    }
 
 };
