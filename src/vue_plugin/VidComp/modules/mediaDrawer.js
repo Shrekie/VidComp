@@ -175,9 +175,11 @@ export default function () {
                 }
 
             }
-
+            
             if( (!loadingBuffer) && timeTracker.isPlaying ){
                 animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
+            }else{
+                this.loadingBuffer();
             }
 
         }
@@ -185,6 +187,10 @@ export default function () {
         contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
         loadingBufferCheck();
     };
+
+    this.loadingBuffer = function(Icb){
+        Icb();
+    }
 
     this.stopDrawSources = function (sourceLoader) {
 

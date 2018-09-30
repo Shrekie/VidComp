@@ -1,10 +1,12 @@
+import ffmpeg from "ffmpeg.js";
+
 export default  function () {
 
     var webmParser = {
 
-        searchBinary: function (videoBlob, tagname, done){
+        searchBinary: function (videoBlob, tagname, breakflag, done){
 
-            this.findBinary(videoBlob, tagname, false, function(currentIndex, dataView){
+            this.findBinary(videoBlob, tagname, breakflag, function(currentIndex, dataView){
                 done(currentIndex, dataView);
             })
 
@@ -13,8 +15,8 @@ export default  function () {
         setTimecodeScale: function (videoBlob, done){
 
             this.findBinary(videoBlob, '2ad7b1', true, function(currentIndex, dataView){
-                dataView.setUint32(currentIndex+4, 85333325, false);
-                done(new Blob([new Uint8Array(dataView.buffer)]));
+                dataView.setUint32(currentIndex+5, 85333325, false);
+                done(dataView.buffer);
             })
 
         },
@@ -26,7 +28,7 @@ export default  function () {
                 var dataView = new DataView(videoBuffer, 0, videoBuffer.byteLength);        
                 for(var i = 0; i < dataView.byteLength; i++){
                     try{     
-                        if(dataView.getInt32(i).toString(16).includes(tagname)){
+                        if(dataView.getUint32(i).toString(16).includes(tagname)){
                             done(i, dataView);
                             if(breakFlag) break;
                         }
@@ -77,62 +79,105 @@ export default  function () {
             mediaRecorder.stop();
             stream.getTracks().forEach(track => track.stop());
 
-        }, time);
-        
-        /*
+        }, time);   
+
         setTimeout(function(){ 
 
             sourceLoader.stopUnreadyAudio();
-            //stream.getAudioTracks().forEach(track => {track.stop(); console.log(track);});
+            stream.getAudioTracks().forEach(track => {track.stop(); console.log(track);});
 
-        }, time/3);
-        */
+        }, time*0.33);
+
+        videoProjection.bufferInterrupt(function(bufferingState){
+
+            if(bufferingState == "loading"){
+                if(mediaRecorder.state != "paused") mediaRecorder.pause()
+            }
+            else {
+                if(mediaRecorder.state != "recording") mediaRecorder.start()
+            }
+            
+        });
+    
     }
 
     this.render = function (sourceLoader, videoOutput, videoProjection){
         
         var options = {};
 
-        if (MediaRecorder.isTypeSupported('video/webm;codecs=H264')) {
-            options = {mimeType: 'video/webm;codecs=H264'};
+        if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+            options = {mimeType: 'video/webm;codecs=vp8'};
         } else {
-            alert('video/webm;codecs=H264 NOT SUPPORTED');
+            alert('video/webm;codecs=vp8 NOT SUPPORTED');
         }
  
         sourceLoader.getVideoSources().forEach(function(source){
             source.cast.playbackRate = 0.33;
+        });setTimeout
+
+        sourceLoader.getAudioSources().forEach(function(source){
+            source.cast.muted = true;
         });
 
         videoProjection.setTimeDelay(0.33);
 
         videoProjection.resetPlayer(sourceLoader);
 
-        combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
+        var downloadFile = function (file){
+            var url = window.URL.createObjectURL(file);
+            var downloadLink = document.createElement("a");
+            downloadLink.download = 'file.webm';
+            downloadLink.href = url;
+            downloadLink.click();    
+        }
 
-            //combinedStream.addTrack(streamDest.stream.getAudioTracks()[0]);
+        var audioRender = new Promise((resolve, reject) => { 
+            combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
+                recordStream(40000, streamDest.stream, options, videoProjection, sourceLoader, function(blob){
 
-            recordStream(28350, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
+                    sourceLoader.getAudioSources().forEach(function(source){
+                        source.cast.muted = false;
+                    });
+
+                    var fileReader = new FileReader();
+                    fileReader.onload = function() {
+                        resolve(this.result);
+                    };
+                    fileReader.readAsArrayBuffer(blob);
+
+                })
+            });
+        });
+
+
+        var videoRender = new Promise((resolve, reject) => { 
+            recordStream(40000, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
 
                 sourceLoader.getVideoSources().forEach(function(source){
                     source.cast.playbackRate = 1.0;
                 });
 
-                sourceLoader.getAudioSources().forEach(function(source){
-                    source.cast.muted = false;
+                webmParser.setTimecodeScale(blob, function(file){
+                    resolve(file);
                 });
 
-                videoProjection.setTimeDelay(1);
-                
-                webmParser.setTimecodeScale(blob, function(file){
-                    var url = window.URL.createObjectURL(file);
-                    var downloadLink = document.createElement("a");
-                    downloadLink.download = 'file.webm';
-                    downloadLink.href = url;
-                    downloadLink.click();    
-                })
-
             });
-  
+        })
+
+        Promise.all([audioRender, videoRender]).then(function(values) {
+
+            videoProjection.setTimeDelay(1);
+            console.log(values);
+
+            var result = ffmpeg({
+                MEMFS: [{name: "audio.webm", data: new Uint8Array(values[0])}, {name: "video.webm", data: new Uint8Array(values[1])}],
+                arguments: "-i video.webm -i audio.webm -c copy output.webm -shortest".split(" "),
+                // Ignore stdin read requests.mp3
+                stdin: function() {},
+            });
+            console.log(result.MEMFS[0]);
+            downloadFile(new Blob([new Uint8Array(result.MEMFS[0].data)]));
+
         });
       
     }

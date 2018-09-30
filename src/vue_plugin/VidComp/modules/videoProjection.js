@@ -32,4 +32,11 @@ export default function () {
         this.mediaDrawer.setTimeDelay(time);
     }
 
+    this.bufferInterrupt = function (interruptCb) {
+        
+        MediaDrawer.loadingBuffer(function(){
+            interruptCb();
+        });
+    }
+
 };

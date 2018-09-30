@@ -42,7 +42,7 @@ export default function () {
                 video.onloadeddata = function() {
 
                     var audio = document.createElement("audio");
-                    audio.muted = true;
+                    audio.muted = false;
                     audio.src = media.resource.url;
                     store.sources.push({media:media, cast:audio, type:'audio-throw', status:"ready"});
 
