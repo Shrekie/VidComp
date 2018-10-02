@@ -121,5 +121,6 @@ new Vue({
     render: h => h(appHook),
     el: '#app',
     store,
-    router
+    router,
+    mode: 'production'
 }).$mount('#app');

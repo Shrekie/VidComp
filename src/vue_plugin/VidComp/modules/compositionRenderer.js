@@ -88,6 +88,8 @@ export default  function () {
 
         }, time*0.33);
 
+        /*
+
         videoProjection.bufferInterrupt(function(bufferingState){
 
             if(bufferingState == "loading"){
@@ -98,7 +100,7 @@ export default  function () {
             }
             
         });
-    
+        */
     }
 
     this.render = function (sourceLoader, videoOutput, videoProjection){
@@ -148,7 +150,6 @@ export default  function () {
                 })
             });
         });
-
 
         var videoRender = new Promise((resolve, reject) => { 
             recordStream(40000, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){

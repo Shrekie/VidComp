@@ -10,6 +10,7 @@ require('./config/db_connect.js');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+var expressStaticGzip = require("express-static-gzip");
 const session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
 
@@ -46,9 +47,10 @@ app.use(session({
 // Parse requests as json and encode urls
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/", expressStaticGzip("./public"));
 
 // Expose public sources
-app.use(express.static(__dirname + '/../public/'));
+app.use(express.static(__dirname + './public'));
 
 // Register application routes
 app.use(google_oauth);

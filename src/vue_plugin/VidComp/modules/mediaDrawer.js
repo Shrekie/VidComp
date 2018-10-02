@@ -179,7 +179,7 @@ export default function () {
             if( (!loadingBuffer) && timeTracker.isPlaying ){
                 animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
             }else{
-                this.loadingBuffer();
+                //this.loadingBuffer();
             }
 
         }
