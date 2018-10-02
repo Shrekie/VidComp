@@ -116,13 +116,13 @@ export default function () {
 
     this.videoControl = function (frameHookName, frameHook) {
 
-        videoProjection.mediaDrawer.contextHooks
-        .registerHooks({name:frameHookName, callbackHook:frameHook});
-
         if(frameHookName == 'drawingUpdate'){
             videoProjection.mediaDrawer.contextHooks
             .initializeContextHook({name:frameHookName, callbackHook:frameHook});
         }
+
+        return videoProjection.mediaDrawer.contextHooks
+        .registerHooks({name:frameHookName, callbackHook:frameHook});
 
     };
 

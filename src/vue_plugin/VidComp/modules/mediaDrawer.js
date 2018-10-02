@@ -45,6 +45,7 @@ export default function () {
     this.contextHooks = new ContextHooks({timeTracker});
     var animationFrame = {};
     var loadingBuffer = false;
+    var loadingBufferContextFlag = false;
 
     var stopContent = function (sourceLoader) {
 
@@ -106,15 +107,14 @@ export default function () {
 
                         // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                         if(source.cast.paused){
-
                             // if paused, shift currentTime to correct pos
-                            source.cast.currentTime = timeTracker.convertTimeInteger(source.media.videoStartTime) + 
-                            (timeTracker.convertTimeInteger(elapsed)- 
-                            timeTracker.convertTimeInteger(source.media.timelineTime[0]));
-
+                            
                             source.cast.playPromise = source.cast.play();
 
                             source.cast.playPromise.then(_ => {
+                                source.cast.currentTime = timeTracker.convertTimeInteger(source.media.videoStartTime) + 
+                                (timeTracker.convertTimeInteger(elapsed)- 
+                                timeTracker.convertTimeInteger(source.media.timelineTime[0]));
                                 source.cast.playPromise = false;
                             })
                             .catch(error => {
@@ -168,18 +168,21 @@ export default function () {
                         console.log(error);
 
                     });
-                    
+
                     loadingBuffer = true;
                     break;
                     
                 }
 
             }
-            
-            if( (!loadingBuffer) && timeTracker.isPlaying ){
+
+            if( (loadingBuffer == false) && timeTracker.isPlaying ){
                 animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
-            }else{
-                //this.loadingBuffer();
+            }
+
+            if(loadingBuffer != loadingBufferContextFlag){
+                contextHooks.runContextHooks({name: 'bufferInterrupt', status:loadingBuffer});
+                loadingBufferContextFlag = loadingBuffer;
             }
 
         }
@@ -187,10 +190,6 @@ export default function () {
         contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
         loadingBufferCheck();
     };
-
-    this.loadingBuffer = function(Icb){
-        Icb();
-    }
 
     this.stopDrawSources = function (sourceLoader) {
 

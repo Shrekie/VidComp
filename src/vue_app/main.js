@@ -3,7 +3,7 @@
 */
 
 import Vue from 'vue';
-Vue.config.devtools = true;
+Vue.config.devtools = false;
 
 // Vue libraries
 import Vuex from 'vuex';
@@ -121,6 +121,5 @@ new Vue({
     render: h => h(appHook),
     el: '#app',
     store,
-    router,
-    mode: 'production'
+    router
 }).$mount('#app');

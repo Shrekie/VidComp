@@ -18,7 +18,7 @@ module.exports = {
         .add(/node_modules/)
         .end()
         .use('babel')
-        .loader('babel-loader')
+        .loader('babel-loader');
 
         config
         .plugin("CompressionPlugin")
@@ -30,6 +30,10 @@ module.exports = {
         .pre()
         .use('gzip-loader')
         .loader('gzip-loader');
+
+        config.optimization
+        .minimize(false);
+        
 
     }
     

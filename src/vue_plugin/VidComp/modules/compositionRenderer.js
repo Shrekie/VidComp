@@ -57,6 +57,7 @@ export default  function () {
     var recordStream = function (time, stream, options, videoProjection, sourceLoader, done){
 
         var recordedBlobs = [];
+
         var mediaRecorder = new MediaRecorder(stream, options);
         mediaRecorder.ondataavailable = function (event) {
             if(!event || !event.data || !event.data.size) alert('Failed fetching stream data..');
@@ -64,6 +65,24 @@ export default  function () {
                 recordedBlobs.push(event.data);
             }
         }
+
+        var bufferingState = videoProjection.mediaDrawer.contextHooks
+        .registerHooks({name:'bufferInterrupt', callbackHook:function(bufferingState){
+
+            if(bufferingState.status){
+                if(mediaRecorder.state != "paused"){
+                    mediaRecorder.pause();
+                    console.log("STOP R");
+                }
+            }
+            else {
+                if(mediaRecorder.state != "recording"){
+                    mediaRecorder.resume();
+                    console.log("START R");
+                }
+            }
+
+        }});
 
         videoProjection.startPlaying(sourceLoader);
         mediaRecorder.start(10);
@@ -74,33 +93,12 @@ export default  function () {
 
         setTimeout(function(){ 
 
-            videoProjection.stopPlaying(sourceLoader);
-            videoProjection.resetPlayer(sourceLoader);
             mediaRecorder.stop();
             stream.getTracks().forEach(track => track.stop());
+            videoProjection.mediaDrawer.contextHooks.unregisterHook(bufferingState);
 
         }, time);   
-
-        setTimeout(function(){ 
-
-            sourceLoader.stopUnreadyAudio();
-            stream.getAudioTracks().forEach(track => {track.stop(); console.log(track);});
-
-        }, time*0.33);
-
-        /*
-
-        videoProjection.bufferInterrupt(function(bufferingState){
-
-            if(bufferingState == "loading"){
-                if(mediaRecorder.state != "paused") mediaRecorder.pause()
-            }
-            else {
-                if(mediaRecorder.state != "recording") mediaRecorder.start()
-            }
-            
-        });
-        */
+        
     }
 
     this.render = function (sourceLoader, videoOutput, videoProjection){
@@ -115,13 +113,9 @@ export default  function () {
  
         sourceLoader.getVideoSources().forEach(function(source){
             source.cast.playbackRate = 0.33;
-        });setTimeout
-
-        sourceLoader.getAudioSources().forEach(function(source){
-            source.cast.muted = true;
         });
 
-        videoProjection.setTimeDelay(0.33);
+        videoProjection.setTimeDelay(0.333);
 
         videoProjection.resetPlayer(sourceLoader);
 
@@ -135,11 +129,7 @@ export default  function () {
 
         var audioRender = new Promise((resolve, reject) => { 
             combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
-                recordStream(40000, streamDest.stream, options, videoProjection, sourceLoader, function(blob){
-
-                    sourceLoader.getAudioSources().forEach(function(source){
-                        source.cast.muted = false;
-                    });
+                recordStream(137000*0.33, streamDest.stream, options, videoProjection, sourceLoader, function(blob){
 
                     var fileReader = new FileReader();
                     fileReader.onload = function() {
@@ -152,11 +142,7 @@ export default  function () {
         });
 
         var videoRender = new Promise((resolve, reject) => { 
-            recordStream(40000, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
-
-                sourceLoader.getVideoSources().forEach(function(source){
-                    source.cast.playbackRate = 1.0;
-                });
+            recordStream(137000, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
 
                 webmParser.setTimecodeScale(blob, function(file){
                     resolve(file);
@@ -167,16 +153,20 @@ export default  function () {
 
         Promise.all([audioRender, videoRender]).then(function(values) {
 
+            videoProjection.stopPlaying(sourceLoader);
+            videoProjection.resetPlayer(sourceLoader);
             videoProjection.setTimeDelay(1);
-            console.log(values);
+            sourceLoader.getVideoSources().forEach(function(source){
+                source.cast.playbackRate = 1.0;
+            });
 
             var result = ffmpeg({
                 MEMFS: [{name: "audio.webm", data: new Uint8Array(values[0])}, {name: "video.webm", data: new Uint8Array(values[1])}],
-                arguments: "-i video.webm -i audio.webm -c copy output.webm -shortest".split(" "),
+                arguments: "-i video.webm -i audio.webm -c copy output.webm".split(" "),
                 // Ignore stdin read requests.mp3
                 stdin: function() {},
             });
-            console.log(result.MEMFS[0]);
+
             downloadFile(new Blob([new Uint8Array(result.MEMFS[0].data)]));
 
         });
