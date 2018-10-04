@@ -47,14 +47,14 @@ export default  function () {
         const audioContext = new AudioContext();
         
         const streamSource = audioTracks.map(track =>
-            audioContext.createMediaStreamSource(new MediaStream([track])));
+        audioContext.createMediaStreamSource(new MediaStream([track])));
         const combined = audioContext.createMediaStreamDestination();
         streamSource.forEach(source => source.connect(combined));
         done(combined);
 
     }
 
-    var recordStream = function (time, stream, options, videoProjection, sourceLoader, done){
+    var recordStream = function (finishState, stream, options, videoProjection, sourceLoader, done){
 
         var recordedBlobs = [];
 
@@ -68,7 +68,7 @@ export default  function () {
 
         var bufferingState = videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:'bufferInterrupt', callbackHook:function(bufferingState){
-
+      
             if(bufferingState.status){
                 if(mediaRecorder.state != "paused"){
                     mediaRecorder.pause();
@@ -89,15 +89,19 @@ export default  function () {
 
         mediaRecorder.onstop = function (event){
             done(new Blob(recordedBlobs, {type: options.mimeType}), done);
+            videoProjection.mediaDrawer.contextHooks.unregisterHook(playFinish);
         };
 
-        setTimeout(function(){ 
+        var playFinish = videoProjection.mediaDrawer.contextHooks
+        .registerHooks({name:'finished', callbackHook:function(finished){
+            console.log(finishState);
+            if(finished.status == finishState){
+                mediaRecorder.stop();
+                stream.getTracks().forEach(track => track.stop());
+                videoProjection.mediaDrawer.contextHooks.unregisterHook(bufferingState);
+            }
 
-            mediaRecorder.stop();
-            stream.getTracks().forEach(track => track.stop());
-            videoProjection.mediaDrawer.contextHooks.unregisterHook(bufferingState);
-
-        }, time);   
+        }});
         
     }
 
@@ -129,7 +133,7 @@ export default  function () {
 
         var audioRender = new Promise((resolve, reject) => { 
             combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
-                recordStream(137000*0.33, streamDest.stream, options, videoProjection, sourceLoader, function(blob){
+                recordStream("normal", streamDest.stream, options, videoProjection, sourceLoader, function(blob){
 
                     var fileReader = new FileReader();
                     fileReader.onload = function() {
@@ -142,7 +146,7 @@ export default  function () {
         });
 
         var videoRender = new Promise((resolve, reject) => { 
-            recordStream(137000, videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
+            recordStream("delayed", videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
 
                 webmParser.setTimecodeScale(blob, function(file){
                     resolve(file);
@@ -153,9 +157,9 @@ export default  function () {
 
         Promise.all([audioRender, videoRender]).then(function(values) {
 
-            videoProjection.stopPlaying(sourceLoader);
             videoProjection.resetPlayer(sourceLoader);
             videoProjection.setTimeDelay(1);
+
             sourceLoader.getVideoSources().forEach(function(source){
                 source.cast.playbackRate = 1.0;
             });

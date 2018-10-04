@@ -114,60 +114,16 @@ export default function () {
 
     };
 
+    this.getEndTime = function () {
+        return Math.max.apply(Math, store.sources.map(function(source) { return source.media.timelineTime[1]; }));
+    };
+
     this.getVideoSources = function (){
         return store.sources.filter(source => source.type == "video" || source.type == "audio");
     };
 
     this.getAudioSources = function (){
         return store.sources.filter(source => source.type.includes("audio"));
-    };
-
-    this.stopUnreadyAudio = function (){
-
-        store.sources.forEach(function(source){
-            
-            if(source.type.includes('audio')){
-
-                source.status = "unready";
-
-                if(!source.cast.paused){
-
-                    // pause audio
-                    console.log(source.cast);
-                    if(source.cast.playPromise){
-
-                        source.cast.playPromise.then(_ => {
-                            source.cast.pause();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-
-                    }else{
-
-                        source.cast.pause();
-
-                    }
-
-                }
-
-            }
-
-        });
-
-    };
-
-    this.readyAudio = function (){
-
-        store.sources.forEach(function(source){
-            
-            if(source.type.includes('audio')){
-
-                source.status = "ready";
-
-            }
-
-        });
     };
 
     this.loadMedia = function (media) {

@@ -44,10 +44,14 @@ export default function () {
     var timeTracker = new TimeTracker();
     this.contextHooks = new ContextHooks({timeTracker});
     var animationFrame = {};
+    var endTime = 0;
     var loadingBuffer = false;
-    var loadingBufferContextFlag = false;
+    var playStateFlag = [false, false]; // flag for endTime and bufferInterrupt
 
     var stopContent = function (sourceLoader) {
+
+        loadingBuffer = false;
+        playStateFlag = [false, false];
 
         sourceLoader.eachSource.forEach(function(source){
 
@@ -79,12 +83,10 @@ export default function () {
 
     };
 
-    var videoUpdate = function (sourceLoader, videoOutput, contextHooks) {
+    var videoUpdate = function (sourceLoader, videoOutput, contextHooks, mediaDrawer) {
 
         videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
         timeTracker.trackTime();
-
-        loadingBuffer = false;
 
         sourceLoader.eachSource.forEach(function(source){
 
@@ -111,11 +113,16 @@ export default function () {
                             
                             source.cast.playPromise = source.cast.play();
 
-                            source.cast.playPromise.then(_ => {
+                            source.cast.playPromise.then().then(_ => {
+
+                                elapsed = timeTracker.elapsed;
+                                if(source.type.includes('audio')!=true) elapsed *= timeTracker.timeDelay;
+
                                 source.cast.currentTime = timeTracker.convertTimeInteger(source.media.videoStartTime) + 
                                 (timeTracker.convertTimeInteger(elapsed)- 
                                 timeTracker.convertTimeInteger(source.media.timelineTime[0]));
                                 source.cast.playPromise = false;
+
                             })
                             .catch(error => {
                                 console.log(error);
@@ -159,8 +166,8 @@ export default function () {
 
                     sourceLoader.eachSource[i].cast.playPromise.then(_ => {
 
-                        loadingBufferCheck();
                         timeTracker.startTime();
+                        loadingBufferCheck();
                         
                     })
                     .catch(error => {
@@ -177,13 +184,25 @@ export default function () {
             }
 
             if( (loadingBuffer == false) && timeTracker.isPlaying ){
-                animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks) }.bind(this));
+                animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, contextHooks, mediaDrawer) }.bind(this));
             }
 
-            if(loadingBuffer != loadingBufferContextFlag){
+            if(loadingBuffer != playStateFlag[0]){
                 contextHooks.runContextHooks({name: 'bufferInterrupt', status:loadingBuffer});
-                loadingBufferContextFlag = loadingBuffer;
+                playStateFlag[0] = loadingBuffer;
             }
+
+            if( timeTracker.convertTimeInteger(timeTracker.elapsed) > timeTracker.convertTimeInteger(endTime) && playStateFlag[1] == false ){
+                contextHooks.runContextHooks({name: 'finished', status:"normal"});
+                playStateFlag[1] = true;
+            }
+
+            if( timeTracker.convertTimeInteger(timeTracker.elapsed) > timeTracker.convertTimeInteger(endTime/timeTracker.timeDelay) && playStateFlag[1] == true){
+                console.log(timeTracker.elapsed+ " " +endTime/timeTracker.timeDelay);
+                contextHooks.runContextHooks({name: 'finished', status:"delayed"});
+                mediaDrawer.stopDrawSources(sourceLoader);
+            }
+
 
         }
 
@@ -228,7 +247,8 @@ export default function () {
             this.contextHooks.runContextHooks({name: 'beforeActionStart', action: 'play', timeTracker});
             stopContent(sourceLoader);
             timeTracker.isPlaying = true;
-            animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, this.contextHooks) }.bind(this));
+            endTime = sourceLoader.getEndTime();
+            animationFrame = requestAnimationFrame(function () { videoUpdate(sourceLoader, videoOutput, this.contextHooks, this) }.bind(this));
             timeTracker.startTime();
 
         }

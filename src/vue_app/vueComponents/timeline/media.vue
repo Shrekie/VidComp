@@ -69,6 +69,7 @@ export default {
 
     mounted: function () {
         
+        //TODO: disable drag media when playing
         var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
         this.dragMotion = new MotionEvents().enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
             
