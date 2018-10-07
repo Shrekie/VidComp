@@ -6,6 +6,15 @@ export default function () {
         sources: []
     };
 
+    var Cast = function (media, cast, type){
+
+        this.media = media;
+        this.cast = cast;
+        this.type = type;
+        this.status = "ready";
+
+    }
+
     // TODO: make casting async
     
     var castMedia = function (media){
@@ -19,7 +28,7 @@ export default function () {
             // TODO: do something better while fetching
             var image = new Image();
             image.src = 'https://i.imgur.com/IaS4CqB.png';
-            store.sources.push({media:media, cast:image, type: 'image', status:"ready"});
+            store.sources.push(new Cast(media, image, 'image'));
 
         }else{
 
@@ -29,7 +38,7 @@ export default function () {
 
                 var image = new Image();
                 image.src = media.resource.url;
-                store.sources.push({media:media, cast:image, type:media.resource.type, status:"ready"});
+                store.sources.push(new Cast(media, image, media.resource.type));
 
             }
     
@@ -41,14 +50,14 @@ export default function () {
 
                 video.onloadeddata = function() {
 
-                    var audio = document.createElement("audio");
+                    var audio = document.createElement("video")
                     audio.muted = false;
                     audio.src = media.resource.url;
-                    store.sources.push({media:media, cast:audio, type:'audio-throw', status:"ready"});
+                    store.sources.push(new Cast(media, audio, 'audio-throw'));
 
                 };
 
-                store.sources.push({media:media, cast:video, type:media.resource.type, status:"ready"});
+                store.sources.push(new Cast(media, video, media.resource.type));
 
             }
 
@@ -118,8 +127,12 @@ export default function () {
         return Math.max.apply(Math, store.sources.map(function(source) { return source.media.timelineTime[1]; }));
     };
 
+    this.getControlledSources = function(){
+        return store.sources.filter(source => source.type.includes("audio") || source.type.includes("video"));
+    };
+
     this.getVideoSources = function (){
-        return store.sources.filter(source => source.type == "video" || source.type == "audio");
+        return store.sources.filter(source => source.type == "video");
     };
 
     this.getAudioSources = function (){

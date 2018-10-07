@@ -94,7 +94,6 @@ export default  function () {
 
         var playFinish = videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:'finished', callbackHook:function(finished){
-            console.log(finishState);
             if(finished.status == finishState){
                 mediaRecorder.stop();
                 stream.getTracks().forEach(track => track.stop());
@@ -119,7 +118,7 @@ export default  function () {
             source.cast.playbackRate = 0.33;
         });
 
-        videoProjection.setTimeDelay(0.333);
+        videoProjection.setTimeDelay(0.3333);
 
         videoProjection.resetPlayer(sourceLoader);
 
@@ -130,7 +129,7 @@ export default  function () {
             downloadLink.href = url;
             downloadLink.click();    
         }
-
+        
         var audioRender = new Promise((resolve, reject) => { 
             combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
                 recordStream("normal", streamDest.stream, options, videoProjection, sourceLoader, function(blob){
