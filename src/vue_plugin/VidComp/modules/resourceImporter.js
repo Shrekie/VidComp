@@ -9,7 +9,15 @@ export default function () {
     const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxy
     
     var fetchResource = function (resourceLink) {
-        return fetch(proxyurl + resourceLink);
+        return fetch(proxyurl + resourceLink)
+                .then(res => {
+                    if (res.status === 200) {
+                        return res;
+                    } else {
+                        throw new Error(res.statusText);
+                    }
+                })
+                .catch(error => { return {error} });
     };
 
     this.getAllResources = function(){
@@ -22,6 +30,23 @@ export default function () {
         });
     };
 
+    this.saveBlob = function (newResource, resource, sourceLoader) {
+
+        fetchResource(newResource.resourceLink)
+        .then(res => {
+            if(res.error){
+                alert("error retrieving media resource");
+            }else{
+                res.blob().then(function(blob){
+                    resource.url = URL.createObjectURL(blob);
+                    sourceLoader.loadSelectedResource(resource);
+                });
+            }
+        }); 
+        return resource;
+
+    }
+
     this.changeResource = function(resourceChange, sourceLoader){
 
         var resource = this.existingResource(resourceChange.name);
@@ -32,19 +57,9 @@ export default function () {
         if(resourceChange.resourceLink){
 
             resource.url = 'fetching';
-            
             sourceLoader.loadSelectedResource(resource);
-
-            fetchResource(newResource.resourceLink)
-            .then(res => res.blob())
-            .then(blob => {
-                resource.url = URL.createObjectURL(blob);
-                console.log(resource);
-                sourceLoader.loadSelectedResource(resource);
-            }); 
-
-            return resource
-
+            return this.saveBlob(resourceChange, resource, sourceLoader);
+            
         }else{
             return resource;
         }
@@ -68,16 +83,7 @@ export default function () {
             };
 
             store.resources.push(resource);
-            
-            fetchResource(newResource.resourceLink)
-            .then(res => res.blob())
-            .then(blob => {
-                resource.url = URL.createObjectURL(blob);
-                console.log(resource);
-                sourceLoader.loadSelectedResource(resource);
-            }); 
-
-            return resource;
+            return this.saveBlob(newResource, resource, sourceLoader);
 
         }
 

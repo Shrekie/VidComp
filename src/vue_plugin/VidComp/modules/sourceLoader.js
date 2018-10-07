@@ -50,8 +50,7 @@ export default function () {
 
                 video.onloadeddata = function() {
 
-                    var audio = document.createElement("video")
-                    audio.muted = false;
+                    var audio = document.createElement("audio");
                     audio.src = media.resource.url;
                     store.sources.push(new Cast(media, audio, 'audio-throw'));
 

@@ -116,7 +116,6 @@ export default function () {
                         if(source.cast.paused){
                             // if paused, shift currentTime to correct pos
 
-
                             source.cast.currentTime = 
                             (timeTracker.convertTimeInteger(source.media.videoStartTime) + 
                             (timeTracker.convertTimeInteger(elapsed) - 
@@ -169,6 +168,7 @@ export default function () {
 
             }
 
+            // buffer hooks
             if(loadingBuffer != playStateFlag[0]){
                 contextHooks.runContextHooks({name: 'bufferInterrupt', status:loadingBuffer});
                 playStateFlag[0] = loadingBuffer;

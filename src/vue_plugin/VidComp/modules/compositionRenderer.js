@@ -118,6 +118,10 @@ export default  function () {
             source.cast.playbackRate = 0.33;
         });
 
+        sourceLoader.getAudioSources().forEach(function(source){
+            source.cast.muted = true;
+        });
+
         videoProjection.setTimeDelay(0.3333);
 
         videoProjection.resetPlayer(sourceLoader);
@@ -161,6 +165,10 @@ export default  function () {
 
             sourceLoader.getVideoSources().forEach(function(source){
                 source.cast.playbackRate = 1.0;
+            });
+
+            sourceLoader.getAudioSources().forEach(function(source){
+                source.cast.muted = false;
             });
 
             var result = ffmpeg({
