@@ -19,6 +19,13 @@ export default function () {
     
     var castMedia = function (media){
 
+        //TODO: Move this to blob analyzer
+        function hasAudio (video) {
+            return video.mozHasAudio ||
+            Boolean(video.webkitAudioDecodedByteCount) ||
+            Boolean(video.audioTracks && video.audioTracks.length);
+        }
+
         if(!media.resource) {
 
             console.log('YOU CASTED MEDIA WITH NO RESOURCE');
@@ -48,13 +55,13 @@ export default function () {
                 video.src = media.resource.url;
                 video.muted = true;
 
-                video.onloadeddata = function() {
-
-                    var audio = document.createElement("audio");
-                    audio.src = media.resource.url;
-                    store.sources.push(new Cast(media, audio, 'audio-throw'));
-
-                };
+                    video.onloadeddata = function() {
+                        if(hasAudio(video)){
+                            var audio = document.createElement("audio");
+                            audio.src = media.resource.url;
+                            store.sources.push(new Cast(media, audio, 'audio-throw'));
+                        }
+                    };
 
                 store.sources.push(new Cast(media, video, media.resource.type));
 

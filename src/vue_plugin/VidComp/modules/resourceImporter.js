@@ -1,11 +1,13 @@
-// TODO: catch errors better and stuff, cleanup
+import BlobAnalyzer from './../../../vue_app/library/fileManager/blobAnalyzer.js'; //TODO: move library to top public level
 
 export default function () {
 
     var store = {
         resources: []
     };
-    
+
+    var blobAnalyzer = new BlobAnalyzer();
+
     const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxy
     
     var fetchResource = function (resourceLink) {
@@ -35,11 +37,19 @@ export default function () {
         fetchResource(newResource.resourceLink)
         .then(res => {
             if(res.error){
-                alert("error retrieving media resource");
+                alert("error retrieving media resource, is url broken?");
             }else{
                 res.blob().then(function(blob){
-                    resource.url = URL.createObjectURL(blob);
-                    sourceLoader.loadSelectedResource(resource);
+
+                    var fileType = blobAnalyzer.determineType(blob);
+                    if(fileType == "undefined"){
+                        alert("Could not determine file type, please report this error.");
+                    }else{
+                        resource.url = URL.createObjectURL(blob);
+                        resource.type = fileType;
+                        sourceLoader.loadSelectedResource(resource);
+                    }
+
                 });
             }
         }); 

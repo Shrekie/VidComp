@@ -29,6 +29,12 @@
                             ></v-text-field>
                         </v-flex>
 
+                        <!--
+                        <v-card flat>
+                            <input type="file" ref="inputBox" @change="uploadFile">
+                        </v-card>
+                        -->
+
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -54,6 +60,12 @@ export default {
     },
 
     methods: {
+        
+        /*
+        uploadFile () {
+            console.log(this.$refs.inputBox.files);
+        },
+        */
 
         importMedia() {
 
@@ -70,7 +82,7 @@ export default {
                 newResource: {
                     name: this.mediaURL,
                     resourceLink: this.mediaURL,
-                    resourceType: 'video'
+                    resourceType: 'searching'
                 }
 
             });
