@@ -15,6 +15,7 @@
   "author": "Thomas Lindauer",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@mdi/font": "^2.7.94",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",

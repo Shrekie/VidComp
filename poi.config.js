@@ -8,6 +8,7 @@ module.exports = {
         config
         .output
         .path(path.resolve(__dirname, 'public'));
+        //.chunkFilename('[name].bundle.js');
 
         config.module
         .noParse(/ffmpeg/)

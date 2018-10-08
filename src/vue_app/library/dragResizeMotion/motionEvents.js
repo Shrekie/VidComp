@@ -1,6 +1,61 @@
 
 var MotionEvents = function () {
 
+    var holdNonSwipeTouch = function (triggerElement, dragMouseDown){
+
+        var touchduration = 500;
+        var swipestrength = 10;
+        var preventDefault = false;
+        var timer;
+        var startX;
+        var startY;
+        var moveX;
+        var moveY;
+
+        triggerElement.ontouchstart = function(e) {
+
+            startX = e.touches[0].pageX;
+            startY = e.touches[0].pageY;
+            timer = setTimeout(function(){
+                preventDefault = true;
+                dragMouseDown(e);
+            }.bind(this), touchduration);
+
+            return true;
+
+        }
+
+        triggerElement.ontouchend = function(e) {
+
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            return true;
+
+        }
+
+        triggerElement.ontouchmove = function(e) {
+
+            if(preventDefault){
+                e.preventDefault();
+            }
+
+            moveX = e.touches[0].pageX;
+            moveY = e.touches[0].pageY;
+
+            var xDiff = startX - moveX;
+            var yDiff = startY - moveY;
+
+            if( Math.abs(xDiff) > swipestrength || Math.abs(yDiff) > swipestrength){
+                clearTimeout(timer);
+            }
+
+        }
+
+
+    }
+
     var cursorHandler = function(e, cb){
 
         e = e || window.event;
@@ -10,8 +65,8 @@ var MotionEvents = function () {
         cursorOveridden = e;
 
         if(e.touches){
-            cursorOveridden.clientX = event.touches[0].pageX;
-            cursorOveridden.clientY = event.touches[0].pageY;
+            cursorOveridden.clientX = e.touches[0].pageX;
+            cursorOveridden.clientY = e.touches[0].pageY;
         }
 
         cb(cursorOveridden);
@@ -21,7 +76,6 @@ var MotionEvents = function () {
     var enableDrag = function (media, triggerElement, dragElement, onDragClose) {
 
         var dragMouseDown = function(e) {
-
             cursorHandler(e, function(e){
                 MotionEvents.prototype.
                 snapCalculation(this.media, this.dragElement);
@@ -104,7 +158,7 @@ var MotionEvents = function () {
         this.pos1 = 0, this.pos2 = 0, 
         this.pos3 = 0, this.pos4 = 0; // SUGGESTION: make these global var on this class
         this.triggerElement.onmousedown = dragMouseDown;
-        this.triggerElement.ontouchstart = dragMouseDown;
+        holdNonSwipeTouch(this.triggerElement, dragMouseDown);
 
     };
 
@@ -150,7 +204,7 @@ var MotionEvents = function () {
         }.bind(this);
 
         var elementResize = function(e){
-
+            console.log(e);
             cursorHandler(e, function(e){
 
                 this.pos1 = this.pos3 - e.clientX;

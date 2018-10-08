@@ -8,7 +8,7 @@ export default function () {
 
     var blobAnalyzer = new BlobAnalyzer();
 
-    const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxy
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxys
     
     var fetchResource = function (resourceLink) {
         return fetch(proxyurl + resourceLink)
@@ -42,6 +42,7 @@ export default function () {
                 res.blob().then(function(blob){
 
                     var fileType = blobAnalyzer.determineType(blob);
+
                     if(fileType == "undefined"){
                         alert("Could not determine file type, please report this error.");
                     }else{
@@ -58,6 +59,8 @@ export default function () {
     }
 
     this.changeResource = function(resourceChange, sourceLoader){
+
+        //TODO: mix this this importResource
 
         var resource = this.existingResource(resourceChange.name);
 

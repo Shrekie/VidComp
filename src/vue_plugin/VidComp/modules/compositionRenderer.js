@@ -1,5 +1,3 @@
-import ffmpeg from "ffmpeg.js";
-
 export default  function () {
 
     var webmParser = {
@@ -105,6 +103,7 @@ export default  function () {
     }
 
     this.render = function (sourceLoader, videoOutput, videoProjection){
+        import("ffmpeg.js").then(function({ default: ffmpeg }){
         
         var options = {};
 
@@ -181,7 +180,8 @@ export default  function () {
             downloadFile(new Blob([new Uint8Array(result.MEMFS[0].data)]));
 
         });
-      
+
+        });
     }
     
 };

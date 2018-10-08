@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", expressStaticGzip("./public"));
 
 // Expose public sources
-app.use(express.static(__dirname + './public'));
+//app.use(express.static(__dirname + './public'));
 
 // Register application routes
 app.use(google_oauth);

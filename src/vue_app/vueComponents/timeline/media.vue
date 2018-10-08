@@ -110,6 +110,7 @@ export default {
     height: 60px;
     width: 0px;
     user-select: none;
+    cursor: pointer;
     border: 1px solid #2f2f2f;
     border-radius: 3px;
     z-index: 1;
