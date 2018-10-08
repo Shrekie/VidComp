@@ -3,9 +3,9 @@
 -->
 
 <template>
-
 <div class="mediaContainer" ref="mediaContainer"
-v-bind:style="{ width: `${mediaWidth}px`, left: `${mediaLeft}px` }" >
+v-bind:style="{width:`${mediaWidth}px`,left:`${mediaLeft}px`}" 
+v-bind:class="{selectedMedia: focusArea}">
 
     <RimDrag v-bind:media-index="mediaIndex" 
     v-bind:layer-index="layerIndex" v-bind:project-name="projectName"
@@ -18,10 +18,7 @@ v-bind:style="{ width: `${mediaWidth}px`, left: `${mediaLeft}px` }" >
     v-bind:direction='"left"' v-if="mediaWidth > 70"></RimDrag>
 
     <div class="media" ref="media"> </div>
-
 </div>
-
-
 </template>
 
 <script>
@@ -57,12 +54,26 @@ export default {
             this.mediaLeft = (this.timelineTime[0] * this.zoomScale);
         },
 
+        selectArea() {
+            this.$store.dispatch('setFocusArea', {timelineArea: [this.layerIndex, this.mediaIndex]});
+        },
+
+        deselectArea(){
+            this.$store.dispatch('setFocusArea', {timelineArea: [this.layerIndex, "none"]});
+        }
+
     },
 
     computed: {
         
-        zoomScale (){
+        zoomScale (){ 
             return this.$store.getters.zoomScale(this.projectName);
+        },
+
+        focusArea (){
+            let focusArea = this.$store.getters.focusArea;
+            console.log(focusArea);
+            return focusArea[0] == this.layerIndex && focusArea[1] == this.mediaIndex;
         }
         
     },
@@ -85,13 +96,9 @@ export default {
                     timelineStartTime: (left/this.zoomScale)
             });
 
-            this.setMediaSize();
-
-            this.$refs.mediaContainer.style.top = "0px";
-            this.$refs.mediaContainer.style.left = this.mediaLeft
+            if(newLayerIndex == 0) this.selectArea();
 
         }.bind(this));
-        
         
         this.setMediaSize();
         
@@ -114,6 +121,10 @@ export default {
     border: 1px solid #2f2f2f;
     border-radius: 3px;
     z-index: 1;
+}
+
+.selectedMedia{
+    border: 3px solid white !important;
 }
 
 .media{

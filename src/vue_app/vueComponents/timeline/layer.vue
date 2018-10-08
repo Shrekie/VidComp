@@ -3,13 +3,15 @@
 -->
 
 <template>
-<div class="layerContainer" v-bind:style="{ width: `${layerWidth}px` }">
+<div class="layerContainer" v-bind:style="{width:`${layerWidth}px`}"
+@click="selectArea(layerIndex)" v-bind:class="{selectedLayer: focusArea}">
 
-    <Media ref="mediaElements" v-bind:media-index="media.mediaIndex" v-bind:layer-index="layerIndex" 
+    <Media ref="mediaElements" v-bind:media-index="media.mediaIndex"
+    v-bind:layer-index="layerIndex" 
     v-bind:project-name="projectName" v-bind:timeline-time="media.timelineTime"
     v-for="media in allLayerMedia" 
     :key='media.timelineTime[0] + "-" + mediaChange'>
-    </Media> <!-- #TODO: this key man, maybe just do indexshift always -->
+    </Media>
 
 </div>
 </template>
@@ -51,6 +53,11 @@ export default {
 
         mediaChange (){
             return this.$store.getters.mediaChange;
+        },
+
+        focusArea (){
+            let focusArea = this.$store.getters.focusArea;
+            return focusArea[0] == this.layerIndex;
         }
 
     },
@@ -68,7 +75,11 @@ export default {
             this.width = Math.round((currentTotal * this.zoomScale));
             return this.width;
 
-        }
+        },
+
+        selectArea(layerIndex) {
+            this.$store.dispatch('setFocusArea', {timelineArea: [this.layerIndex, "none"]});
+        } 
 
     },
 
@@ -87,6 +98,10 @@ export default {
     width: 0px;
     margin-right: 50%;
     margin-left: 50%;
+}
+
+.selectedLayer {
+    background-color:#8e8d8d;
 }
 
 </style>

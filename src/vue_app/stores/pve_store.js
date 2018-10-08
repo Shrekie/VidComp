@@ -14,7 +14,8 @@ export default {
         projectsReady:false,
         authenticated: false,
         zoomAmount: 10,
-        mediaChange: false
+        mediaChange: false,
+        focusArea: [0, "none"]
     },
 
     actions:{
@@ -113,6 +114,10 @@ export default {
             });
         },
 
+        setFocusArea ({commit}, payload){
+            commit('setFocusArea', payload);
+        },
+
         mediaHasChanged({commit, getters}){
             commit('setMediaChange', !getters.mediaChange);
         },
@@ -168,8 +173,12 @@ export default {
             state.mediaChange = payload
         },
 
-        setProjectLoaded (payload){
+        setProjectLoaded (state, payload){
             state.projects[payload.projectId].projectLoaded = true;
+        },
+
+        setFocusArea (state, payload){
+            state.focusArea = payload.timelineArea;
         },
 
         setProjectsReady (state){
@@ -226,7 +235,11 @@ export default {
         },
 
         projectsReady (state) {
-            return state.projectsReady
+            return state.projectsReady;
+        },
+
+        focusArea (state) {
+            return state.focusArea;
         },
 
         mediaChange (state) {
