@@ -51,12 +51,19 @@ export default {
     props: ['projectName'],
 
     computed: {
+        
         timeSliderTime (){
             return this.$store.getters.sliderTime(this.projectName);
         },
+
         zoomScale (){
             return this.$store.getters.zoomScale(this.projectName);
+        },
+
+        focusArea (){
+            return this.$store.getters.focusArea;
         }
+
     },
 
     methods: {
@@ -69,10 +76,19 @@ export default {
 
         importMedia() {
 
+            var loadedResource = function () {
+
+                this.$store.dispatch('setResources',{name: this.projectName,
+                resources: this.$vcomp.project(this.projectName).getAllResources()});
+
+                this.$router.push({ path: `/project/${this.projectName}`});
+
+            }.bind(this);
+
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
 
                 newMedia: {
-                    layerIndex: 0,
+                    layerIndex: this.focusArea[0],
                     size: [1280, 720],
                     timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
                     position: [0,0],
@@ -82,30 +98,26 @@ export default {
                 newResource: {
                     name: this.mediaURL,
                     resourceLink: this.mediaURL,
-                    resourceType: 'searching'
+                    resourceType: 'searching',
+                    loadedResource: loadedResource
                 }
 
             });
 
-            console.log(mediaMeta);
-
             this.$vcomp.project(this.projectName)
             .adjustMediaShift({
-                    layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
-                },{
-                    layerIndex: 0,
-                    timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
+                layerIndex: this.focusArea[0], mediaIndex: mediaMeta.mediaIndex
+            },{
+                layerIndex: 0,
+                timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
-            
-            this.$store.dispatch('setResources',{name: this.projectName,
-            resources: this.$vcomp.project(this.projectName).getAllResources()});
 
             this.$store.dispatch('setMedia',{name: this.projectName,
             media: this.$vcomp.project(this.projectName).getAllMedia()});
 
             this.$vcomp.project(this.projectName).log();
 
-            this.$router.push({ path: `/project/${this.projectName}`});
+            console.log(mediaMeta);
 
         }
 

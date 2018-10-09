@@ -72,7 +72,6 @@ export default {
 
         focusArea (){
             let focusArea = this.$store.getters.focusArea;
-            console.log(focusArea);
             return focusArea[0] == this.layerIndex && focusArea[1] == this.mediaIndex;
         }
         
@@ -82,7 +81,11 @@ export default {
         
         //TODO: disable drag media when playing
         var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        this.dragMotion = new MotionEvents().enableDrag(media, this.$refs.media, this.$refs.mediaContainer, function(top, left){
+        this.dragMotion = new MotionEvents()
+        .enableDrag(media, this.$refs.media, this.$refs.mediaContainer,
+        function(){this.selectArea();}.bind(this),
+
+        function(top, left){
             
             var nextLayerPixels = 60;
             var newLayerIndex = Math.sign((top/nextLayerPixels)) * 
@@ -96,7 +99,7 @@ export default {
                     timelineStartTime: (left/this.zoomScale)
             });
 
-            if(newLayerIndex == 0) this.selectArea();
+            if(newLayerIndex != 0) this.deselectArea();
 
         }.bind(this));
         

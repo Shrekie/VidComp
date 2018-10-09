@@ -56,13 +56,15 @@ export default function () {
                 video.muted = true;
 
                     video.onloadeddata = function() {
+
                         if(hasAudio(video)){
                             var audio = document.createElement("audio");
                             audio.src = media.resource.url;
                             store.sources.push(new Cast(media, audio, 'audio-throw'));
                         }
+                        
                     };
-
+                    
                 store.sources.push(new Cast(media, video, media.resource.type));
 
             }
@@ -118,6 +120,7 @@ export default function () {
 
         while (i--) {
             if( store.sources[i].media.resource.name == resource.name ){
+                store.sources[i].status = "deleting";
                 decastMedia(store.sources[i]);
                 if(store.sources[i].type.includes("throw") == false ) castMedia(store.sources[i].media);
                 console.log(store.sources[i]);

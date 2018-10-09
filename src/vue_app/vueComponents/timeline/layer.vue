@@ -4,7 +4,7 @@
 
 <template>
 <div class="layerContainer" v-bind:style="{width:`${layerWidth}px`}"
-@click="selectArea(layerIndex)" v-bind:class="{selectedLayer: focusArea}">
+@click="selectArea()" v-bind:class="{selectedLayer: focusArea}">
 
     <Media ref="mediaElements" v-bind:media-index="media.mediaIndex"
     v-bind:layer-index="layerIndex" 
@@ -77,7 +77,7 @@ export default {
 
         },
 
-        selectArea(layerIndex) {
+        selectArea() {
             this.$store.dispatch('setFocusArea', {timelineArea: [this.layerIndex, "none"]});
         } 
 

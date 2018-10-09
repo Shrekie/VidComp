@@ -84,7 +84,7 @@ export default {
                     layers: this.$vcomp.project(this.projectName).getAllLayers()
                 };
 
-                console.log("MEDIASHIFT");
+                console.log('%c MEDIASHIFT CONTEXT ', 'background: #222; color: #bada55');
 
                 // log
                 this.$vcomp.project(this.projectName).log();

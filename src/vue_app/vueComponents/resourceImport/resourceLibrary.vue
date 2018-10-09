@@ -103,11 +103,17 @@ export default {
         timeSliderTime (){
             return this.$store.getters.sliderTime(this.projectName);
         },
+
         zoomScale (){
             return this.$store.getters.zoomScale(this.projectName);
         },
+
         allResources (){
             return this.$store.getters.resources(this.projectName);
+        },
+
+        focusArea (){
+            return this.$store.getters.focusArea;
         }
 
     },
@@ -133,7 +139,7 @@ export default {
 
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
                 newMedia: {
-                    layerIndex: 0,
+                    layerIndex: this.focusArea[0],
                     size: [1280, 720],
                     timelineTime: [((this.timeSliderTime/this.zoomScale) - 0.05), ( (this.timeSliderTime/this.zoomScale) + 0.05 )],
                     position: [0, 0],
@@ -146,7 +152,7 @@ export default {
 
             this.$vcomp.project(this.projectName)
             .adjustMediaShift({
-                    layerIndex: 0, mediaIndex: mediaMeta.mediaIndex
+                    layerIndex: this.focusArea[0], mediaIndex: mediaMeta.mediaIndex
                 },{
                     layerIndex: 0,
                     timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)

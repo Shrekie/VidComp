@@ -188,7 +188,7 @@ export default function () {
 
             if( (loadingBuffer == false) && timeTracker.isPlaying ){
                 animationFrame = requestAnimationFrame(function () { 
-                    videoUpdate(sourceLoader, videoOutput, contextHooks, mediaDrawer) }.bind(this));
+                videoUpdate(sourceLoader, videoOutput, contextHooks, mediaDrawer) }.bind(this));
             }
 
 
@@ -206,6 +206,7 @@ export default function () {
 
             })
             .catch(error => {
+
                 console.log(error);
 
             });

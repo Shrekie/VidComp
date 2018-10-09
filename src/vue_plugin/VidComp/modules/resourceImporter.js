@@ -8,7 +8,7 @@ export default function () {
 
     var blobAnalyzer = new BlobAnalyzer();
 
-    const proxyurl = "https://cors-anywhere.herokuapp.com/"; // TODO: make my own proxys
+    const proxyurl = ""; // TODO: make my own proxy https://cors-anywhere.herokuapp.com/
     
     var fetchResource = function (resourceLink) {
         return fetch(proxyurl + resourceLink)
@@ -49,6 +49,7 @@ export default function () {
                         resource.url = URL.createObjectURL(blob);
                         resource.type = fileType;
                         sourceLoader.loadSelectedResource(resource);
+                        if(newResource.loadedResource) newResource.loadedResource(); //TODO: promise structure
                     }
 
                 });

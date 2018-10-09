@@ -33,6 +33,8 @@ function MediaShift() {
         // predicted amount performed shift media has shifted
         var predictedLength = 0;
 
+        console.log('%c CASCADING SHIFT ', 'background: #222; color: #bada55');
+
         if(direction == "forwards"){
 
             predictedLength = targetMedia.timelineTime[1] + shiftPos;
@@ -72,6 +74,8 @@ function MediaShift() {
             
 
         }
+
+        console.log('%c ------- ', 'background: #222; color: #bada55');
 
     }
 

@@ -4,7 +4,7 @@ var MotionEvents = function () {
     var holdNonSwipeTouch = function (triggerElement, dragMouseDown){
 
         var touchduration = 500;
-        var swipestrength = 10;
+        var swipestrength = 30;
         var preventDefault = false;
         var timer;
         var startX;
@@ -27,11 +27,11 @@ var MotionEvents = function () {
 
         triggerElement.ontouchend = function(e) {
 
+            e.preventDefault();
+
             if (timer) {
                 clearTimeout(timer);
             }
-
-            return true;
 
         }
 
@@ -73,10 +73,13 @@ var MotionEvents = function () {
 
     };
 
-    var enableDrag = function (media, triggerElement, dragElement, onDragClose) {
+    var enableDrag = function (media, triggerElement, dragElement, onDragBegin, onDragClose) {
 
         var dragMouseDown = function(e) {
             cursorHandler(e, function(e){
+
+                this.onDragBegin();
+
                 MotionEvents.prototype.
                 snapCalculation(this.media, this.dragElement);
                 // get the mouse cursor position at startup:
@@ -153,6 +156,7 @@ var MotionEvents = function () {
 
         this.media = media;
         this.onDragClose = onDragClose;
+        this.onDragBegin = onDragBegin;
         this.dragElement = dragElement;
         this.triggerElement = triggerElement;
         this.pos1 = 0, this.pos2 = 0, 
@@ -204,7 +208,6 @@ var MotionEvents = function () {
         }.bind(this);
 
         var elementResize = function(e){
-            console.log(e);
             cursorHandler(e, function(e){
 
                 this.pos1 = this.pos3 - e.clientX;
