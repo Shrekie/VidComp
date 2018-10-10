@@ -132,6 +132,12 @@ export default function () {
 
     };
 
+    this.deleteSourceMedia = function (layerIndex, mediaIndex){
+        store.sources.splice(store.sources.findIndex(source => 
+            source.media.layerIndex == layerIndex && 
+            source.media.mediaIndex == mediaIndex ), 1);
+    };
+
     this.getEndTime = function () {
         return Math.max.apply(Math, store.sources.map(function(source) { return source.media.timelineTime[1]; }));
     };

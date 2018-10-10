@@ -40,6 +40,7 @@ export default {
             return new Promise((resolve, reject) => {
 
                 var newProject = {
+
                     name: payload.name,
                     timeSliderTime: 0,
                     zoomScale: 1000,
@@ -48,7 +49,7 @@ export default {
                     }],
                     media: [],
                     resources: []
-
+                    
                 }
     
                 Appapi.setProject(newProject, (response) => {

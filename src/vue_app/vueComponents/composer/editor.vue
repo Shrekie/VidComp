@@ -43,11 +43,17 @@
 		<router-view>
 
 		</router-view>
-
+		<!--#TODO: put into own component-->
 		<v-card flat>
+
 			<v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
 				<v-icon>mdi-plus-circle</v-icon>
 			</v-btn>
+
+			<v-btn icon v-if="this.selectedMenu" @click="deleteLayerMedia">
+				<v-icon>mdi-delete</v-icon>
+			</v-btn>
+
 		</v-card>
 
 	</v-flex>
@@ -74,15 +80,26 @@ export default {
 	},
 
 	computed:{
+
         zoomScale (){
             return this.$store.getters.zoomScale(this.projectName);
-        }
+		},
+
+		selectedMenu (){
+			return this.focusArea[1] != "none";
+		},
+
+		focusArea (){
+            return this.$store.getters.focusArea;
+		}
+		
 	},
 	
 	methods: {
 
 		logRestoreSave(){
 
+			//FIXME: just call mediashift context on logger?
 			this.$store.dispatch('setLayersAndMedia',{name: this.projectName,
 			media: this.$vcomp.project(this.projectName).getAllMedia(),
 			layers: this.$vcomp.project(this.projectName).getAllLayers()});
@@ -102,6 +119,18 @@ export default {
 			this.$vcomp.project(this.projectName).redo();
 			this.logRestoreSave();
 
+		},
+
+		deleteLayerMedia(){
+
+			let newLayerFocus = this.focusArea[0];
+
+			let deletedLayer = this.$vcomp.project(this.projectName)
+			.deleteLayerMedia(this.focusArea[0], this.focusArea[1]);
+			if(deletedLayer) newLayerFocus-=1;
+
+            this.$store.dispatch('setFocusArea', {timelineArea: [newLayerFocus, "none"]});
+ 
 		},
 		
 		importVideo () {

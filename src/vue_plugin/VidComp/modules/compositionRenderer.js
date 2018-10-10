@@ -150,7 +150,7 @@ export default  function () {
             source.cast.muted = true;
         });
 
-        videoProjection.setTimeDelay(0.3333);
+        videoProjection.setTimeDelay(0.333);
 
         videoProjection.resetPlayer(sourceLoader);
 
@@ -192,6 +192,7 @@ export default  function () {
             /*
                 #FIXME: only video trims end of video.
                 (1): add artifical audio layer
+                (2): vp9 opus without encoding
             */
 
             if(!renderVideo){

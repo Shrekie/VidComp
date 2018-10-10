@@ -208,6 +208,10 @@ export default function () {
             .catch(error => {
 
                 console.log(error);
+                sourceLoader.eachSource.forEach(function(source){
+                    source.status = "ready";
+                });
+                mediaDrawer.stopDrawSources(sourceLoader);
 
             });
 

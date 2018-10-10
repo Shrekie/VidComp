@@ -60,6 +60,24 @@ export default function () {
 
     }
 
+    this.deleteLayerMedia = function(layerIndex, mediaIndex, sourceLoader){
+
+        let layerDeleted = false;
+        let mediaLayer = this.getLayer(layerIndex)
+        sourceLoader.deleteSourceMedia(layerIndex, mediaIndex);
+        mediaLayer.deleteMedia(mediaIndex);
+
+        if(!mediaLayer.getAllMedia().length > 0 && layerIndex != 0){
+            this.deleteLayer(layerIndex);
+            layerDeleted = true;
+        }
+
+        this.contextHooks.runContextHooks({name:'mediaShift'});
+
+        return layerDeleted;
+
+    };
+
     this.adjustMediaTimeShift = function(direction, layerIndex, mediaIndex, timelineTime){
         
         var changedMedia = this.getLayer(layerIndex).getMedia(mediaIndex);

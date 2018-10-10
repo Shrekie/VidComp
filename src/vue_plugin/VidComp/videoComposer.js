@@ -191,6 +191,10 @@ export default function () {
         return timeline.getLayer(layerIndex).getMedia(mediaIndex);
     }
 
+    this.deleteLayerMedia = function(layerIndex, mediaIndex){
+        return timeline.deleteLayerMedia(layerIndex, mediaIndex, sourceLoader);
+    }
+
     this.stop = function () {
         videoProjection.stopPlaying(sourceLoader);
     };
