@@ -109,7 +109,9 @@ export default function () {
 
     }
 
-    this.eachSource = store.sources;
+    this.eachSource = function (){
+        return store.sources;
+    }
 
     this.loadSelectedResource = function (resource) {
 
@@ -132,9 +134,21 @@ export default function () {
     };
 
     this.deleteSourceMedia = function (layerIndex, mediaIndex){
-        store.sources.splice(store.sources.findIndex(source => 
-            source.media.layerIndex == layerIndex && 
-            source.media.mediaIndex == mediaIndex ), 1);
+
+        let mediaToDecast = store.sources.filter(function(source) {
+            return source.media.layerIndex == layerIndex && 
+            source.media.mediaIndex == mediaIndex;
+        });
+
+        store.sources = store.sources.filter(function(source) {
+            return source.media.layerIndex != layerIndex || 
+            source.media.mediaIndex != mediaIndex;
+        });
+
+        mediaToDecast.forEach(function(source){
+            decastMedia(source);
+        });
+
     };
 
     this.getEndTime = function () {

@@ -55,7 +55,7 @@ export default function () {
         loadingBuffer = false;
         playStateFlag = [false, false];
 
-        sourceLoader.eachSource.forEach(function(source){
+        sourceLoader.eachSource().forEach(function(source){
 
             if(source.type == 'video' || source.type.includes('audio')){
 
@@ -93,7 +93,7 @@ export default function () {
         var frameElapsed = timeTracker.elapsed;
         let playBus = [];
 
-        sourceLoader.eachSource.forEach(function(source){
+        sourceLoader.eachSource().forEach(function(source){
 
             let elapsed = frameElapsed;
             if(source.type.includes('audio')!=true) elapsed *= timeTracker.timeDelay;
@@ -114,20 +114,17 @@ export default function () {
 
                         // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                         if(source.cast.paused){
-                            console.log(source.media.videoStartTime);
+
                             // if paused, shift currentTime to correct pos
                             let currentTime = 
                             Math.floor((source.media.videoStartTime + 
                             (timeTracker.convertTimeInteger(elapsed) - 
                             timeTracker.convertTimeInteger(source.media.timelineTime[0])))*100)/100
 
-                            console.log(currentTime);
 
                             // relative repeating of course
                             currentTime = ((currentTime/source.cast.duration)
                             -(Math.ceil(currentTime/source.cast.duration)-1)) * source.cast.duration;
-
-                            console.log( Math.floor(currentTime * 1e2 ) / 1e2);
 
                             source.cast.currentTime = Math.floor(currentTime * 1e2 ) / 1e2;
                             
@@ -166,9 +163,9 @@ export default function () {
 
             loadingBuffer = false;
 
-            for(var i = 0; i < sourceLoader.eachSource.length; i++) {
+            for(var i = 0; i < sourceLoader.eachSource().length; i++) {
 
-                if (sourceLoader.eachSource[i].status == "staging") {
+                if (sourceLoader.eachSource()[i].status == "staging") {
                     
                     timeTracker.forgetTime = true;
                     loadingBuffer = true;
@@ -218,7 +215,7 @@ export default function () {
             .catch(error => {
 
                 console.log(error);
-                sourceLoader.eachSource.forEach(function(source){
+                sourceLoader.eachSource().forEach(function(source){
                     source.status = "ready";
                 });
                 mediaDrawer.stopDrawSources(sourceLoader);
