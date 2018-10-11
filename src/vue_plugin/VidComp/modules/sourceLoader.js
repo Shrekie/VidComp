@@ -76,8 +76,7 @@ export default function () {
 
     var decastMedia = function (source) {
 
-        // hey gc get these pls
-        // seems to be working nicely
+        // burn
         if(source.type.includes('video')){
             source.cast.pause();
             source.cast.src = '';

@@ -114,12 +114,19 @@ export default function () {
 
                         // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                         if(source.cast.paused){
-                            // if paused, shift currentTime to correct pos
 
-                            source.cast.currentTime = 
+                            // if paused, shift currentTime to correct pos
+                            let currentTime = 
                             (timeTracker.convertTimeInteger(source.media.videoStartTime) + 
                             (timeTracker.convertTimeInteger(elapsed) - 
                             timeTracker.convertTimeInteger(source.media.timelineTime[0]))).toFixed(2);
+
+                            // relative repeating of course
+                            currentTime = ((currentTime/source.cast.duration)
+                            -(Math.ceil(currentTime/source.cast.duration)-1)) 
+                            * source.cast.duration;
+
+                            source.cast.currentTime = currentTime;
                             
                             playBus.push(source);
 
