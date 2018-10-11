@@ -1,6 +1,3 @@
-import timeline from "./timeline";
-
-// could implement like polymorphic shifting types based on how user wants shift to work
 function MediaShift() {
 
     var formatTimelineValue = function(targetMedia){
@@ -98,7 +95,7 @@ function MediaShift() {
 
     };
 
-    var shiftTimeMedia = function(affectedLayerMedia, direction, targetMedia, timelineTime){
+    var shiftTimeMedia = function(affectedLayerMedia, direction, targetMedia, timelineTime, sourceLoader){
 
         //TODO: bind this tighter with shiftMedia
         /*
@@ -113,7 +110,8 @@ function MediaShift() {
         }else{
             shiftPos =  targetMedia.timelineTime[0] - timelineTime;
         }
-        console.log("DRAG SHIFTPOS: " + shiftPos);
+        
+        if(direction!="forwards") moveStartTime(shiftPos, targetMedia, sourceLoader);
         checkCascade(affectedLayerMedia, direction, targetMedia, shiftPos);
 
         if(direction=="forwards"){
@@ -288,6 +286,15 @@ function MediaShift() {
 
     }
 
+    var moveStartTime = function (shiftPos, media, sourceLoader){
+        let mediaCast = sourceLoader.getMediaCast(media);
+        if(mediaCast){
+            let newStartTime = media.videoStartTime - (shiftPos*100);
+            media.videoStartTime = Math.floor((((newStartTime/mediaCast.duration)
+            - (Math.ceil(newStartTime/mediaCast.duration)-1)) * mediaCast.duration )* 1e2) / 1e2;
+        }
+    }
+
     var negativePush = function(affectedLayerMedia, targetMedia){
         // adjust media if they were negatively positioned
         
@@ -326,6 +333,7 @@ function MediaShift() {
         }
 
         */
+
         affectedLayerMedia.forEach(function(media){
             console.log(media);
             media.timelineTime[0] = media.timelineTime[0] + shiftPos;

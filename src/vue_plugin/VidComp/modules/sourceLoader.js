@@ -153,13 +153,17 @@ export default function () {
         return store.sources.filter(source => source.type.includes("audio"));
     };
 
+    this.getMediaCast = function (media) {
+        return store.sources.find(source => source.media === media ).cast;
+    }
+
     this.loadMedia = function (media) {
         castMedia(media);
         this.sortMediaLayers();
     };
 
     this.clearSources = function () {
-        store.sources.splice(0,store.sources.length)
+        store.sources.splice(0, store.sources.length)
     }
 
 };

@@ -78,7 +78,7 @@ export default function () {
 
     };
 
-    this.adjustMediaTimeShift = function(direction, layerIndex, mediaIndex, timelineTime){
+    this.adjustMediaTimeShift = function(direction, layerIndex, mediaIndex, timelineTime, sourceLoader){
         
         var changedMedia = this.getLayer(layerIndex).getMedia(mediaIndex);
         var affectedLayerMedia = this.getLayer(layerIndex).getAllMedia();
@@ -86,7 +86,7 @@ export default function () {
         if(direction == "forwards"){
             mediaShift.shiftTimeMedia(affectedLayerMedia, direction, changedMedia, timelineTime);
         }else{
-            mediaShift.shiftTimeMedia(affectedLayerMedia, direction, changedMedia, timelineTime);
+            mediaShift.shiftTimeMedia(affectedLayerMedia, direction, changedMedia, timelineTime, sourceLoader);
         }
 
         this.contextHooks.runContextHooks({name:'mediaShift'});

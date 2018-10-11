@@ -103,7 +103,7 @@ export default function () {
     };
 
     this.adjustMediaTimeShift = function (direction, layerIndex, mediaIndex, timelineTime) {
-        timeline.adjustMediaTimeShift(direction, layerIndex, mediaIndex, timelineTime);
+        timeline.adjustMediaTimeShift(direction, layerIndex, mediaIndex, timelineTime, sourceLoader);
     }
 
     this.adjustMediaShift = function (currentTimelinePos, newTimelinePos) {
