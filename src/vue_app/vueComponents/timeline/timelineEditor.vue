@@ -159,10 +159,12 @@ export default {
                     var startTime = (this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000);
                     context.timeTracker.elapsedDateTime = startTime;
                     // FIXME: will probably not use scrollbars so fix these
+                    this.playing = true;
                     this.$refs.timeline.style.overflow = "hidden";
                 }
 
                 if(context.action == 'stop'){
+                    this.playing = false;
                     this.$refs.timeline.style.overflow = "overlay";
                 }
 
@@ -194,7 +196,15 @@ export default {
 
             // update stored scollLeft value on scroll
             this.$refs.timeline.onscroll = function(event){
-                this.$store.dispatch('setSliderTime', {name: this.projectName, timeSliderTime: this.$refs.timeline.scrollLeft});
+
+                this.$store.dispatch('setSliderTime', 
+                {name: this.projectName, timeSliderTime: this.$refs.timeline.scrollLeft});
+                
+                if(!this.playing){
+                    this.$vcomp.project(this.projectName)
+                    .scrubVideo((this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000));
+                }
+                 
             }.bind(this)
 
 

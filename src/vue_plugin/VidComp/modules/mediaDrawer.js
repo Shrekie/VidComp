@@ -2,48 +2,9 @@
 
 import ContextHooks from './contextHooks.js';
 
-export default function () {
+export default function (timeTracker) {
 
-    // TODO: move 'TimeTracker' to own file
-    var TimeTracker = function () {
-
-        var startTime = 0;
-        var nowTime = 0;
-        this.timeDelay = 1;
-        this.elapsed = 0;
-        this.elapsedDateTime = 0;
-        this.forgetTime = false;
-        this.isPlaying = false;
-        
-        this.trackTime = function () {
-            nowTime = performance.now();
-            if(this.forgetTime) {this.startTime(); this.forgetTime = false;}
-            this.elapsedDateTime = (nowTime - startTime);
-            this.elapsed = (this.elapsedDateTime);
-            this.elapsed = (this.elapsed/100000);
-        };
-
-        this.resetTime = function () {
-            this.elapsedDateTime = 0;
-        };
-
-        this.startTime = function(){
-            startTime = (performance.now() - (this.elapsedDateTime));
-        }
-
-        this.convertTimeInteger = function (time) {
-            var Newtime = time*100;
-            return parseFloat(Newtime);
-        }
-
-        this.setTimeDelay = function(time){
-            this.timeDelay = time;
-            console.log(time);
-        }
-
-    };
-
-    var timeTracker = new TimeTracker();
+    var timeTracker = timeTracker
     this.contextHooks = new ContextHooks({timeTracker});
     var animationFrame = {};
     var endTime = 0;
@@ -110,7 +71,6 @@ export default function () {
                 if(source.type == 'video' || source.type.includes('audio')){
 
                     if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
-                    
 
                         // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                         if(source.cast.paused){
@@ -155,8 +115,11 @@ export default function () {
                         }
 
                     }
+
                 }
+
             }
+
         });
 
         var bufferCheck = function(){
@@ -267,7 +230,7 @@ export default function () {
             timeTracker.isPlaying = true;
             endTime = sourceLoader.getEndTime();
             animationFrame = requestAnimationFrame(function () { 
-                videoUpdate(sourceLoader, videoOutput, this.contextHooks, this) }.bind(this));
+            videoUpdate(sourceLoader, videoOutput, this.contextHooks, this) }.bind(this));
             timeTracker.startTime();
 
         }

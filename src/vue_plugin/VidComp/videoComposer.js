@@ -207,6 +207,10 @@ export default function () {
         videoProjection.resetPlayer(sourceLoader);
     };
 
+    this.scrubVideo = function (elapsedDateTime){
+        videoProjection.scrubVideo(elapsedDateTime, sourceLoader);
+    }
+
 };
 
 /*
