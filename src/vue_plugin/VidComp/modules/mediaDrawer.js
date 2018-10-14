@@ -8,6 +8,9 @@ export default function (timeTracker) {
     this.contextHooks = new ContextHooks({timeTracker});
     var animationFrame = {};
     var endTime = 0;
+    var frameElapsed = 0;
+    var playBus = [];
+    var drawBus = [];
     var loadingBuffer = false;
     var playStateFlag = [false, false]; // flag for endTime and bufferInterrupt
 
@@ -16,43 +19,23 @@ export default function (timeTracker) {
         loadingBuffer = false;
         playStateFlag = [false, false];
 
-        sourceLoader.eachSource().forEach(function(source){
-
-            if(source.type == 'video' || source.type.includes('audio')){
-
-                if(!source.cast.paused){
-
-                    // pause videos
-                    if(source.cast.status == "staging"){
-
-                        source.cast.playPromise.then(_ => {
-                            source.cast.pause();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-
-                    }else{
-
-                        source.cast.pause();
-
-                    }
-
+        Promise.all(playBus).then().then().then(function(sources) {
+            sourceLoader.eachSource().forEach(function(source){
+                if(source.type == 'video' || source.type.includes('audio')){
+                    source.cast.pause();
                 }
-
-            }
-
+            });
         });
 
     };
 
     var videoUpdate = function (sourceLoader, videoOutput, contextHooks, mediaDrawer) {
 
-        videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
         timeTracker.trackTime();
-
-        var frameElapsed = timeTracker.elapsed;
-        let playBus = [];
+        timeTracker.forgetTime = false;
+        frameElapsed = timeTracker.elapsed;
+        playBus = [];
+        drawBus = [];
 
         sourceLoader.eachSource().forEach(function(source){
 
@@ -63,8 +46,7 @@ export default function (timeTracker) {
 
                 if(source.type == 'image'){
                     if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
-                        videoOutput.ctx.drawImage(source.cast, source.media.position[0], source.media.position[1],
-                        source.media.size[0], source.media.size[1]);
+                        drawBus.push(source);
                     }
                 }
 
@@ -74,27 +56,10 @@ export default function (timeTracker) {
 
                         // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
                         if(source.cast.paused){
-
-                            // if paused, shift currentTime to correct pos
-                            let currentTime = 
-                            Math.floor((source.media.videoStartTime + 
-                            (timeTracker.convertTimeInteger(elapsed) - 
-                            timeTracker.convertTimeInteger(source.media.timelineTime[0])))*100)/100
-
-
-                            // relative repeating of course
-                            currentTime = ((currentTime/source.cast.duration)
-                            -(Math.ceil(currentTime/source.cast.duration)-1)) * source.cast.duration;
-
-                            source.cast.currentTime = Math.floor(currentTime * 1e2 ) / 1e2;
-                            
-                            playBus.push(source);
-
+                            loadingBuffer = true;
                         } 
 
-                        if(source.type == 'video'){videoOutput.ctx.drawImage(source.cast, 
-                        source.media.position[0], source.media.position[1],
-                        source.media.size[0], source.media.size[1]);}
+                        drawBus.push(source);
 
                     }else if(!source.cast.paused){
 
@@ -122,73 +87,175 @@ export default function (timeTracker) {
 
         });
 
-        var bufferCheck = function(){
 
-            loadingBuffer = false;
+        // buffer hooks
+        
+        if(loadingBuffer != playStateFlag[0]){
+            contextHooks.runContextHooks({name: 'bufferInterrupt', status:loadingBuffer});
+            playStateFlag[0] = loadingBuffer;
+        }
 
-            for(var i = 0; i < sourceLoader.eachSource().length; i++) {
+        if( timeTracker.convertTimeInteger(timeTracker.elapsed) > 
+            timeTracker.convertTimeInteger(endTime) && playStateFlag[1] == false ){
+            contextHooks.runContextHooks({name: 'finished', status:"normal"});
+            playStateFlag[1] = true;
+        }
 
-                if (sourceLoader.eachSource()[i].status == "staging") {
-                    
-                    timeTracker.forgetTime = true;
-                    loadingBuffer = true;
-                    break;
-                    
+        if( timeTracker.convertTimeInteger(timeTracker.elapsed) > 
+            timeTracker.convertTimeInteger(endTime/timeTracker.timeDelay) && playStateFlag[1] == true){
+            contextHooks.runContextHooks({name: 'finished', status:"delayed"});
+            mediaDrawer.stopDrawSources(sourceLoader);
+        }
+
+        if(loadingBuffer){
+
+            drawBus.forEach(function(source){
+
+                if(source.type == 'video' || source.type.includes('audio')){
+
+                if(!source.cast.paused){
+
+                    if(source.status == "staging"){
+
+                        source.cast.playPromise.then().then(_ => {
+                            source.cast.pause();
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
+                    }else{
+
+                        source.cast.pause();
+
+                    }
+
                 }
 
-            }
+                source.status = "staging";
 
-            // buffer hooks
-            if(loadingBuffer != playStateFlag[0]){
-                contextHooks.runContextHooks({name: 'bufferInterrupt', status:loadingBuffer});
-                playStateFlag[0] = loadingBuffer;
-            }
+                let elapsed = frameElapsed;
+                if(source.type.includes('audio')!=true) elapsed *= timeTracker.timeDelay;
+                
+                // if paused, shift currentTime to correct pos
+                let currentTime = 
+                Math.floor((source.media.videoStartTime + 
+                (timeTracker.convertTimeInteger(elapsed) - 
+                timeTracker.convertTimeInteger(source.media.timelineTime[0])))*100)/100
+        
+        
+                // relative repeating of course
+                currentTime = ((currentTime/source.cast.duration)
+                -(Math.ceil(currentTime/source.cast.duration)-1)) * source.cast.duration;
+                
+                source.cast.currentTime = Math.floor(currentTime * 1e2 ) / 1e2;
+        
+                loadingBuffer = true;
 
-            if( timeTracker.convertTimeInteger(timeTracker.elapsed) > 
-                timeTracker.convertTimeInteger(endTime) && playStateFlag[1] == false ){
-                contextHooks.runContextHooks({name: 'finished', status:"normal"});
-                playStateFlag[1] = true;
-            }
+                source.cast.playPromise = new Promise(resolve => {
+                    source.cast.oncanplaythrough = function() {
+                        resolve(source);
+                        source.cast.oncanplay = null;
+                    };
+                });
 
-            if( timeTracker.convertTimeInteger(timeTracker.elapsed) > 
-                timeTracker.convertTimeInteger(endTime/timeTracker.timeDelay) && playStateFlag[1] == true){
-                contextHooks.runContextHooks({name: 'finished', status:"delayed"});
-                mediaDrawer.stopDrawSources(sourceLoader);
-            }
+                playBus.push(source.cast.playPromise);
 
-            if( (loadingBuffer == false) && timeTracker.isPlaying ){
+                } 
+
+            });
+        }
+
+
+        var tickFrame = function(){
+
+            if( !loadingBuffer && timeTracker.isPlaying ){
+
+                drawBus.forEach(function(source){
+                    if(!source.type.includes('audio')){
+                        videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
+                        videoOutput.ctx.drawImage(source.cast, 
+                        source.media.position[0], source.media.position[1],
+                        source.media.size[0], source.media.size[1]);
+                    }
+                });
+
                 animationFrame = requestAnimationFrame(function () { 
                 videoUpdate(sourceLoader, videoOutput, contextHooks, mediaDrawer) }.bind(this));
-            }
 
+            }
 
         }
 
-        playBus.forEach(function(playSource){
+        if(playBus.length > 0){
+            
+        Promise.all(playBus).then(function(sources) {
 
-            playSource.cast.playPromise = playSource.cast.play();
-            playSource.status = "staging";
+            let playStarted = [];
 
-            playSource.cast.playPromise.then(_ => {
+            sources.forEach(function(source){  
 
-                playSource.status = "ready";
-                bufferCheck();
+                playStarted.push(new Promise(resolve => {
 
-            })
-            .catch(error => {
+                    if(!source.type.includes('image')){
 
-                console.log(error);
-                sourceLoader.eachSource().forEach(function(source){
-                    source.status = "ready";
-                });
-                mediaDrawer.stopDrawSources(sourceLoader);
+                        source.cast.playPromise = source.cast.play();
+                        source.cast.playPromise.then(_ => {
+                            
+                            source.status = "ready";
+                            source.cast.playPromise = null;
+                            resolve(source);
+            
+                        })
+                        .catch(error => {
+            
+                            console.log(error);
+                            sourceLoader.eachSource().forEach(function(source){
+                                source.status = "ready";
+                                source.cast.playPromise = null;
+                            });
+                            mediaDrawer.stopDrawSources(sourceLoader);
+                            resolve(source);
 
+                        });
+
+                    }else{
+
+                        source.status = "ready";
+                        resolve(source);
+                        
+                    }
+
+                }));
+
+            });
+
+            return playStarted;
+
+        }).then(function(playStarted){
+
+            Promise.all(playStarted).then(function(sources) {
+                loadingBuffer = false;
+                timeTracker.forgetTime = true;
+                tickFrame();
             });
 
         });
 
-        bufferCheck();
+        }else if (drawBus.length > 0) {
+
+            tickFrame();
+
+        } else {
+
+            // no drawing or playing, just clear screen.
+            videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
+            tickFrame();
+
+        }
+
         contextHooks.runContextHooks({name: 'drawingUpdate', timeTracker});
+
     };
 
     this.stopDrawSources = function (sourceLoader) {

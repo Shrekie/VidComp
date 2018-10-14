@@ -41,7 +41,7 @@ export default function (timeTracker) {
                     
                     scrubBus.push(
                     new Promise(resolve => {
-                        source.cast.ontimeupdate = function() {
+                        source.cast.oncanplay = function() {
                             resolve(source);
                             source.cast.ontimeupdate = null;
                         };
@@ -58,11 +58,14 @@ export default function (timeTracker) {
         Promise.all(scrubBus).then(function(sources) {
 
             sources.forEach(function(source){
+                console.log("DRAWING SCRUB");
                 videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
                 videoOutput.ctx.drawImage(source.cast, 
                 source.media.position[0], source.media.position[1],
                 source.media.size[0], source.media.size[1])
             });
+
+            if(sources.length <= 0) videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
 
         });
 

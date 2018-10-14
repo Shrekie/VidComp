@@ -55,17 +55,22 @@ export default function () {
                 video.src = media.resource.url;
                 video.muted = true;
 
-                    video.onloadeddata = function() {
+                    video.oncanplay = function() {
 
                         if(hasAudio(video)){
                             var audio = document.createElement("audio");
                             audio.src = media.resource.url;
-                            store.sources.push(new Cast(media, audio, 'audio-throw'));
+                            audio.oncanplay = function(){
+                                store.sources.push(new Cast(media, audio, 'audio-throw'));
+                                audio.oncanplay = null;
+                            }
                         }
                         
+                        store.sources.push(new Cast(media, video, media.resource.type));
+
+                        video.oncanplay = null;
+
                     };
-                    
-                store.sources.push(new Cast(media, video, media.resource.type));
 
             }
 
