@@ -10,7 +10,7 @@
 </template>
 <script>
 
-import MotionEvents from './../../library/dragResizeMotion/motionEvents.js';
+import DragResizeMedia from './../../library/dragResizeMotion/dragResizeMedia.js';
 
 export default {
     
@@ -51,7 +51,7 @@ export default {
     mounted: function () {
         
         var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        this.resizeMotion = new MotionEvents().enableResize(media, this.$refs.rimPoint, 
+        this.resizeMotion = new DragResizeMedia().enableResize(media, this.$refs.rimPoint, 
         this.elementToResize.mediaContainer, function(top, left){
             
             var direction = 0;

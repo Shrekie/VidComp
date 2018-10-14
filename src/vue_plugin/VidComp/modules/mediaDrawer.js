@@ -170,10 +170,11 @@ export default function (timeTracker) {
         var tickFrame = function(){
 
             if( !loadingBuffer && timeTracker.isPlaying ){
+                
+                videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
 
                 drawBus.forEach(function(source){
                     if(!source.type.includes('audio')){
-                        videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
                         videoOutput.ctx.drawImage(source.cast, 
                         source.media.position[0], source.media.position[1],
                         source.media.size[0], source.media.size[1]);

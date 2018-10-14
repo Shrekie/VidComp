@@ -9,8 +9,8 @@ import Logger from './modules/logger.js';
 
 export default function () {
 
-    var videoProjection = new VideoProjection();
     var timeline = new Timeline();
+    var videoProjection = new VideoProjection(timeline);
     var resourceImporter = new ResourceImporter();
     var sourceLoader = new SourceLoader();
     var logger = new Logger(this, timeline, sourceLoader);
@@ -209,6 +209,10 @@ export default function () {
 
     this.scrubVideo = function (elapsedDateTime){
         videoProjection.scrubVideo(elapsedDateTime, sourceLoader);
+    }
+
+    this.enableTransform = function (){
+        videoProjection.enableTransform(sourceLoader);
     }
 
 };

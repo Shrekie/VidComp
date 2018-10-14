@@ -23,7 +23,7 @@ v-bind:class="{selectedMedia: focusArea}">
 
 <script>
 
-import MotionEvents from './../../library/dragResizeMotion/motionEvents.js';
+import DragResizeMedia from './../../library/dragResizeMotion/dragResizeMedia.js';
 import RimDrag from './rimDrag.vue';
 
 export default {
@@ -81,7 +81,7 @@ export default {
         
         //TODO: disable drag media when playing
         var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        this.dragMotion = new MotionEvents()
+        this.dragMotion = new DragResizeMedia()
         .enableDrag(media, this.$refs.media, this.$refs.mediaContainer,
         function(){this.selectArea();}.bind(this),
 

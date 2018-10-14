@@ -2,7 +2,7 @@ export default function (timeTracker) {
 
     var timeTracker = timeTracker;
 
-    this.scrubVideo = function (elapsedDateTime, sourceLoader, videoOutput) {
+    this.scrubVideo = function (elapsedDateTime, sourceLoader, videoOutput, betweenFrames) {
 
         //TODO: make a draw/time helper utility
         timeTracker.elapsedDateTime = elapsedDateTime;
@@ -57,12 +57,15 @@ export default function (timeTracker) {
 
         Promise.all(scrubBus).then(function(sources) {
 
+            videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
+
             sources.forEach(function(source){
-                console.log("DRAWING SCRUB");
-                videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
+                
                 videoOutput.ctx.drawImage(source.cast, 
                 source.media.position[0], source.media.position[1],
                 source.media.size[0], source.media.size[1])
+                betweenFrames(source);
+
             });
 
             if(sources.length <= 0) videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);

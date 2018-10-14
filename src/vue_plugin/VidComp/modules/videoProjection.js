@@ -1,14 +1,19 @@
 import TimeTracker from './timeTracker.js';
 import MediaDrawer from './mediaDrawer.js';
 import InterfaceDrawer from './interfaceDrawer.js';
+import MediaTransform from './mediaTransform.js';
 import CompositionRenderer from './compositionRenderer.js';
 
-export default function () {
+export default function (timeline) {
 
     this.videoOutput = {};
     this.timeTracker = new TimeTracker();
+
     this.mediaDrawer = new MediaDrawer(this.timeTracker);
     this.interfaceDrawer = new InterfaceDrawer(this.timeTracker);
+    this.mediaTransform = new MediaTransform(this.timeTracker,
+        this.interfaceDrawer, timeline);
+
     this.compositionRenderer = new CompositionRenderer();
 
     this.setTarget = function (canvas) {
@@ -31,8 +36,12 @@ export default function () {
         return this.compositionRenderer.render(sourceLoader, this.videoOutput, this);
     }
 
-    this.scrubVideo = function(elapsedDateTime, sourceLoader){
-        this.interfaceDrawer.scrubVideo(elapsedDateTime, sourceLoader, this.videoOutput);
+    this.enableTransform = function(sourceLoader){
+        this.mediaTransform.enableTransform(this.videoOutput, sourceLoader);
+    }
+
+    this.scrubVideo = function(elapsedDateTime){
+        this.mediaTransform.transformScrub(elapsedDateTime);
     }
 
     this.setTimeDelay = function (time) {

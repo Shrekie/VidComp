@@ -137,7 +137,13 @@ export default {
 			console.log("import media");
 		}
 
-	}
+	},
+
+	mounted: function () {
+
+		this.$vcomp.project(this.projectName).enableTransform();
+		
+    },
 
 };
 </script>
