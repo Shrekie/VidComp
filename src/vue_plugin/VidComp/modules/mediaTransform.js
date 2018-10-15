@@ -98,7 +98,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
                 y: (e.clientY - rect.top) * scaleY
             };
 
-            touchedBox = boxBus.find(function(box){
+            touchedBox = boxBus.slice().reverse().find(function(box){
                 return box.touchBox([mousePos.x, mousePos.y])
             });
 

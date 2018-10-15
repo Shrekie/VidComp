@@ -60,15 +60,13 @@ export default function (timeTracker) {
             videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
 
             sources.forEach(function(source){
-                
+
                 videoOutput.ctx.drawImage(source.cast, 
                 source.media.position[0], source.media.position[1],
                 source.media.size[0], source.media.size[1])
                 betweenFrames(source);
 
             });
-
-            if(sources.length <= 0) videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
 
         });
 

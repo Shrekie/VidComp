@@ -6,12 +6,13 @@ export default function () {
         sources: []
     };
 
-    var Cast = function (media, cast, type){
+    var Cast = function (media, cast, type, status){
 
         this.media = media;
         this.cast = cast;
         this.type = type;
-        this.status = "ready";
+        if (status == null) this.status = "ready";
+        else this.status = status;
 
     }
 
@@ -54,23 +55,32 @@ export default function () {
                 var video = document.createElement("video");
                 video.src = media.resource.url;
                 video.muted = true;
+                var videoCast = new Cast(media, video, media.resource.type, "loading");
 
                     video.oncanplay = function() {
+
+                        videoCast.status = "ready";
 
                         if(hasAudio(video)){
                             var audio = document.createElement("audio");
                             audio.src = media.resource.url;
+
+                            var audioCast = new Cast(media, audio, 'audio-throw', "loading")
+
                             audio.oncanplay = function(){
-                                store.sources.push(new Cast(media, audio, 'audio-throw'));
                                 audio.oncanplay = null;
+                                audioCast.status = "ready";
                             }
+
+                            store.sources.push(audioCast);
+                            
                         }
-                        
-                        store.sources.push(new Cast(media, video, media.resource.type));
 
                         video.oncanplay = null;
 
                     };
+
+                store.sources.push(videoCast);
 
             }
 

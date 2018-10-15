@@ -249,8 +249,6 @@ export default function (timeTracker) {
 
         } else {
 
-            // no drawing or playing, just clear screen.
-            videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
             tickFrame();
 
         }
