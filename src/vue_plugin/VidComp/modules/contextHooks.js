@@ -1,13 +1,10 @@
-/*
-    context hook for specific events.
-*/
-// TODO: Maybe make extended types of this class
-export default  function (context) {
+var ContextHook = function (context) {
     
     this.frameContextHooks = [];
     this.context = context;
 
     this.runContextHooks = function (context){
+
         if(this.frameContextHooks){
 
             this.frameContextHooks.forEach(function(contextHook){
@@ -19,6 +16,7 @@ export default  function (context) {
             });
 
         }
+
     };
 
     this.initializeContextHook = function (hook) {
@@ -39,3 +37,52 @@ export default  function (context) {
     };
 
 };
+
+var contextManager = {
+
+    parents: [],
+
+    findHookParent: function (name) {
+
+        return contextManager.parents.find(function(hooks) {
+            return hooks.name == name;
+        });
+
+    },
+
+    createHook: function (parentName, context){
+
+        var contextHook = new ContextHook(context);
+
+        contextManager.parents.push({
+            name: parentName, 
+            contextHook: contextHook
+        });
+
+        return contextHook;
+
+    },
+
+    unbindAllFrameHooks: function () {
+
+        contextManager.parents.forEach(function(hooks){
+            hooks.contextHook.unregisterAllHooks();
+        })
+
+    },
+
+    unbindFrameHook: function (name, hookIndex) {
+
+        var contextHook = findHookParent(name);
+        contextHook.unregisterHook(hookIndex);
+        
+    }
+
+}
+
+
+export default {
+    createHook: contextManager.createHook,
+    unbindFrameHook: contextManager.unbindFrameHook,
+    unbindAllFrameHooks: contextManager.unbindAllFrameHooks
+}

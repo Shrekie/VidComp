@@ -141,6 +141,7 @@ export default {
 
 	mounted: function () {
 
+		this.$store.dispatch('setFocusArea', {timelineArea: [0, "none"]});
 		this.$vcomp.project(this.projectName).enableTransform();
 		
     },

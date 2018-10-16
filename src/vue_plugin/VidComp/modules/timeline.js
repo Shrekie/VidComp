@@ -1,14 +1,13 @@
-import ContextHooks from './contextHooks.js';
 import mediaShift from './mediaShift.js';
 import Layer from './layer.js';
 
-export default function () {
+export default function (ContextHooks) {
 
     var store = {
         layers: []
     };
 
-    this.contextHooks = new ContextHooks();
+    this.contextHooks = ContextHooks.createHook("layerControl");
 
     this.getLayer = function (layerIndex) {
         return store.layers.find(function(layer){

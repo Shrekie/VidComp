@@ -34,49 +34,45 @@ export default function () {
 
     this.saveBlob = function (newResource, resource, sourceLoader) {
 
-        fetchResource(newResource.resourceLink)
-        .then(res => {
-            if(res.error){
-                alert("error retrieving media resource, is url broken?");
-            }else{
-                res.blob().then(function(blob){
+        resource.loadedResource = new Promise(function(resolve, reject){
 
-                    var fileType = blobAnalyzer.determineType(blob);
+            fetchResource(newResource.resourceLink)
+            .then(res => {
 
-                    if(fileType == "undefined"){
-                        alert("Could not determine file type, please report this error.");
-                    }else{
-                        resource.url = URL.createObjectURL(blob);
-                        resource.type = fileType;
-                        sourceLoader.loadSelectedResource(resource);
-                        if(newResource.loadedResource) newResource.loadedResource(); //TODO: promise structure
-                    }
+                if(res.error){
 
-                });
-            }
-        }); 
+                    alert("error retrieving media resource, is url broken?");
+                    reject();
+
+                }else{
+
+                    res.blob().then(function(blob){
+
+                        var fileType = blobAnalyzer.determineType(blob);
+
+                        if(fileType == "undefined"){
+
+                            alert("Could not determine file type, please report this error.");
+                            reject();
+                            
+                        }else{
+
+                            resource.url = URL.createObjectURL(blob);
+                            resource.type = fileType;
+                            sourceLoader.loadSelectedResource(resource);
+                            resolve(resource);
+
+                        }
+
+                    });
+
+                }
+
+            }); 
+
+        });
+
         return resource;
-
-    }
-
-    this.changeResource = function(resourceChange, sourceLoader){
-
-        //TODO: mix this this importResource
-
-        var resource = this.existingResource(resourceChange.name);
-
-        if(resourceChange.name) resource.name = resourceChange.name;
-        if(resourceChange.resourceType) resource.type = resourceChange.resourceType;
-
-        if(resourceChange.resourceLink){
-
-            resource.url = 'fetching';
-            sourceLoader.loadSelectedResource(resource);
-            return this.saveBlob(resourceChange, resource, sourceLoader);
-            
-        }else{
-            return resource;
-        }
 
     }
 
@@ -97,6 +93,7 @@ export default function () {
             };
 
             store.resources.push(resource);
+
             return this.saveBlob(newResource, resource, sourceLoader);
 
         }

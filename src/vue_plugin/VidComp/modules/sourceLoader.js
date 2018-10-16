@@ -1,10 +1,12 @@
 import _ from 'lodash';
 
-export default function () {
+export default function (ContextHooks) {
 
     var store = {
         sources: []
     };
+
+    this.contextHooks = ContextHooks.createHook("castControl");
 
     var Cast = function (media, cast, type, status){
 
@@ -13,19 +15,19 @@ export default function () {
         this.type = type;
         if (status == null) this.status = "ready";
         else this.status = status;
+        this.loadedCast = {};
 
     }
 
-    // TODO: make casting async
-    
-    var castMedia = function (media){
+    //TODO: Move this to blob analyzer
+    var hasAudio = function (video) {
+        return video.mozHasAudio ||
+        Boolean(video.webkitAudioDecodedByteCount) ||
+        Boolean(video.audioTracks && video.audioTracks.length);
+    }
 
-        //TODO: Move this to blob analyzer
-        function hasAudio (video) {
-            return video.mozHasAudio ||
-            Boolean(video.webkitAudioDecodedByteCount) ||
-            Boolean(video.audioTracks && video.audioTracks.length);
-        }
+    // TODO: make casting async
+    var castMedia = function (media){
 
         if(!media.resource) {
 
@@ -35,8 +37,21 @@ export default function () {
             
             // TODO: do something better while fetching
             var image = new Image();
-            image.src = 'https://i.imgur.com/IaS4CqB.png';
-            store.sources.push(new Cast(media, image, 'image'));
+            var imageCast = new Cast(media, image, 'image', "loading");
+
+            imageCast.loadedCast = new Promise(function(resolve){
+
+                image.onload = function() {
+                    image.onload = null;
+                    resolve(imageCast);
+                    imageCast.status = "ready";
+                };
+
+                image.src = 'https://i.imgur.com/IaS4CqB.png';
+
+            });
+
+            store.sources.push(imageCast);
 
         }else{
 
@@ -45,40 +60,67 @@ export default function () {
             if(media.resource.type == 'image'){
 
                 var image = new Image();
-                image.src = media.resource.url;
-                store.sources.push(new Cast(media, image, media.resource.type));
+                var imageCast = new Cast(media, image, media.resource.type, "loading");
+
+                imageCast.loadedCast = new Promise(function(resolve){
+
+                    image.onload = function() {
+                        image.onload = null;
+                        resolve(imageCast);
+                        imageCast.status = "ready";
+                    };
+                    image.src = media.resource.url;
+
+                });
+
+                store.sources.push(imageCast);
 
             }
     
             if(media.resource.type == 'video'){
 
                 var video = document.createElement("video");
-                video.src = media.resource.url;
                 video.muted = true;
+                
                 var videoCast = new Cast(media, video, media.resource.type, "loading");
+
+                videoCast.loadedCast = new Promise(function(resolve, reject){
 
                     video.oncanplay = function() {
 
-                        videoCast.status = "ready";
-
                         if(hasAudio(video)){
+
                             var audio = document.createElement("audio");
-                            audio.src = media.resource.url;
 
                             var audioCast = new Cast(media, audio, 'audio-throw', "loading")
 
                             audio.oncanplay = function(){
+
                                 audio.oncanplay = null;
+                                videoCast.status = "ready";
                                 audioCast.status = "ready";
+                                resolve(videoCast);
+
                             }
+
+                            audio.src = media.resource.url;
 
                             store.sources.push(audioCast);
                             
+                        }else{
+
+                            videoCast.status = "ready";
+                            resolve(videoCast);
+
                         }
 
                         video.oncanplay = null;
 
                     };
+
+                    video.src = media.resource.url;
+
+                });
 
                 store.sources.push(videoCast);
 
@@ -86,7 +128,6 @@ export default function () {
 
         }
 
-        
     };
 
     var decastMedia = function (source) {
@@ -138,15 +179,29 @@ export default function () {
             if( store.sources[i].media.resource.name == resource.name ){
                 store.sources[i].status = "deleting";
                 decastMedia(store.sources[i]);
-                if(store.sources[i].type.includes("throw") == false ) castMedia(store.sources[i].media);
-                console.log(store.sources[i]);
+                if(store.sources[i].type.includes("throw") == false ) 
+                castMedia(store.sources[i].media);
                 store.sources.splice(i, 1);
             }
         }
 
         this.sortMediaLayers();
+        
+        this.whenCastReady(resource).then(function(mediaCast){
+            this.contextHooks.runContextHooks({name:'resourceCasted'});
+        }.bind(this));
 
     };
+
+    this.whenCastReady = function (resource) {
+
+        var castedMedia = store.sources.filter(source => 
+        (source.media.resource.name == resource.name)
+        && (!source.type.includes("throw")));
+            
+        return Promise.all(castedMedia.map(source => source.loadedCast));
+
+    }
 
     this.deleteSourceMedia = function (layerIndex, mediaIndex){
 
@@ -187,8 +242,15 @@ export default function () {
     }
 
     this.loadMedia = function (media) {
+
         castMedia(media);
+
         this.sortMediaLayers();
+
+        this.whenCastReady(media.resource).then(function(mediaCast){
+            this.contextHooks.runContextHooks({name:'resourceCasted'});
+        }.bind(this));
+
     };
 
     this.clearSources = function () {

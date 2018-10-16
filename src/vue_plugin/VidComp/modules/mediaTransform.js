@@ -28,12 +28,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
         this.touchBox = function (cord) {
 
             let right = this.size[0] + this.pos[0];
-            let bottom = this.size[0] + this.pos[1];
-
-            console.log(right);
-            console.log(bottom);
-            console.log(cord);
-            console.log(this.pos);
+            let bottom = this.size[1] + this.pos[1];
 
             if((cord[0] < right && cord[0] > this.pos[0]) &&
                (cord[1] < bottom && cord[1] > this.pos[1])
@@ -44,6 +39,22 @@ export default function (timeTracker, interfaceDrawer, timeline) {
             }
 
         }
+
+    }
+
+    var drawControlArea = function (){
+
+        _interfaceDrawer.scrubVideo(_elapsedDateTime, _sourceLoader, _videoOutput, function(source){
+
+            _videoOutput.ctx.beginPath();
+            _videoOutput.ctx.lineWidth = "6";
+            _videoOutput.ctx.strokeStyle = "red";
+            _videoOutput.ctx.rect(source.media.position[0], source.media.position[1],
+            source.media.size[0], source.media.size[1]);
+            _videoOutput.ctx.stroke();
+            _videoOutput.ctx.closePath();
+
+        });
 
     }
 
@@ -63,16 +74,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
             changedMedia.position = [changedMedia.position[0] - pos1, changedMedia.position[1] - pos2];
             changedMedia.size = touchedBox.size;
 
-            _interfaceDrawer.scrubVideo(_elapsedDateTime, _sourceLoader, _videoOutput, function(source){
-                _videoOutput.ctx.beginPath();
-                _videoOutput.ctx.lineWidth = "6";
-                _videoOutput.ctx.strokeStyle = "red";
-                _videoOutput.ctx.rect(source.media.position[0], source.media.position[1],
-                source.media.size[0], source.media.size[1]);
-                _videoOutput.ctx.stroke();
-                _videoOutput.ctx.closePath();
-
-            });
+            drawControlArea();
 
         });
 
@@ -101,8 +103,6 @@ export default function (timeTracker, interfaceDrawer, timeline) {
             touchedBox = boxBus.slice().reverse().find(function(box){
                 return box.touchBox([mousePos.x, mousePos.y])
             });
-
-            console.log(touchedBox);
 
             if(touchedBox){
 
@@ -142,23 +142,17 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
         _sourceLoader.eachSource().forEach(function(source){
 
-            if(!source.type.includes('audio')){
-                if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
-                    boxBus.push(new boundingMoveBox(source.media.size, source.media.position, source.media));
+            if(source.status == "ready"){
+                if(!source.type.includes('audio')){
+                    if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+                        boxBus.push(new boundingMoveBox(source.media.size, source.media.position, source.media));
+                    }
                 }
             }
-
+            
         });
 
-        _interfaceDrawer.scrubVideo(_elapsedDateTime, _sourceLoader, _videoOutput, function(source){
-            _videoOutput.ctx.beginPath();
-            _videoOutput.ctx.lineWidth = "6";
-            _videoOutput.ctx.strokeStyle = "red";
-            _videoOutput.ctx.rect(source.media.position[0], source.media.position[1],
-            source.media.size[0], source.media.size[1]);
-            _videoOutput.ctx.stroke();
-            _videoOutput.ctx.closePath();
-        });
+        drawControlArea();
 
         /*
 

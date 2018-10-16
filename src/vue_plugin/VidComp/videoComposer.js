@@ -6,13 +6,14 @@ import ResourceImporter from './modules/resourceImporter.js';
 import SourceLoader from './modules/sourceLoader.js';
 import Layer from './modules/layer.js';
 import Logger from './modules/logger.js';
+import ContextHooks from './modules/contextHooks.js';
 
 export default function () {
 
-    var timeline = new Timeline();
-    var videoProjection = new VideoProjection(timeline);
+    var timeline = new Timeline(ContextHooks);
+    var videoProjection = new VideoProjection(ContextHooks, timeline);
     var resourceImporter = new ResourceImporter();
-    var sourceLoader = new SourceLoader();
+    var sourceLoader = new SourceLoader(ContextHooks);
     var logger = new Logger(this, timeline, sourceLoader);
 
     this.createLayer = function (newLayer) {
@@ -23,13 +24,13 @@ export default function () {
             newLayer.newMedia.resource = resourceImporter.importResource(newLayer.newResource, sourceLoader);
             var layer = new Layer(newLayer.newMedia.layerIndex);
             let mediaIndex = layer.addMedia(newLayer.newMedia);
-            console.log(mediaIndex);
             timeline.addLayer(layer);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
             return {
                 layerIndex:layer.layerIndex,
-                mediaIndex:mediaIndex
+                mediaIndex:mediaIndex,
+                loadedResource:newLayer.newMedia.resource.loadedResource
             }
 
         }else if (newLayer.newMedia) {
@@ -64,15 +65,14 @@ export default function () {
         if ( newMedia.newResource ){
 
             // add new resource to new media in existing layer
-            console.log(newMedia.newMedia.layerIndex);
             var layer = timeline.getLayer(newMedia.newMedia.layerIndex);
             newMedia.newMedia.resource = resourceImporter.importResource(newMedia.newResource,sourceLoader);
-            console.log(layer);
             let mediaIndex = layer.addMedia(newMedia.newMedia);
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
             
             return {
-                mediaIndex: mediaIndex
+                mediaIndex: mediaIndex,
+                loadedResource:newMedia.newMedia.resource.loadedResource
             }
 
         }else if ( newMedia.resource ) {
@@ -84,7 +84,8 @@ export default function () {
             sourceLoader.loadMedia(layer.getMedia(mediaIndex));
 
             return {
-                mediaIndex: mediaIndex
+                mediaIndex: mediaIndex,
+                loadedResource:newMedia.newMedia.resource.loadedResource
             }
 
         } else {
@@ -110,6 +111,11 @@ export default function () {
         timeline.adjustMediaShift(currentTimelinePos, newTimelinePos, sourceLoader);
     }
 
+    // #SUGGESTION: handle all contexthooks on contextmanager
+    this.castControl = function (frameHookName, frameHook) {
+        return sourceLoader.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
+    };
+
     this.layerControl = function (frameHookName, frameHook) {
         return timeline.contextHooks.registerHooks({name:frameHookName, callbackHook:frameHook});
     };
@@ -127,20 +133,11 @@ export default function () {
     };
 
     this.unbindAllFrameHooks = function () {
-        videoProjection.mediaDrawer.contextHooks.unregisterAllHooks();
-        timeline.contextHooks.unregisterAllHooks();
+        ContextHooks.unbindAllFrameHooks();
     };
 
     this.unbindFrameHook = function (frameHookParent, hookIndex) {
-        //#TODO: add this onto the contexthook class
-        switch(frameHookParent) {
-            case "layerControl":
-                timeline.contextHooks.unregisterHook(hookIndex);
-                break;
-            case "videoControl":
-                videoProjection.mediaDrawer.contextHooks.unregisterHook(hookIndex);
-                break;
-        }
+        ContextHooks.unbindFrameHook(frameHookParent, hookIndex);
     };
 
     this.undo = function (){
@@ -158,10 +155,6 @@ export default function () {
     this.addResource = function(resource) {
         resourceImporter.importResource(resource, sourceLoader);
     }
-
-    this.changeResource = function(resourceChange){
-        resourceImporter.changeResource(resourceChange, sourceLoader);
-    };
 
     this.setTarget = function (canvas) {
         videoProjection.setTarget(canvas);

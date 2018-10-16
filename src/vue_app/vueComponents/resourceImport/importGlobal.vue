@@ -76,15 +76,6 @@ export default {
 
         importMedia() {
 
-            var loadedResource = function () {
-
-                this.$store.dispatch('setResources',{name: this.projectName,
-                resources: this.$vcomp.project(this.projectName).getAllResources()});
-
-                this.$router.push({ path: `/project/${this.projectName}`});
-
-            }.bind(this);
-
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
 
                 newMedia: {
@@ -98,8 +89,7 @@ export default {
                 newResource: {
                     name: this.mediaURL,
                     resourceLink: this.mediaURL,
-                    resourceType: 'searching',
-                    loadedResource: loadedResource
+                    resourceType: 'searching'
                 }
 
             });
@@ -112,12 +102,19 @@ export default {
                 timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
 
+
             this.$store.dispatch('setMedia',{name: this.projectName,
             media: this.$vcomp.project(this.projectName).getAllMedia()});
 
             this.$vcomp.project(this.projectName).log();
 
-            console.log(mediaMeta);
+            mediaMeta.loadedResource.then(function () {
+
+                this.$store.dispatch('setResources',{name: this.projectName,
+                resources: this.$vcomp.project(this.projectName).getAllResources()});
+                this.$router.push({ path: `/project/${this.projectName}`});
+
+            }.bind(this));
 
         }
 

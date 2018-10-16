@@ -34,7 +34,8 @@ export default {
 	},
 
 	mounted (){
-		if(this.projectByName) this.loadedProject = this.$vcomp.loadProject(this.projectByName);
+		if(this.projectByName) 
+		this.loadedProject = this.$vcomp.loadProject(this.projectByName);
 	}
 	
 	

@@ -72,6 +72,17 @@ export default {
     
     methods: {
 
+        triggerTransform: function(){
+
+            if(!this.playing){
+
+                this.$vcomp.project(this.projectName)
+                .scrubVideo((this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000));
+
+            }
+
+        },
+
         registerShiftHooks: function(){
 
             this.$vcomp.project(this.projectName)
@@ -95,7 +106,8 @@ export default {
                 // autosave
                 this.$store.dispatch('setLayersAndMedia',layerMedia);
 
-
+                // transform update
+                this.triggerTransform();
 
             }.bind(this));
 
@@ -169,9 +181,12 @@ export default {
                 }
 
                 if(context.action == 'reset'){
+                    this.playing = false;
                     this.$refs.timeline.scrollLeft = 0;
                     this.$refs.timeline.style.overflow = "overlay";
                 }
+
+                this.triggerTransform();
     
             }.bind(this));
 
@@ -197,16 +212,22 @@ export default {
             // update stored scollLeft value on scroll
             this.$refs.timeline.onscroll = function(event){
 
+                this.triggerTransform();
+
                 this.$store.dispatch('setSliderTime', 
                 {name: this.projectName, timeSliderTime: this.$refs.timeline.scrollLeft});
-                
-                if(!this.playing){
-                    this.$vcomp.project(this.projectName)
-                    .scrubVideo((this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000));
-                }
-                 
-            }.bind(this)
+        
+            }.bind(this);
 
+        },
+
+        registerTransformHooks: function () {
+
+            this.$vcomp.project(this.projectName)
+            .castControl('resourceCasted', 
+            function(context){
+                this.triggerTransform();
+            }.bind(this));
 
         }
 
@@ -218,6 +239,7 @@ export default {
         // TODO: split these to components
         this.registerVideoControlEvents();
         this.registerScrollHooks();
+        this.registerTransformHooks();
         this.determineSnaps();
         this.registerShiftHooks();
         

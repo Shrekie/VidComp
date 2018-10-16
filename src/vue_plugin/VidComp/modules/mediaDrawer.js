@@ -1,11 +1,9 @@
 // TODO: make a seperate scanner drawer? or re render on stop?
 
-import ContextHooks from './contextHooks.js';
-
-export default function (timeTracker) {
+export default function (ContextHooks, timeTracker) {
 
     var timeTracker = timeTracker
-    this.contextHooks = new ContextHooks({timeTracker});
+    this.contextHooks = ContextHooks.createHook("videoControl", {timeTracker});
     var animationFrame = {};
     var endTime = 0;
     var frameElapsed = 0;
@@ -86,7 +84,6 @@ export default function (timeTracker) {
             }
 
         });
-
 
         // buffer hooks
         
@@ -174,10 +171,12 @@ export default function (timeTracker) {
                 videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
 
                 drawBus.forEach(function(source){
-                    if(!source.type.includes('audio')){
-                        videoOutput.ctx.drawImage(source.cast, 
-                        source.media.position[0], source.media.position[1],
-                        source.media.size[0], source.media.size[1]);
+                    if(source.status == "ready"){
+                        if(!source.type.includes('audio')){
+                            videoOutput.ctx.drawImage(source.cast, 
+                            source.media.position[0], source.media.position[1],
+                            source.media.size[0], source.media.size[1]);
+                        }
                     }
                 });
 

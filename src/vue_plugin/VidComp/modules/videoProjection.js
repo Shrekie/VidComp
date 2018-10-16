@@ -4,15 +4,15 @@ import InterfaceDrawer from './interfaceDrawer.js';
 import MediaTransform from './mediaTransform.js';
 import CompositionRenderer from './compositionRenderer.js';
 
-export default function (timeline) {
+export default function (ContextHooks, timeline) {
 
     this.videoOutput = {};
     this.timeTracker = new TimeTracker();
 
-    this.mediaDrawer = new MediaDrawer(this.timeTracker);
+    this.mediaDrawer = new MediaDrawer(ContextHooks, this.timeTracker);
     this.interfaceDrawer = new InterfaceDrawer(this.timeTracker);
     this.mediaTransform = new MediaTransform(this.timeTracker,
-        this.interfaceDrawer, timeline);
+    this.interfaceDrawer, timeline);
 
     this.compositionRenderer = new CompositionRenderer();
 
