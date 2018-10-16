@@ -58,16 +58,16 @@ export default {
 
 @media screen and (max-width: 780px) {
     #canvasLockAspectContainer{
-		max-width: 320px !important;
-		max-height: 160px !important;
+		width: 256px !important;
+		height: 144px !important;
 	}
 }
 
 #canvasLockAspectContainer{
 	margin: 0 auto;
 	overflow: hidden;
-	max-width: 640px; 
-	max-height: 320px;
+	width: 720px; 
+	height: 405px;
 }
 
 #canvasLockAspectContainer canvas{

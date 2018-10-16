@@ -12,6 +12,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
     var boxBus = [];
     var touchedBox;
+    var canvasRect;
 
     var pos1 = 0, pos2 = 0, 
     pos3 = 0, pos4 = 0;
@@ -68,7 +69,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
             pos2 = pos4 - e.clientY;
             pos3 = e.clientX;
             pos4 = e.clientY;
-
+            
             touchedBox.moveBox([changedMedia.position[0] - pos1, changedMedia.position[1] - pos2]);
 
             changedMedia.position = [changedMedia.position[0] - pos1, changedMedia.position[1] - pos2];
@@ -87,18 +88,24 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
     }
 
+    var getMousePos = function (e) {
+
+        canvasRect = _videoOutput.el.getBoundingClientRect()
+        var scaleX = _videoOutput.el.width / canvasRect.width,
+        scaleY = _videoOutput.el.height / canvasRect.height;
+
+        return {
+            x: (e.clientX - canvasRect.left) * scaleX,
+            y: (e.clientY - canvasRect.top) * scaleY
+        };
+
+    }
+
     var checkTouch = function (e) {
 
         MotionEvents.cursorHandler(e, function(e){
 
-            var rect = _videoOutput.el.getBoundingClientRect(),
-            scaleX = _videoOutput.el.width / rect.width,
-            scaleY = _videoOutput.el.height / rect.height;
-
-            let mousePos = {
-                x: (e.clientX - rect.left) * scaleX,
-                y: (e.clientY - rect.top) * scaleY
-            };
+            let mousePos = getMousePos(e);
 
             touchedBox = boxBus.slice().reverse().find(function(box){
                 return box.touchBox([mousePos.x, mousePos.y])
@@ -112,8 +119,8 @@ export default function (timeTracker, interfaceDrawer, timeline) {
                 _videoOutput.el.onmousemove = dragBox;
                 _videoOutput.el.ontouchmove = dragBox;
 
-                _videoOutput.el.onmouseup = dragStop;
-                _videoOutput.el.ontouchend = dragStop;
+                window.addEventListener('mouseup', dragStop);
+                window.addEventListener('touchend', dragStop);
 
             }
 
