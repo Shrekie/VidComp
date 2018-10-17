@@ -26,8 +26,23 @@
                             <v-text-field v-model="mediaURL"
                             append-icon="mdi-link-variant"
                             outline
-                            ></v-text-field>
+                            >
+                                <v-tooltip
+                                slot="prepend"
+                                bottom
+                                >
+                                <v-icon slot="activator">mdi-help-circle-outline</v-icon>
+                                Paste image, video or audio URL to import it.
+                                </v-tooltip>
+                            
+                            </v-text-field>
                         </v-flex>
+
+                        <v-progress-circular v-if="loadingResource" class="mb-4"
+                            :size="50"
+                            color="primary"
+                            indeterminate
+                        ></v-progress-circular>
 
                         <!--
                         <v-card flat>
@@ -76,6 +91,8 @@ export default {
 
         importMedia() {
 
+            this.loadingResource = true;
+
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
 
                 newMedia: {
@@ -112,6 +129,9 @@ export default {
 
                 this.$store.dispatch('setResources',{name: this.projectName,
                 resources: this.$vcomp.project(this.projectName).getAllResources()});
+
+                this.loadingResource = false;
+
                 this.$router.push({ path: `/project/${this.projectName}`});
 
             }.bind(this));
@@ -123,9 +143,11 @@ export default {
     data() {
 
         var mediaURL;
+        var loadingResource = false;
 
         return {
-            mediaURL
+            mediaURL,
+            loadingResource
         }
 
     }

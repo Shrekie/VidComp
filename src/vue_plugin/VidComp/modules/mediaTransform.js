@@ -29,17 +29,15 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
         }
 
-        moveBox (changedMedia, pos1, pos2){
+        moveBox (pos1, pos2){
 
             let newPos = 
-            [changedMedia.position[0] - pos1, changedMedia.position[1] - pos2];
+            [this.media.position[0] - pos1, this.media.position[1] - pos2];
 
-            changedMedia.position = newPos
-            changedMedia.size = touchedBox.size
+            this.media.position = newPos
+            this.media.size = touchedBox.size
 
             this.setBounding();
-
-            return changedMedia;
 
         }
 
@@ -81,18 +79,16 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
         }
 
-        moveBox (changedMedia, pos1, pos2){
+        moveBox (pos1, pos2){
 
             let angle = Math.atan2(pos1, pos2) * 360 / Math.PI;
 
             if(angle>135 && angle<-315)
-            changedMedia.size = [changedMedia.size[0] + pos1, changedMedia.size[1] + pos2];
+            this.media.size = [this.media.size[0] + pos1, this.media.size[1] + pos2];
             else
-            changedMedia.size = [changedMedia.size[0] - pos1, changedMedia.size[1] - pos2];
+            this.media.size = [this.media.size[0] - pos1, this.media.size[1] - pos2];
 
             this.setBounding();
-
-            return changedMedia;
 
         }
 
@@ -118,7 +114,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
             _videoOutput.ctx.setLineDash([]);
             _videoOutput.ctx.arc((source.media.position[0]+source.media.size[0])-RESIZE_OFFSET[0],
             (source.media.position[1]+source.media.size[1])-RESIZE_OFFSET[0],RESIZE_RADIAN,0,2*Math.PI);
-            _videoOutput.ctx.fillStyle = 'gray';
+            _videoOutput.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
             _videoOutput.ctx.fill();
             _videoOutput.ctx.closePath();
 
@@ -132,15 +128,12 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
         MotionEvents.cursorHandler(e, function(e){
 
-            var changedMedia = _timeline.getLayer(touchedBox.media.layerIndex)
-            .getMedia(touchedBox.media.mediaIndex);
-
             pos1 = pos3 - e.clientX;
             pos2 = pos4 - e.clientY;
             pos3 = e.clientX;
             pos4 = e.clientY;
 
-            changedMedia = touchedBox.moveBox(changedMedia, pos1, pos2);
+            touchedBox.moveBox(pos1, pos2);
 
             drawControlArea();
 

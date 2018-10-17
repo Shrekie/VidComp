@@ -3,6 +3,17 @@ var ContextHook = function (context) {
     this.frameContextHooks = [];
     this.context = context;
 
+    class Hook {
+
+        constructor(hookBody){
+
+            this.name = hookBody.name;
+            this.callbackHook = hookBody.callbackHook;
+
+        }
+
+    }
+
     this.runContextHooks = function (context){
 
         if(this.frameContextHooks){
@@ -24,12 +35,18 @@ var ContextHook = function (context) {
     };
 
     this.registerHooks = function (newHook){
-        console.log(newHook);
-        return this.frameContextHooks.push(newHook) - 1;
+
+        var hook = new Hook(newHook);
+        this.frameContextHooks.push(hook);
+        return hook;
+
     };
 
-    this.unregisterHook = function(hookIndex){
-        this.frameContextHooks.splice(hookIndex, 1);
+    this.unregisterHook = function(deleteHook){
+
+        this.frameContextHooks.splice(
+        this.frameContextHooks.findIndex(hook => deleteHook === hook), 1);
+        
     };
 
     this.unregisterAllHooks = function () {

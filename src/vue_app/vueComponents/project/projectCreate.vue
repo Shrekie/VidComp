@@ -17,10 +17,23 @@
                         </v-btn>
 
                         <v-flex xs8 offset-xs2>
+
+
                             <v-text-field v-model="projectName"
                             outline
                             append-icon="mdi-folder-plus"
-                            ></v-text-field>
+                            >
+        
+                                <v-tooltip
+                                slot="prepend"
+                                bottom
+                                >
+                                <v-icon slot="activator">mdi-help-circle-outline</v-icon>
+                                Give your project a name.
+                                </v-tooltip>
+                            
+                            </v-text-field>
+
                         </v-flex>
 
                     </v-card>

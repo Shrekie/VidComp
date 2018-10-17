@@ -295,9 +295,9 @@ export default function (ContextHooks, timeTracker) {
             stopContent(sourceLoader);
             timeTracker.isPlaying = true;
             endTime = sourceLoader.getEndTime();
+            timeTracker.startTime();
             animationFrame = requestAnimationFrame(function () { 
             videoUpdate(sourceLoader, videoOutput, this.contextHooks, this) }.bind(this));
-            timeTracker.startTime();
 
         }
 

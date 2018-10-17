@@ -43,6 +43,7 @@ export default  function () {
 
     var combineAudio = function (audioTracks, done){
 
+        console.log(audioTracks);
         const audioContext = new AudioContext();
         
         const streamSource = audioTracks.map(track =>
@@ -53,11 +54,14 @@ export default  function () {
 
     }
 
-    var recordStream = function (finishState, stream, options, videoProjection, sourceLoader, done){
+    var recordStream = function (finishState, stream, options, videoProjection, sourceLoader, playDelay, done){
 
         var recordedBlobs = [];
 
         var mediaRecorder = new MediaRecorder(stream, options);
+
+        mediaRecorder.ignoreMutedMedia = true;
+
         mediaRecorder.ondataavailable = function (event) {
             if(!event || !event.data || !event.data.size) console.log('%c NOTHING IN STREAM ', 'background: yellow; color: orange');
             if (event.data && event.data.size > 0) {
@@ -67,25 +71,29 @@ export default  function () {
 
         var bufferingState = videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:'bufferInterrupt', callbackHook:function(bufferingState){
-      
-            if(bufferingState.status){
-                if(mediaRecorder.state != "paused"){
-                    mediaRecorder.pause();
-                    //alert("PAUSE");
-                    console.log("STOP R");
+            
+            if(mediaRecorder.state != "inactive"){
+
+                if(bufferingState.status){
+                    if(mediaRecorder.state != "paused"){
+                        mediaRecorder.pause();
+                        //alert("PAUSE");
+                        console.log("STOP R");
+                    }
                 }
-            }
-            else {
-                if(mediaRecorder.state != "recording"){
-                    mediaRecorder.resume();
-                    //alert("START");
-                    console.log("START R");
+                else {
+                    if(mediaRecorder.state != "recording"){
+                        mediaRecorder.resume();
+                        //alert("START");
+                        console.log("START R");
+                    }
                 }
+
             }
 
         }});
 
-        videoProjection.startPlaying(sourceLoader);
+        videoProjection.startPlaying(sourceLoader); 
         mediaRecorder.start(100);
 
         mediaRecorder.onstop = function (event){
@@ -108,6 +116,7 @@ export default  function () {
     this.render = function (sourceLoader, videoOutput, videoProjection){
 
         var renderAudio, renderVideo;
+        var renderStages = {loadffmpeg:0, renderDone:0};
 
         if(sourceLoader.getVideoSources().length > 0 && 
         sourceLoader.getAudioSources().length <= 0){
@@ -129,15 +138,20 @@ export default  function () {
 
         }else{
             alert("Nothing to render!");
-            return false;
+            renderStages.loadffmpeg = Promise.resolve();
+            renderStages.renderDone = Promise.resolve();
+            return renderStages;
         }
 
-        import("ffmpeg.js").then(function({ default: ffmpeg }){
-        
+        var loadffmpeg = import("ffmpeg.js");
+        renderStages.loadffmpeg = loadffmpeg;
+
+        renderStages.renderDone = loadffmpeg.then(function({ default: ffmpeg }){
+
         var options = {};
 
-        if (MediaRecorder.isTypeSupported('video/webm;vp8')) {
-            options = {mimeType: 'video/webm;codecs=vp8'};
+        if (MediaRecorder.isTypeSupported('video/webm;vp8,opus')) {
+            options = {mimeType: 'video/webm;codecs=vp8,opus'};
         } else {
             alert('video/webm; NOT SUPPORTED');
         }
@@ -150,7 +164,7 @@ export default  function () {
             source.cast.muted = true;
         });
 
-        videoProjection.setTimeDelay(0.333);
+        videoProjection.setTimeDelay(0.33);
 
         videoProjection.resetPlayer(sourceLoader);
 
@@ -173,8 +187,10 @@ export default  function () {
             } else {
 
                 alert("THERE IS AUDIO");
-                combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream().getAudioTracks()[0]), function(streamDest){
-                    recordStream("normal", streamDest.stream, options, videoProjection, sourceLoader, function(blob){
+                combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream()
+                .getAudioTracks()[0]), function(streamDest){
+                    recordStream("normal", streamDest.stream, options, 
+                    videoProjection, sourceLoader, 0, function(blob){
                         var fileReader = new FileReader();
                         fileReader.onload = function() {
                             resolve(this.result);
@@ -204,7 +220,8 @@ export default  function () {
             }else{
 
                 alert("THERE IS VIDEO");
-                recordStream("delayed", videoOutput.el.captureStream(), options, videoProjection, sourceLoader, function(blob){
+                recordStream("delayed", videoOutput.el.captureStream(), 
+                options, videoProjection, sourceLoader, 3000, function(blob){
                     webmParser.setTimecodeScale(blob, function(file){
                         resolve(file);
                     });
@@ -214,7 +231,9 @@ export default  function () {
 
         })
 
-        Promise.all([audioRender, videoRender]).then(function(values) {
+
+        return Promise.all([audioRender, videoRender]).then(function(values) {
+
 
             videoProjection.resetPlayer(sourceLoader);
             videoProjection.setTimeDelay(1);
@@ -259,10 +278,13 @@ export default  function () {
             });
 
             downloadFile(new Blob([new Uint8Array(result.MEMFS[0].data)]));
-            //downloadFile(new Blob([new Uint8Array(values[1])]));
+            
         });
 
         });
+
+        return renderStages;
+
     }
     
 };
