@@ -32,7 +32,7 @@ export default function (timeTracker) {
                         let currentTime = 
                         Math.floor((source.media.videoStartTime + 
                         (timeTracker.convertTimeInteger(elapsed) - 
-                        timeTracker.convertTimeInteger(source.media.timelineTime[0])))*100)/100
+                        timeTracker.convertTimeInteger(source.media.timelineTime[0])))*1e2)/1e2
 
                         // relative repeating of course
                         currentTime = ((currentTime/source.cast.duration)

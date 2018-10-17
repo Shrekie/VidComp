@@ -17,16 +17,40 @@ export default function (timeTracker, interfaceDrawer, timeline) {
     var pos1 = 0, pos2 = 0, 
     pos3 = 0, pos4 = 0;
 
-    var boundingMoveBox = function (size, pos, media) {
+    const RESIZE_OFFSET = [60, 60],
+    RESIZE_RADIAN = 60
 
-        this.size = size, this.pos = pos,
-        this.media = media;
+    class BoundingMoveBox  {
 
-        this.moveBox = function (pos){
-            this.pos = pos;
+        constructor(media) {
+
+            this.media = media;
+            this.setBounding();
+
         }
 
-        this.touchBox = function (cord) {
+        moveBox (changedMedia, pos1, pos2){
+
+            let newPos = 
+            [changedMedia.position[0] - pos1, changedMedia.position[1] - pos2];
+
+            changedMedia.position = newPos
+            changedMedia.size = touchedBox.size
+
+            this.setBounding();
+
+            return changedMedia;
+
+        }
+
+        setBounding () {
+            this.size = this.media.size;
+            this.pos = this.media.position;
+        }
+
+        touchBox (cord) {
+
+            this.setBounding();
 
             let right = this.size[0] + this.pos[0];
             let bottom = this.size[1] + this.pos[1];
@@ -43,17 +67,62 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
     }
 
+    class BoundingControlResize extends BoundingMoveBox {
+
+        constructor(media) {
+            super(media);
+        }
+
+        setBounding () {
+
+            this.size = [RESIZE_RADIAN*2, RESIZE_RADIAN*2];
+            this.pos = [((this.media.position[0]+this.media.size[0])-(RESIZE_OFFSET[0]*2)),
+            ((this.media.position[1]+this.media.size[1])-(RESIZE_OFFSET[0]*2))];
+
+        }
+
+        moveBox (changedMedia, pos1, pos2){
+
+            let angle = Math.atan2(pos1, pos2) * 360 / Math.PI;
+
+            if(angle>135 && angle<-315)
+            changedMedia.size = [changedMedia.size[0] + pos1, changedMedia.size[1] + pos2];
+            else
+            changedMedia.size = [changedMedia.size[0] - pos1, changedMedia.size[1] - pos2];
+
+            this.setBounding();
+
+            return changedMedia;
+
+        }
+
+    }
+
     var drawControlArea = function (){
 
         _interfaceDrawer.scrubVideo(_elapsedDateTime, _sourceLoader, _videoOutput, function(source){
 
             _videoOutput.ctx.beginPath();
-            _videoOutput.ctx.lineWidth = "6";
-            _videoOutput.ctx.strokeStyle = "red";
+            _videoOutput.ctx.lineWidth = "5";
+            _videoOutput.ctx.strokeStyle = "white";
+            _videoOutput.ctx.setLineDash([10, 10]);
             _videoOutput.ctx.rect(source.media.position[0], source.media.position[1],
             source.media.size[0], source.media.size[1]);
-            _videoOutput.ctx.stroke();
             _videoOutput.ctx.closePath();
+
+            _videoOutput.ctx.stroke();
+
+            _videoOutput.ctx.beginPath();
+            _videoOutput.ctx.lineWidth = "3";
+            _videoOutput.ctx.strokeStyle = "black";
+            _videoOutput.ctx.setLineDash([]);
+            _videoOutput.ctx.arc((source.media.position[0]+source.media.size[0])-RESIZE_OFFSET[0],
+            (source.media.position[1]+source.media.size[1])-RESIZE_OFFSET[0],RESIZE_RADIAN,0,2*Math.PI);
+            _videoOutput.ctx.fillStyle = 'gray';
+            _videoOutput.ctx.fill();
+            _videoOutput.ctx.closePath();
+
+            _videoOutput.ctx.stroke();
 
         });
 
@@ -63,17 +132,15 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
         MotionEvents.cursorHandler(e, function(e){
 
-            var changedMedia = _timeline.getLayer(touchedBox.media.layerIndex).getMedia(touchedBox.media.mediaIndex);
+            var changedMedia = _timeline.getLayer(touchedBox.media.layerIndex)
+            .getMedia(touchedBox.media.mediaIndex);
 
             pos1 = pos3 - e.clientX;
             pos2 = pos4 - e.clientY;
             pos3 = e.clientX;
             pos4 = e.clientY;
-            
-            touchedBox.moveBox([changedMedia.position[0] - pos1, changedMedia.position[1] - pos2]);
 
-            changedMedia.position = [changedMedia.position[0] - pos1, changedMedia.position[1] - pos2];
-            changedMedia.size = touchedBox.size;
+            changedMedia = touchedBox.moveBox(changedMedia, pos1, pos2);
 
             drawControlArea();
 
@@ -133,7 +200,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
         _videoOutput = videoOutput;
         _sourceLoader = sourceLoader;
         _videoOutput.el.onmousedown = function(e){checkTouch(e)};
-        MotionEvents.holdNonSwipeTouch(videoOutput.el, checkTouch);
+        _videoOutput.el.ontouchstart = function(e){checkTouch(e)};
 
     }
 
@@ -152,7 +219,11 @@ export default function (timeTracker, interfaceDrawer, timeline) {
             if(source.status == "ready"){
                 if(!source.type.includes('audio')){
                     if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
-                        boxBus.push(new boundingMoveBox(source.media.size, source.media.position, source.media));
+
+                        boxBus.push(new BoundingMoveBox(source.media));
+
+                        boxBus.push(new BoundingControlResize(source.media));
+
                     }
                 }
             }
