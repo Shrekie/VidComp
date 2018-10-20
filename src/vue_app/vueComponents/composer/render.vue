@@ -68,24 +68,21 @@ export default {
 
             var renderStages = this.$vcomp.project(this.projectName).render();
 
-            this.loadingffmpeg = true;
+            this.loadingRender = true;
 
-            renderStages.loadffmpeg.then(function(){
-
-                alert("render start");
-
-                this.loadingffmpeg = false;
-                this.loadingRender = true;
-
-            }.bind(this));
-            
             renderStages.renderDone.then(function(){
 
-                alert("render done");
                 this.loadingRender = false;
+                this.loadingffmpeg = true;
                 
             }.bind(this));
 
+            renderStages.loadffmpeg.then(function(){
+
+                this.loadingffmpeg = false;
+
+            }.bind(this));
+ 
         }
 
     },

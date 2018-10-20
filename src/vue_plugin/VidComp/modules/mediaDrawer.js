@@ -38,7 +38,10 @@ export default function (ContextHooks, timeTracker) {
         sourceLoader.eachSource().forEach(function(source){
 
             let elapsed = frameElapsed;
+            let delayedStart = 1;
             if(source.type.includes('audio')!=true) elapsed *= timeTracker.timeDelay;
+            else
+            delayedStart = timeTracker.timeDelay;
 
             if(source.status == "ready"){
 
@@ -50,13 +53,20 @@ export default function (ContextHooks, timeTracker) {
 
                 if(source.type == 'video' || source.type.includes('audio')){
 
-                    if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+                    if( elapsed >= source.media.timelineTime[0] && 
+                        
+                        elapsed <= source.media.timelineTime[1]){
 
-                        // FIXME: if 'videoStartTime' + 'timelineTime[0]' is over the video length there is a error.
+                         /*
+                        elapsed <= source.media.timelineTime[0]/delayedStart + 
+                        ((source.media.timelineTime[1]) - (source.media.timelineTime[0]))
+                        */
+                            
+                        // FIXME: paused after canvas draw for some reason
                         if(source.cast.paused){
                             loadingBuffer = true;
                         } 
-
+                        
                         drawBus.push(source);
 
                     }else if(!source.cast.paused){
@@ -111,22 +121,7 @@ export default function (ContextHooks, timeTracker) {
                 if(source.type == 'video' || source.type.includes('audio')){
 
                 if(!source.cast.paused){
-
-                    if(source.status == "staging"){
-
-                        source.cast.playPromise.then().then(_ => {
-                            source.cast.pause();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-
-                    }else{
-
-                        source.cast.pause();
-
-                    }
-
+                    source.cast.pause();
                 }
 
                 source.status = "staging";
@@ -140,23 +135,22 @@ export default function (ContextHooks, timeTracker) {
                 (timeTracker.convertTimeInteger(elapsed) - 
                 timeTracker.convertTimeInteger(source.media.timelineTime[0])))*1e2)/1e2
         
-        
                 // relative repeating of course
                 currentTime = ((currentTime/source.cast.duration)
                 -(Math.ceil(currentTime/source.cast.duration)-1)) * source.cast.duration;
                 
                 source.cast.currentTime = Math.floor(currentTime * 1e2 ) / 1e2;
-        
-                loadingBuffer = true;
 
-                source.cast.playPromise = new Promise(resolve => {
+                source.cast.canPlayPromise = new Promise(resolve => {
+
                     source.cast.oncanplaythrough = function() {
                         resolve(source);
-                        source.cast.oncanplay = null;
+                        source.cast.oncanplaythrough = null;
                     };
+                    
                 });
 
-                playBus.push(source.cast.playPromise);
+                playBus.push(source.cast.canPlayPromise);
 
                 } 
 
@@ -164,10 +158,15 @@ export default function (ContextHooks, timeTracker) {
             
         }
 
-
         var tickFrame = function(){
 
-            if( !loadingBuffer && timeTracker.isPlaying ){
+
+            if(loadingBuffer != playStateFlag[0]){
+                contextHooks.runContextHooks({name: 'bufferInterrupt', status:loadingBuffer});
+                playStateFlag[0] = loadingBuffer;
+            }
+
+            if( (!loadingBuffer) && timeTracker.isPlaying ){
                 
                 videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
 
@@ -196,6 +195,8 @@ export default function (ContextHooks, timeTracker) {
 
             sources.forEach(function(source){  
 
+                //source.cast.canPlayPromise = null;
+
                 playStarted.push(new Promise(resolve => {
 
                     if(!source.type.includes('image')){
@@ -204,20 +205,8 @@ export default function (ContextHooks, timeTracker) {
                         source.cast.playPromise.then(_ => {
                             
                             source.status = "ready";
-                            source.cast.playPromise = null;
                             resolve(source);
             
-                        })
-                        .catch(error => {
-            
-                            console.log(error);
-                            sourceLoader.eachSource().forEach(function(source){
-                                source.status = "ready";
-                                source.cast.playPromise = null;
-                            });
-                            mediaDrawer.stopDrawSources(sourceLoader);
-                            resolve(source);
-
                         });
 
                     }else{
@@ -286,7 +275,7 @@ export default function (ContextHooks, timeTracker) {
 
         if(timeTracker.isPlaying){
 
-            //resetContent(sourceLoader);
+            //this.resetDrawSources(sourceLoader);
             //timeTracker.resetTime();
 
         }else{

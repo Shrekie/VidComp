@@ -13,8 +13,8 @@ export default  function () {
         setTimecodeScale: function (videoBlob, done){
 
             this.findBinary(videoBlob, '2ad7b1', true, function(currentIndex, dataView){
-                alert(dataView.getUint32(currentIndex+5, false).toString(16));
-                dataView.setUint32(currentIndex+5, 85333325, false);
+                //alert(dataView.getUint32(currentIndex+5, false).toString(16));
+                dataView.setUint32(currentIndex+5, 76800077, false);
                 done(dataView.buffer);
             })
 
@@ -24,9 +24,9 @@ export default  function () {
             var fileReader = new FileReader();
             fileReader.onload = function() {
                 var videoBuffer = this.result;
-                var dataView = new DataView(videoBuffer, 0, videoBuffer.byteLength);        
+                var dataView = new DataView(videoBuffer, 0, videoBuffer.byteLength);      
                 for(var i = 0; i < dataView.byteLength; i++){
-                    try{     
+                    try{   
                         if(dataView.getUint32(i).toString(16).includes(tagname)){
                             done(i, dataView);
                             if(breakFlag) break;
@@ -41,20 +41,23 @@ export default  function () {
 
     }
 
-    var combineAudio = function (audioTracks, done){
+    var combineAudio = function (audioTracks){
 
-        console.log(audioTracks);
-        const audioContext = new AudioContext();
-        
-        const streamSource = audioTracks.map(track =>
-        audioContext.createMediaStreamSource(new MediaStream([track])));
-        const combined = audioContext.createMediaStreamDestination();
-        streamSource.forEach(source => source.connect(combined));
-        done(combined);
+        return new Promise(function(resolve, reject){
+
+            const audioContext = new AudioContext();
+            const streamSource = audioTracks.map(track =>
+            audioContext.createMediaStreamSource(new MediaStream([track])));
+            const combined = audioContext.createMediaStreamDestination();
+            streamSource.forEach(source => source.connect(combined));
+
+            resolve(combined);
+
+        });
 
     }
 
-    var recordStream = function (finishState, stream, options, videoProjection, sourceLoader, playDelay, done){
+    var recordStream = function (finishState, stream, options, videoProjection, sourceLoader, done){
 
         var recordedBlobs = [];
 
@@ -72,7 +75,7 @@ export default  function () {
         var bufferingState = videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:'bufferInterrupt', callbackHook:function(bufferingState){
             
-            if(mediaRecorder.state != "inactive"){
+            //if(mediaRecorder.state != "inactive"){
 
                 if(bufferingState.status){
                     if(mediaRecorder.state != "paused"){
@@ -89,12 +92,19 @@ export default  function () {
                     }
                 }
 
-            }
+            //}
 
         }});
+       
+        mediaRecorder.onstart = function() {
 
-        videoProjection.startPlaying(sourceLoader); 
-        mediaRecorder.start(100);
+            console.log(mediaRecorder.state);
+            if(finishState == "normal"){
+                videoProjection.resetPlayer(sourceLoader);
+                videoProjection.startPlaying(sourceLoader);
+            }
+            
+        }
 
         mediaRecorder.onstop = function (event){
             done(new Blob(recordedBlobs, {type: options.mimeType}), done);
@@ -103,6 +113,7 @@ export default  function () {
 
         var playFinish = videoProjection.mediaDrawer.contextHooks
         .registerHooks({name:'finished', callbackHook:function(finished){
+
             if(finished.status == finishState){
                 mediaRecorder.stop();
                 stream.getTracks().forEach(track => track.stop());
@@ -110,7 +121,17 @@ export default  function () {
             }
 
         }});
+
+        return mediaRecorder;
         
+    }
+
+    var downloadFile = function (file){
+        var url = window.URL.createObjectURL(file);
+        var downloadLink = document.createElement("a");
+        downloadLink.download = 'file.webm';
+        downloadLink.href = url;
+        downloadLink.click();    
     }
 
     this.render = function (sourceLoader, videoOutput, videoProjection){
@@ -123,8 +144,7 @@ export default  function () {
             // only video
             renderVideo = true;
             renderAudio = false;
-        } 
-        else if (sourceLoader.getVideoSources().length <= 0 && 
+        } else if (sourceLoader.getVideoSources().length <= 0 && 
         sourceLoader.getAudioSources().length > 0){
             // only audio
             renderVideo = false;
@@ -136,17 +156,12 @@ export default  function () {
             renderVideo = true;
             renderAudio = true;
 
-        }else{
+        } else {
             alert("Nothing to render!");
             renderStages.loadffmpeg = Promise.resolve();
             renderStages.renderDone = Promise.resolve();
             return renderStages;
         }
-
-        var loadffmpeg = import("ffmpeg.js");
-        renderStages.loadffmpeg = loadffmpeg;
-
-        renderStages.renderDone = loadffmpeg.then(function({ default: ffmpeg }){
 
         var options = {};
 
@@ -157,51 +172,21 @@ export default  function () {
         }
  
         sourceLoader.getVideoSources().forEach(function(source){
-            source.cast.playbackRate = 0.33;
+            source.cast.playbackRate = 0.3;
         });
 
         sourceLoader.getAudioSources().forEach(function(source){
             source.cast.muted = true;
         });
 
-        videoProjection.setTimeDelay(0.33);
+        videoProjection.setTimeDelay(0.3);
+        var videoRecorder, audioRecorder;
 
-        videoProjection.resetPlayer(sourceLoader);
+        var audioCombine = 
+        combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream()
+        .getAudioTracks()[0]));
 
-        var downloadFile = function (file){
-            var url = window.URL.createObjectURL(file);
-            var downloadLink = document.createElement("a");
-            downloadLink.download = 'file.webm';
-            downloadLink.href = url;
-            downloadLink.click();    
-        }
-        
-        var audioRender = new Promise((resolve, reject) => {
-
-            if(!renderAudio){
-
-                resolve("no audio");
-                alert("NO AUDIO");
-                return;
-
-            } else {
-
-                alert("THERE IS AUDIO");
-                combineAudio(sourceLoader.getAudioSources().map(source => source.cast.captureStream()
-                .getAudioTracks()[0]), function(streamDest){
-                    recordStream("normal", streamDest.stream, options, 
-                    videoProjection, sourceLoader, 0, function(blob){
-                        var fileReader = new FileReader();
-                        fileReader.onload = function() {
-                            resolve(this.result);
-                        };
-                        fileReader.readAsArrayBuffer(blob);
-                    })
-                });
-
-            }
-
-        });
+        var renderStart = audioCombine.then(function(streamDest){
 
         var videoRender = new Promise((resolve, reject) => {
 
@@ -219,9 +204,9 @@ export default  function () {
 
             }else{
 
-                alert("THERE IS VIDEO");
-                recordStream("delayed", videoOutput.el.captureStream(), 
-                options, videoProjection, sourceLoader, 3000, function(blob){
+                //alert("THERE IS VIDEO");
+                videoRecorder = recordStream("delayed", videoOutput.el.captureStream(), 
+                options, videoProjection, sourceLoader, function(blob){
                     webmParser.setTimecodeScale(blob, function(file){
                         resolve(file);
                     });
@@ -229,57 +214,99 @@ export default  function () {
 
             }
 
-        })
+        });
 
+        var audioRender = new Promise((resolve, reject) => {
 
-        return Promise.all([audioRender, videoRender]).then(function(values) {
+            if(!renderAudio){
 
+                resolve("no audio");
+                alert("NO AUDIO");
+                return;
 
-            videoProjection.resetPlayer(sourceLoader);
-            videoProjection.setTimeDelay(1);
+            } else {
 
-            sourceLoader.getVideoSources().forEach(function(source){
-                source.cast.playbackRate = 1.0;
-            });
+                audioRecorder = recordStream("normal", streamDest.stream, options, 
+                videoProjection, sourceLoader, function(blob){
+                    var fileReader = new FileReader();
+                    fileReader.onload = function() {
+                        //downloadFile(new Blob([new Uint8Array(this.result)]));
+                        resolve(this.result);
+                    };
+                    fileReader.readAsArrayBuffer(blob);
+                })
 
-            sourceLoader.getAudioSources().forEach(function(source){
-                source.cast.muted = false;
-            });
-
-            var encodeCombination;
-            var argumentString;
-
-            renderAudio, renderVideo;
-
-            if(!renderAudio && renderVideo){
-                // only video
-                encodeCombination = [{name: "video.webm", data: new Uint8Array(values[1])}];
-                argumentString = "-i video.webm -c copy output.webm".split(" ");
-            } 
-            else if (renderAudio && !renderVideo){
-                // only audio
-                encodeCombination = [{name: "audio.webm", data: new Uint8Array(values[0])}];
-                argumentString = "-i audio.webm -c copy output.webm".split(" ");
-
-            } else if (renderAudio && renderVideo){
-                // both
-                encodeCombination = [{name: "audio.webm", data: new Uint8Array(values[0])}, 
-                {name: "video.webm", data: new Uint8Array(values[1])}];
-                argumentString = "-i video.webm -i audio.webm -c copy output.webm".split(" ");
-
-            }else{
-                alert("Nothing to render!");
             }
 
-            var result = ffmpeg({
-                MEMFS: encodeCombination,
-                arguments: argumentString,
-                stdin: function() {},
-            });
-
-            downloadFile(new Blob([new Uint8Array(result.MEMFS[0].data)]));
-            
         });
+
+        audioRecorder.start();
+
+        videoRecorder.start();
+
+        return [videoRender, audioRender];
+
+        });
+
+        //renderStages.loadffmpeg = loadffmpeg;
+        
+        var renderDone = renderStart.then(function(renderTracks){
+            return Promise.all(renderTracks).then(function(values) {
+                return values
+            });
+        });
+
+        renderStages.renderDone = renderDone;
+
+        renderStages.loadffmpeg = renderDone.then(function(values){
+
+            return import("ffmpeg.js").then(function({ default: ffmpeg }){
+
+                videoProjection.resetPlayer(sourceLoader);
+                videoProjection.setTimeDelay(1);
+
+                sourceLoader.getVideoSources().forEach(function(source){
+                    source.cast.playbackRate = 1.0;
+                });
+
+                sourceLoader.getAudioSources().forEach(function(source){
+                    source.cast.muted = false;
+                });
+
+                var encodeCombination;
+                var argumentString;
+
+                renderAudio, renderVideo;
+
+                if(!renderAudio && renderVideo){
+                    // only video
+                    encodeCombination = [{name: "video.webm", data: new Uint8Array(values[1])}];
+                    argumentString = "-i video.webm -c copy output.webm".split(" ");
+                } 
+                else if (renderAudio && !renderVideo){
+                    // only audio
+                    encodeCombination = [{name: "audio.webm", data: new Uint8Array(values[0])}];
+                    argumentString = "-i audio.webm -c copy output.webm".split(" ");
+
+                } else if (renderAudio && renderVideo){
+                    // both
+                    encodeCombination = [{name: "audio.webm", data: new Uint8Array(values[1])}, 
+                    {name: "video.webm", data: new Uint8Array(values[0])}];
+                    argumentString = "-i video.webm -i audio.webm -c copy output.webm".split(" ");
+
+                }else{
+                    alert("Nothing to render!");
+                }
+
+                var result = ffmpeg({
+                    MEMFS: encodeCombination,
+                    arguments: argumentString,
+                    stdin: function() {},
+                });
+
+                downloadFile(new Blob([new Uint8Array(result.MEMFS[0].data)]));
+
+            });
 
         });
 

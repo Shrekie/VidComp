@@ -95,7 +95,7 @@ export default function (ContextHooks) {
                             var audioCast = new Cast(media, audio, 'audio-throw', "loading")
 
                             audio.oncanplay = function(){
-
+                                
                                 audio.oncanplay = null;
                                 videoCast.status = "ready";
                                 audioCast.status = "ready";
