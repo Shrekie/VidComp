@@ -8,13 +8,13 @@
             </canvas>
 		</div>
 		
-		<v-btn icon @click="playVideo">
+		<v-btn icon @click="playVideo" v-if="!playcontrolsHidden">
 			<v-icon>mdi-play</v-icon>
 		</v-btn>
-		<v-btn icon @click="stopVideo">
+		<v-btn icon @click="stopVideo" v-if="!playcontrolsHidden">
 			<v-icon>mdi-pause</v-icon>
 		</v-btn>
-		<v-btn icon @click="resetVideo">
+		<v-btn icon @click="resetVideo" v-if="!playcontrolsHidden">
 			<v-icon>mdi-skip-backward</v-icon>
 		</v-btn>
 
@@ -32,6 +32,7 @@ export default {
 	
 	data() {
 		return {
+			playcontrolsHidden:false
 		}
 	},
 	

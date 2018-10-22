@@ -8,7 +8,8 @@
  
         <v-card flat>
             
-            <v-btn icon :to="'/project/' + this.projectName">
+            <v-btn icon :to="'/project/' + this.projectName"
+            :disabled="loadingRender || loadingffmpeg">
                 <v-icon>mdi-arrow-left-bold-circle</v-icon>
             </v-btn>
             
@@ -16,7 +17,7 @@
 
 
     <v-container>
-        <Playback v-bind:project-name="projectName">
+        <Playback v-bind:project-name="projectName" ref="playback">
         </Playback>
     </v-container>
 
@@ -24,7 +25,8 @@
 
     <v-card flat>
             
-        <v-btn fab icon round @click="renderVideo">
+        <v-btn fab icon round @click="renderVideo" 
+        :disabled="loadingRender || loadingffmpeg">
             <v-icon large>mdi-file-download</v-icon>
         </v-btn>
 
@@ -70,6 +72,8 @@ export default {
 
             this.loadingRender = true;
 
+            this.$refs.playback.playcontrolsHidden = true;
+
             renderStages.renderDone.then(function(){
 
                 this.loadingRender = false;
@@ -80,6 +84,7 @@ export default {
             renderStages.loadffmpeg.then(function(){
 
                 this.loadingffmpeg = false;
+                this.$refs.playback.playcontrolsHidden = false;
 
             }.bind(this));
  

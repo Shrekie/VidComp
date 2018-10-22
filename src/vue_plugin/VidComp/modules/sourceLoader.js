@@ -97,9 +97,12 @@ export default function (ContextHooks) {
                             audio.oncanplay = function(){
                                 
                                 audio.oncanplay = null;
+                                //audio.muted = false;
+                                //video.playbackRate = 0.3;
+                                //audio.playbackRate = 0.3;
                                 videoCast.status = "ready";
                                 audioCast.status = "ready";
-                                resolve(videoCast);
+                                resolve(audioCast);
 
                             }
 
@@ -109,6 +112,7 @@ export default function (ContextHooks) {
                             
                         }else{
 
+                            //video.playbackRate = 0.3;
                             videoCast.status = "ready";
                             resolve(videoCast);
 

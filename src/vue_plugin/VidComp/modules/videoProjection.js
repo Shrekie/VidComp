@@ -47,5 +47,5 @@ export default function (ContextHooks, timeline) {
     this.setTimeDelay = function (time) {
         this.mediaDrawer.setTimeDelay(time);
     }
-
+    
 };
