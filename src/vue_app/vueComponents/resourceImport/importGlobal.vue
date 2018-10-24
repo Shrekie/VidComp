@@ -32,7 +32,7 @@
                                 bottom
                                 >
                                 <v-icon slot="activator">mdi-help-circle-outline</v-icon>
-                                Paste image, video or audio URL to import it.
+                                Paste image, video or audio URL to import it
                                 </v-tooltip>
                             
                             </v-text-field>

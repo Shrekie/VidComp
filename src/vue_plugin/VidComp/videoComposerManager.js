@@ -26,6 +26,7 @@ export default function (){
     };
 
     //TODO: this needs to be async
+    //TODO: builder class
     // parses project json and generates VideoCompose projects.
     var loadProject = function(project) {
         

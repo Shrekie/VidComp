@@ -1,4 +1,4 @@
-import MotionEvents from './../../../vue_app/library/dragResizeMotion/motionEvents.js'; //TODO: move library to top public level
+import MotionHatch from './../../../vue_app/library/dragResizeMotion/MotionHatch.js'; //TODO: move library to top public level
 
 export default function (timeTracker, interfaceDrawer, timeline) {
 
@@ -126,7 +126,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
     var dragBox = function (e){
 
-        MotionEvents.cursorHandler(e, function(e){
+        MotionHatch.cursorHandler(e, function(e){
 
             pos1 = pos3 - e.clientX;
             pos2 = pos4 - e.clientY;
@@ -163,7 +163,7 @@ export default function (timeTracker, interfaceDrawer, timeline) {
 
     var checkTouch = function (e) {
 
-        MotionEvents.cursorHandler(e, function(e){
+        MotionHatch.cursorHandler(e, function(e){
 
             let mousePos = getMousePos(e);
 

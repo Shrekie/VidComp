@@ -1,105 +1,89 @@
-var ContextHook = function (context) {
-    
-    this.frameContextHooks = [];
-    this.context = context;
 
-    class Hook {
+class Hook {
 
-        constructor(hookBody){
-
-            this.name = hookBody.name;
-            this.callbackHook = hookBody.callbackHook;
-
-        }
-
+    constructor(hookBody){
+        this.name = hookBody.name;
+        this.callbackHook = hookBody.callbackHook;
     }
 
-    this.runContextHooks = function (context){
+}
 
-        if(this.frameContextHooks){
+class ContextHook {
 
-            this.frameContextHooks.forEach(function(contextHook){
+    _frameContextHooks = [];
+
+    constructor(context){
+        this.context = context;
+    }
+
+    runContextHooks (context){
+
+        if(this._frameContextHooks){
+            this._frameContextHooks.forEach(function(contextHook){
                 
                 if(contextHook.name == context.name){
                     contextHook.callbackHook(context);
                 }
 
             });
-
         }
 
     };
 
-    this.initializeContextHook = function (hook) {
+    initializeContextHook (hook) {
         hook.callbackHook(this.context);
     };
 
-    this.registerHooks = function (newHook){
-
-        var hook = new Hook(newHook);
-        this.frameContextHooks.push(hook);
+    registerHooks (newHook){
+        let hook = new Hook(newHook);
+        this._frameContextHooks.push(hook);
         return hook;
-
     };
 
-    this.unregisterHook = function(deleteHook){
-
-        this.frameContextHooks.splice(
-        this.frameContextHooks.findIndex(hook => deleteHook === hook), 1);
-        
+    unregisterHook (deleteHook){
+        this._frameContextHooks.splice(
+            this. _frameContextHooks.findIndex(hook => deleteHook === hook), 1);
     };
 
-    this.unregisterAllHooks = function () {
-        this.frameContextHooks = [];
+    unregisterAllHooks () {
+        this._frameContextHooks = [];
     };
 
 };
 
-var contextManager = {
+class ContextManager {
 
-    parents: [],
+    static _parents = []
 
-    findHookParent: function (name) {
-
-        return contextManager.parents.find(function(hooks) {
+    static _findHookParent (name) {
+        return this._parents.find(function(hooks) {
             return hooks.name == name;
         });
+    }
 
-    },
-
-    createHook: function (parentName, context){
+    static createHook (parentName, context) {
 
         var contextHook = new ContextHook(context);
 
-        contextManager.parents.push({
+        this._parents.push({
             name: parentName, 
             contextHook: contextHook
         });
 
         return contextHook;
+    }
 
-    },
-
-    unbindAllFrameHooks: function () {
-
-        contextManager.parents.forEach(function(hooks){
+    static unbindAllFrameHooks () {
+        this._parents.forEach(function(hooks){
             hooks.contextHook.unregisterAllHooks();
         })
+    }
 
-    },
-
-    unbindFrameHook: function (name, hookIndex) {
-
-        var contextHook = findHookParent(name);
-        contextHook.unregisterHook(hookIndex);
-        
+    static unbindFrameHook (name, hookIndex) {
+        this._findHookParent(name).unregisterHook(hookIndex);
     }
 
 }
 
 
-export default {
-    createHook: contextManager.createHook,
-    unbindFrameHook: contextManager.unbindFrameHook,
-    unbindAllFrameHooks: contextManager.unbindAllFrameHooks
-}
+export default ContextManager;

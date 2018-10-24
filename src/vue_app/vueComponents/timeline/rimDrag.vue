@@ -10,7 +10,7 @@
 </template>
 <script>
 
-import DragResizeMedia from './../../library/dragResizeMotion/dragResizeMedia.js';
+import MotionTide from './../../library/dragResizeMotion/MotionTide.js';
 
 export default {
     
@@ -51,8 +51,10 @@ export default {
     mounted: function () {
         
         var media = this.$vcomp.project(this.projectName).getMedia(this.layerIndex, this.mediaIndex);
-        this.resizeMotion = new DragResizeMedia().enableResize(media, this.$refs.rimPoint, 
-        this.elementToResize.mediaContainer, function(top, left){
+        this.resizeMotion = new MotionTide.ResizeMedia(media, this.$refs.rimPoint,
+        this.elementToResize.mediaContainer, 
+        function(){}.bind(this),
+        function(top, left){
             
             var direction = 0;
             var timelineTime = 0;
@@ -65,7 +67,7 @@ export default {
                 timelineTime = this.elementToResize.mediaContainer.offsetLeft / this.zoomScale;
                 direction = "backwards";
             }
-            console.log(timelineTime);
+            
             this.$vcomp.project(this.projectName)
             .adjustMediaTimeShift(direction, 
             this.layerIndex, this.mediaIndex, timelineTime);

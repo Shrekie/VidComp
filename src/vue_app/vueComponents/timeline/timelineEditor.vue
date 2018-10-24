@@ -22,7 +22,7 @@
 <script>
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
-import DragResizeMedia from './../../library/dragResizeMotion/dragResizeMedia.js';
+import MotionTide from './../../library/dragResizeMotion/MotionTide.js';
 
 export default {
 
@@ -117,7 +117,7 @@ export default {
         // calculates and registers snap points for all layers.
         determineSnaps: function(){
 
-            DragResizeMedia.prototype.snapCalculation = function(mediaElement, elementToSnap){
+            MotionTide.MotionEvent.snapCalculation = function(mediaElement, elementToSnap){
 
                 let rangeOfSnap = 4;
                 let snapPoints = [];
@@ -157,7 +157,7 @@ export default {
                     }
                 }.bind(this))
 
-                DragResizeMedia.prototype.snapPoints = snapPoints;
+                MotionTide.MotionEvent.snapPoints = snapPoints;
                 
             }.bind(this);
         },

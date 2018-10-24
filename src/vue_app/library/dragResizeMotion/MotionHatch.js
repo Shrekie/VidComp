@@ -1,4 +1,4 @@
-var MotionEvents = function () {
+var MotionHatch = function () {
 
     var holdNonSwipeTouch = function (triggerElement, dragMouseDown){
 
@@ -79,4 +79,4 @@ var MotionEvents = function () {
 
 }
 
-export default MotionEvents();
+export default MotionHatch();

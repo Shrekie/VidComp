@@ -18,8 +18,8 @@
 				bottom
 				>
 				<v-icon slot="activator">mdi-help-circle-outline</v-icon>
-				Press the button to login with Google. <br>
-				Which is used to save your progress.
+				Press the button to login with Google, <br>
+				which is used to save your progress
 				</v-tooltip>
 			</v-container>
 

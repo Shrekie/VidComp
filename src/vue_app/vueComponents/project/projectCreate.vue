@@ -29,7 +29,7 @@
                                 bottom
                                 >
                                 <v-icon slot="activator">mdi-help-circle-outline</v-icon>
-                                Give your project a name.
+                                Give your project a name
                                 </v-tooltip>
                             
                             </v-text-field>

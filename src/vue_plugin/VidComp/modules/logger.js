@@ -33,7 +33,7 @@ export default  function (vidProject, timeline, sourceLoader) {
 
         sourceLoader.clearSources();
 
-        // TODO: create a media constructor class?
+        // TODO: create a media constructor class
 
         if(state.layers.length > 0){
             state.layers.forEach(layer => {
