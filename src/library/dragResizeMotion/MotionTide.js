@@ -198,6 +198,7 @@ class ResizeMedia extends MotionEvent {
                         this.moveElement.style.width =  this._widthGhost + "px";
 
                     }else{
+                        
                         var widthIncrease = snapResult.right.snapPosition -
                         this.moveElement.offsetLeft;
 
@@ -212,6 +213,7 @@ class ResizeMedia extends MotionEvent {
                         this.moveElement.style.width =  this._widthGhost + "px";
 
                     }else{
+
                         var widthIncrease = this.moveElement.offsetLeft - 
                         snapResult.left.snapPosition;
 

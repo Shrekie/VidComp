@@ -1,12 +1,10 @@
-import BlobAnalyzer from './../../../vue_app/library/fileManager/blobAnalyzer.js'; //TODO: move library to top public level
+import BlobAnalyzer from '../../../library/fileManager/BlobAnalyzer.js'; //TODO: move library to top public level
 
 export default function () {
 
     var store = {
         resources: []
     };
-
-    var blobAnalyzer = new BlobAnalyzer();
 
     const proxyurl = ""; // TODO: make my own proxy https://cors-anywhere.herokuapp.com/
     
@@ -48,7 +46,7 @@ export default function () {
 
                     res.blob().then(function(blob){
 
-                        var fileType = blobAnalyzer.determineType(blob);
+                        var fileType = BlobAnalyzer.determineType(blob);
 
                         if(fileType == "undefined"){
 

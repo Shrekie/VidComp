@@ -4,22 +4,22 @@
     Entry point of plugin, install to vue app space.
 */
 
-import VideoComposerManager from './videoComposerManager.js';
-var videoComposerManager = new VideoComposerManager();
+import VideoComposerFacade from './VideoComposerFacade.js';
+var videoComposerFacade = new VideoComposerFacade();
 
 var videoProject =  {
     
     project: (projectName) => {
-        return videoComposerManager.getProject(projectName)
+        return videoComposerFacade.getProject(projectName)
     },
     
     new: (projectName) => {
         videoComposerManager.newProject(projectName);
-        return videoComposerManager.getProject(projectName);
+        return videoComposerFacade.getProject(projectName);
     },
 
     loadProject: (project) => {
-        return videoComposerManager.loadProject(project);
+        return videoComposerFacade.loadProject(project);
     }
     
 };
@@ -31,11 +31,15 @@ export default {
     install(Vue, options) {
 
         Vue.directive('project-composition', {
+
             bind (el, binding, vnode, oldVnode) {
+
                 console.log(videoProject.project(binding.value));
                 videoProject.project(binding.value).setTarget(el);
+
             },
             unbind (el, binding, vnode, oldVnode) {
+
                 console.log('unbound');
                 // Cleanup for new instance of canvas
                 videoProject.project(binding.value).stop();
@@ -44,6 +48,7 @@ export default {
                     so this might be overkill:
                 */
                 videoProject.project(binding.value).unbindAllFrameHooks();
+
             }
 
         });

@@ -1,10 +1,9 @@
-import MotionHatch from './../../../vue_app/library/dragResizeMotion/MotionHatch.js'; //TODO: move library to top public level
+import MotionHatch from './../../../library/dragResizeMotion/MotionHatch.js';
 
-export default function (timeTracker, interfaceDrawer, timeline) {
+export default function (timeTracker, interfaceDrawer) {
 
     var _timeTracker = timeTracker,  
     _interfaceDrawer = interfaceDrawer,
-    _timeline = timeline,
     _videoOutput,
     _sourceLoader;
 
@@ -224,23 +223,6 @@ export default function (timeTracker, interfaceDrawer, timeline) {
         });
 
         drawControlArea();
-
-        /*
-
-        Promise.all(drawBus).then(function(sources) {
-
-            sources.forEach(function(source){
-                videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
-                videoOutput.ctx.drawImage(source.cast, 
-                source.media.position[0], source.media.position[1],
-                source.media.size[0], source.media.size[1])
-            });
-
-            if(sources.length <= 0) videoOutput.ctx.clearRect(0,0, videoOutput.el.width, videoOutput.el.height);
-
-        });
-
-        */
 
     }
 

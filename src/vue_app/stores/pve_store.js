@@ -4,7 +4,7 @@
 */
 
 import Appapi from './../../vue_api/application_api.js';
-import clientAuth from './../library/clientAuthentication/clientAuth.js';
+import PopupAuth from '../../library/clientAuthentication/PopupAuth.js';
 import createMutationsSharer from 'vuex-shared-mutations';
 
 export default {
@@ -110,7 +110,7 @@ export default {
         },
 
         getAuthenticated ({commit}) {
-            clientAuth.checkAuthentication(function(response){
+            PopupAuth.checkAuthentication(function(response){
                 commit('setAuthenticated', response);
             });
         },
@@ -133,7 +133,7 @@ export default {
         },
 
         authenticate (){
-            clientAuth.authenticate();
+            PopupAuth.authenticate();
         }
 
     },

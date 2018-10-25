@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@mdi/font": "^2.7.94",
+    "@mdi/font": "^2.8.94",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "compression-webpack-plugin": "^2.0.0",

@@ -12,10 +12,6 @@ class ContextHook {
 
     _frameContextHooks = [];
 
-    constructor(context){
-        this.context = context;
-    }
-
     runContextHooks (context){
 
         if(this._frameContextHooks){
@@ -48,6 +44,10 @@ class ContextHook {
     unregisterAllHooks () {
         this._frameContextHooks = [];
     };
+
+    constructor(context){
+        this.context = context;
+    }
 
 };
 

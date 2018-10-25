@@ -1,7 +1,3 @@
-<!-- 
-	Main user interaction section
--->
-
 <template>
 
     <v-flex xs12 text-xs-center>

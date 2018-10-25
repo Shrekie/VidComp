@@ -1,7 +1,3 @@
-<!-- 
-	Authenticates and initializes user
--->
-
 <template>
 
 		<v-card app flat color="grey darken-3" v-if="this.authenticated == false">

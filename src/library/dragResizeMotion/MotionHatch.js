@@ -1,6 +1,6 @@
-var MotionHatch = function () {
+class MotionHatch {
 
-    var holdNonSwipeTouch = function (triggerElement, dragMouseDown){
+    static holdNonSwipeTouch (triggerElement, dragMouseDown) {
 
         var touchduration = 500;
         var swipestrength = 30;
@@ -55,7 +55,7 @@ var MotionHatch = function () {
 
     }
 
-    var cursorHandler = function(e, cb){
+    static cursorHandler (e, cb) {
 
         e = e || window.event;
         e.preventDefault();
@@ -70,13 +70,8 @@ var MotionHatch = function () {
 
         cb(cursorOveridden);
 
-    };
-
-    return{
-        cursorHandler,
-        holdNonSwipeTouch
     }
 
 }
 
-export default MotionHatch();
+export default MotionHatch;
