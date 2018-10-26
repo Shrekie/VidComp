@@ -16,6 +16,12 @@ class BlobAnalyzer {
 
     }
 
+    static hasAudio (video) {
+        return video.mozHasAudio ||
+        Boolean(video.webkitAudioDecodedByteCount) ||
+        Boolean(video.audioTracks && video.audioTracks.length);
+    }
+
 };
 
 export default BlobAnalyzer;

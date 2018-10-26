@@ -14,7 +14,7 @@ var videoProject =  {
     },
     
     new: (projectName) => {
-        videoComposerManager.newProject(projectName);
+        videoComposerFacade.newProject(projectName);
         return videoComposerFacade.getProject(projectName);
     },
 

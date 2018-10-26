@@ -10,7 +10,7 @@
 </template>
 <script>
 
-import MotionTide from './../../library/dragResizeMotion/MotionTide.js';
+import MotionTide from './../../../library/dragResizeMotion/MotionTide.js';
 
 export default {
     

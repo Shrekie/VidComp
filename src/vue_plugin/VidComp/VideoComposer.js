@@ -1,9 +1,9 @@
 //#TODO: Seperate into proper directories
 import VideoProjection from './modules/VideoProjection.js';
 import Timeline from './modules/Timeline.js';
-import ResourceImporter from './modules/resourceImporter.js';
-import SourceLoader from './modules/sourceLoader.js';
-import Logger from './modules/logger.js';
+import ResourceImporter from './modules/ResourceImporter.js';
+import SourceLoader from './modules/SourceLoader.js';
+import TrackLogger from './modules/TrackLogger.js';
 import CompositionBuilder from './modules/CompositionBuilder.js';
 
 import ContextHooks from '../../library/contextHook/ContextHook.js';
@@ -18,7 +18,7 @@ class VideoComposer {
         this.timeline = new Timeline(ContextHooks, this.sourceLoader);
         this.videoProjection = new VideoProjection(ContextHooks, this.sourceLoader);
 
-        this.logger = new Logger(this, this.timeline, this.sourceLoader);
+        this.trackLogger = new TrackLogger(this, this.timeline, this.sourceLoader);
         this.compositionBuilder = new CompositionBuilder(this.sourceLoader, 
         this.resourceImporter, this.timeline);
 
@@ -26,7 +26,7 @@ class VideoComposer {
 
     createLayer (newLayer) {
         return this.compositionBuilder.createLayer(newLayer);
-    };
+    }
 
     addMedia (newMedia) {
         return this.compositionBuilder.addMedia(newMedia);
@@ -65,22 +65,22 @@ class VideoComposer {
 
     unbindAllFrameHooks () {
         ContextHooks.unbindAllFrameHooks(); 
-    };
+    }
 
     unbindFrameHook (frameHookParent, hookIndex) {
         ContextHooks.unbindFrameHook(frameHookParent, hookIndex);
-    };
+    }
 
     undo () {
-        this.logger.undo();
+        this.trackLogger.undo();
     }
 
     redo () {
-        this.logger.redo();
+        this.trackLogger.redo();
     }
 
     log () {
-        this.logger.log();
+        this.trackLogger.log();
     }
 
     addResource (resource) {
@@ -101,15 +101,15 @@ class VideoComposer {
 
     getAllMedia () {
         return this.timeline.getAllMedia();
-    };
+    }
 
     getAllLayerMedia (layerIndex) {
         return this.timeline.getLayer(layerIndex).getAllMedia();
-    };
+    }
 
     getAllLayers () {
         return this.timeline.getAllLayers();
-    };
+    }
 
     getMedia (layerIndex, mediaIndex) {
         return this.timeline.getLayer(layerIndex).getMedia(mediaIndex);
@@ -121,15 +121,15 @@ class VideoComposer {
 
     stop () {
         this.videoProjection.stopPlaying(this.sourceLoader);
-    };
+    }
 
     play () {
         this.videoProjection.startPlaying(this.sourceLoader);
-    };
+    }
 
     reset () {
         this.videoProjection.resetPlayer(this.sourceLoader);
-    };
+    }
 
     scrubVideo (elapsedDateTime) {
         this.videoProjection.scrubVideo(elapsedDateTime, this.sourceLoader);

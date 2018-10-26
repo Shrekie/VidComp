@@ -1,40 +1,40 @@
-import BlobAnalyzer from '../../../library/fileManager/BlobAnalyzer.js'; //TODO: move library to top public level
+import BlobAnalyzer from '../../../library/fileManager/BlobAnalyzer.js';
 
-export default function () {
+class ResourceImporter {
 
-    var store = {
+    _store = {
         resources: []
-    };
-
-    const proxyurl = ""; // TODO: make my own proxy https://cors-anywhere.herokuapp.com/
-    
-    var fetchResource = function (resourceLink) {
-        return fetch(proxyurl + resourceLink)
-                .then(res => {
-                    if (res.status === 200) {
-                        return res;
-                    } else {
-                        throw new Error(res.statusText);
-                    }
-                })
-                .catch(error => { return {error} });
-    };
-
-    this.getAllResources = function(){
-        return store.resources;
     }
 
-    this.existingResource = function (name) {
-        return store.resources.find(function(element){
+    _proxyurl;
+    
+    _fetchResource (resourceLink) {
+        return fetch(this._proxyurl + resourceLink)
+            .then(res => {
+                if (res.status === 200) {
+                    return res;
+                } else {
+                    throw new Error(res.statusText);
+                }
+            })
+        .catch(error => { return {error} });
+    }
+
+    getAllResources () {
+        return this._store.resources;
+    }
+
+    _existingResource (name) {
+        return this._store.resources.find(function(element){
             return element.name == name;
         });
-    };
+    }
 
-    this.saveBlob = function (newResource, resource, sourceLoader) {
+    _saveBlob (newResource, resource, sourceLoader) {
 
         resource.loadedResource = new Promise(function(resolve, reject){
 
-            fetchResource(newResource.resourceLink)
+            this._fetchResource(newResource.resourceLink)
             .then(res => {
 
                 if(res.error){
@@ -68,15 +68,15 @@ export default function () {
 
             }); 
 
-        });
+        }.bind(this));
 
         return resource;
 
     }
 
-    this.importResource = function (newResource, sourceLoader) { 
+    importResource (newResource, sourceLoader) { 
 
-        var resourceExists =  this.existingResource(newResource.name);
+        var resourceExists =  this._existingResource(newResource.name);
 
         if(resourceExists){
             return resourceExists;
@@ -90,12 +90,18 @@ export default function () {
                 resourceLink: newResource.resourceLink
             };
 
-            store.resources.push(resource);
+            this._store.resources.push(resource);
 
-            return this.saveBlob(newResource, resource, sourceLoader);
+            return this._saveBlob(newResource, resource, sourceLoader);
 
         }
 
-    };
+    }
+
+    constructor () {
+        this._proxyurl = "";
+    }
 
 };
+
+export default ResourceImporter;

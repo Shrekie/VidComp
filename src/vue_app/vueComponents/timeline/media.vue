@@ -23,7 +23,7 @@ v-bind:class="{selectedMedia: focusArea}">
 
 <script>
 
-import MotionTide from './../../library/dragResizeMotion/MotionTide.js';
+import MotionTide from './../../../library/dragResizeMotion/MotionTide.js';
 import RimDrag from './rimDrag.vue';
 
 export default {

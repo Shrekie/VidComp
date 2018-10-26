@@ -1,7 +1,7 @@
 import TimeTracker from './TimeTracker.js';
 import MediaDrawer from './mediaDrawer.js';
 import InterfaceDrawer from './interfaceDrawer.js';
-import MediaTransform from './mediaTransform.js';
+import MediaTransform from './MediaTransform.js';
 import CompositionRenderer from './CompositionRenderer.js';
 
 class VideoProjection {

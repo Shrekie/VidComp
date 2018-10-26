@@ -1,14 +1,10 @@
+import BlobAnalyzer from '../../../library/fileManager/BlobAnalyzer.js';
+
 import _ from 'lodash';
 
-export default function (ContextHooks) {
+class Cast {
 
-    var store = {
-        sources: []
-    };
-
-    this.contextHooks = ContextHooks.createHook("castControl");
-
-    var Cast = function (media, cast, type, status){
+    constructor(media, cast, type, status){
 
         this.media = media;
         this.cast = cast;
@@ -19,15 +15,17 @@ export default function (ContextHooks) {
 
     }
 
-    //TODO: Move this to blob analyzer
-    var hasAudio = function (video) {
-        return video.mozHasAudio ||
-        Boolean(video.webkitAudioDecodedByteCount) ||
-        Boolean(video.audioTracks && video.audioTracks.length);
-    }
+}
 
-    // TODO: make casting async
-    var castMedia = function (media){
+class SourceLoader {
+
+    _store = {
+        sources: []
+    };
+
+    contextHooks;
+
+    _castMedia (media) {
 
         if(!media.resource) {
 
@@ -51,11 +49,9 @@ export default function (ContextHooks) {
 
             });
 
-            store.sources.push(imageCast);
+            this._store.sources.push(imageCast);
 
         }else{
-
-            // TODO: in future just make a includes branch for audio
 
             if(media.resource.type == 'image'){
 
@@ -73,7 +69,7 @@ export default function (ContextHooks) {
 
                 });
 
-                store.sources.push(imageCast);
+                this._store.sources.push(imageCast);
 
             }
     
@@ -88,7 +84,7 @@ export default function (ContextHooks) {
 
                     video.oncanplay = function() {
 
-                        if(hasAudio(video)){
+                        if(BlobAnalyzer.hasAudio(video)){
 
                             var audio = document.createElement("audio");
 
@@ -97,9 +93,6 @@ export default function (ContextHooks) {
                             audio.oncanplay = function(){
                                 
                                 audio.oncanplay = null;
-                                //audio.muted = false;
-                                //video.playbackRate = 0.3;
-                                //audio.playbackRate = 0.3;
                                 videoCast.status = "ready";
                                 audioCast.status = "ready";
                                 resolve(audioCast);
@@ -108,11 +101,10 @@ export default function (ContextHooks) {
 
                             audio.src = media.resource.url;
 
-                            store.sources.push(audioCast);
+                            this._store.sources.push(audioCast);
                             
                         }else{
 
-                            //video.playbackRate = 0.3;
                             videoCast.status = "ready";
                             resolve(videoCast);
 
@@ -120,13 +112,13 @@ export default function (ContextHooks) {
 
                         video.oncanplay = null;
 
-                    };
+                    }.bind(this);
 
                     video.src = media.resource.url;
 
-                });
+                }.bind(this));
 
-                store.sources.push(videoCast);
+                this._store.sources.push(videoCast);
 
             }
 
@@ -134,9 +126,9 @@ export default function (ContextHooks) {
 
     };
 
-    var decastMedia = function (source) {
+    _decastMedia (source) {
 
-        // burn
+        //TODO: this is dumb
         if(source.type.includes('video')){
             source.cast.pause();
             source.cast.src = '';
@@ -146,15 +138,15 @@ export default function (ContextHooks) {
         }
         if(source.type.includes('audio')){
             source.cast.pause();
-            source.cast.src = '';
+            source.cast.src = ''; 
         }
         //delete source.type;
         delete source.cast;
         delete source.status;
 
     };
- 
-    this.sortMediaLayers = function(){
+
+    sortMediaLayers () {
 
         function compare(a,b) {
             if (a.media.layerIndex < b.media.layerIndex)
@@ -164,42 +156,41 @@ export default function (ContextHooks) {
             return 0;
         }
           
-        store.sources.sort(compare);
-        console.log(store.sources);
+        this._store.sources.sort(compare);
 
     }
 
-    this.eachSource = function (){
-        return store.sources;
+    eachSource () {
+        return this._store.sources;
     }
 
-    this.loadSelectedResource = function (resource) {
+    loadSelectedResource (resource) {
 
         // deletes and recasts media that has 'resource'
 
-        let i = store.sources.length;
+        let i = this._store.sources.length;
 
         while (i--) {
-            if( store.sources[i].media.resource.name == resource.name ){
-                store.sources[i].status = "deleting";
-                decastMedia(store.sources[i]);
-                if(store.sources[i].type.includes("throw") == false ) 
-                castMedia(store.sources[i].media);
-                store.sources.splice(i, 1);
+            if( this._store.sources[i].media.resource.name == resource.name ){
+                this._store.sources[i].status = "deleting";
+                this._decastMedia(this._store.sources[i]);
+                if(this._store.sources[i].type.includes("throw") == false ) 
+                this._castMedia(this._store.sources[i].media);
+                this._store.sources.splice(i, 1);
             }
         }
 
         this.sortMediaLayers();
         
-        this.whenCastReady(resource).then(function(mediaCast){
+        this._whenCastReady(resource).then(function(mediaCast){
             this.contextHooks.runContextHooks({name:'resourceCasted'});
         }.bind(this));
 
-    };
+    }
 
-    this.whenCastReady = function (resource) {
+    _whenCastReady (resource) {
 
-        var castedMedia = store.sources.filter(source => 
+        var castedMedia = this._store.sources.filter(source => 
         (source.media.resource.name == resource.name)
         && (!source.type.includes("throw")));
             
@@ -207,58 +198,61 @@ export default function (ContextHooks) {
 
     }
 
-    this.deleteSourceMedia = function (layerIndex, mediaIndex){
+    deleteSourceMedia (layerIndex, mediaIndex) {
 
-        let mediaToDecast = store.sources.filter(function(source) {
+        let mediaToDecast = this._store.sources.filter(function(source) {
             return source.media.layerIndex == layerIndex && 
             source.media.mediaIndex == mediaIndex;
         });
 
-        store.sources = store.sources.filter(function(source) {
+        this._store.sources = this._store.sources.filter(function(source) {
             return source.media.layerIndex != layerIndex || 
             source.media.mediaIndex != mediaIndex;
         });
 
         mediaToDecast.forEach(function(source){
-            decastMedia(source);
+            this._decastMedia(source);
         });
 
-    };
-
-    this.getEndTime = function () {
-        return Math.max.apply(Math, store.sources.map(function(source) { return source.media.timelineTime[1]; }));
-    };
-
-    this.getControlledSources = function(){
-        return store.sources.filter(source => source.type.includes("audio") || source.type.includes("video"));
-    };
-
-    this.getVideoSources = function (){
-        return store.sources.filter(source => source.type == "video");
-    };
-
-    this.getAudioSources = function (){
-        return store.sources.filter(source => source.type.includes("audio"));
-    };
-
-    this.getMediaCast = function (media) {
-        return store.sources.find(source => source.media === media ).cast;
     }
 
-    this.loadMedia = function (media) {
+    getEndTime () {
+        return Math.max.apply(Math, this._store.sources.map(function(source) 
+        { return source.media.timelineTime[1]; }));
+    }
 
-        castMedia(media);
+    getVideoSources () {
+        return this._store.sources.filter(source => source.type == "video");
+    }
+
+    getAudioSources () {
+        return this._store.sources.filter(source => source.type.includes("audio"));
+    }
+
+    getMediaCast = function (media) {
+        return this._store.sources.find(source => source.media === media ).cast;
+    }
+
+    loadMedia (media) {
+
+        this._castMedia(media);
 
         this.sortMediaLayers();
 
-        this.whenCastReady(media.resource).then(function(mediaCast){
+        this._whenCastReady(media.resource).then(function(mediaCast){
             this.contextHooks.runContextHooks({name:'resourceCasted'});
         }.bind(this));
 
-    };
-
-    this.clearSources = function () {
-        store.sources.splice(0, store.sources.length)
     }
 
-};
+    clearSources = function () {
+        this._store.sources.splice(0, this._store.sources.length)
+    }
+
+    constructor(ContextHooks){
+        this.contextHooks = ContextHooks.createHook("castControl");
+    }
+
+}
+
+export default SourceLoader;

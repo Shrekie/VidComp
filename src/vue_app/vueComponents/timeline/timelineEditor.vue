@@ -22,7 +22,7 @@
 <script>
 import Layer from './layer.vue';
 import TimelineSlider from './timelineSlider.vue';
-import MotionTide from './../../library/dragResizeMotion/MotionTide.js';
+import MotionTide from './../../../library/dragResizeMotion/MotionTide.js';
 
 export default {
 

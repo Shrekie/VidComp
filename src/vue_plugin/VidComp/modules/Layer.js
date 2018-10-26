@@ -32,19 +32,15 @@ class Layer {
     layerIndex;
 
     _uniquifyMedia = function () {
-
         this._store.media.forEach(function(media, index){
             media.mediaIndex = index; 
         });
-
     }
 
     addMedia (mediaTemplate) {
-
         mediaTemplate.mediaIndex = this._store.media.length;
         this._store.media.push(new Media(mediaTemplate));
         return mediaTemplate.mediaIndex;
-
     }
 
     insertMedia (mediaTemplate) {
@@ -61,10 +57,8 @@ class Layer {
     }
 
     deleteMedia (mediaIndex) {
-
         this._store.media.splice(mediaIndex, 1);
         this._uniquifyMedia();
-
     }
 
     deleteAllMedia () {
@@ -72,7 +66,7 @@ class Layer {
     }
 
     constructor(layerIndex, mediaTemplate=false){
-
+        
         this.layerIndex = layerIndex;
 
         if(mediaTemplate)
