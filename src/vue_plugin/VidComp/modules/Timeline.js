@@ -1,4 +1,4 @@
-import mediaShift from './mediaShift.js';
+import MediaShift from './MediaShift.js';
 import Layer from './Layer.js';
 
 class ShiftOrder {
@@ -34,7 +34,7 @@ class ShiftOrder {
 
             // same layer
             console.log(JSON.stringify(changedMedia.timelineTime));
-            mediaShift.checkShift(affectedLayerMedia, changedMedia);
+            MediaShift.checkShift(affectedLayerMedia, changedMedia);
             this._timeline.contextHooks.runContextHooks({name:'mediaShift'});
 
         }else{
@@ -48,7 +48,7 @@ class ShiftOrder {
 
             let currentMedia = this._timeline.getLayer(this._currentTimelinePos.layerIndex).getAllMedia();
 
-            mediaShift.checkShift(affectedLayerMedia, changedMedia);
+            MediaShift.checkShift(affectedLayerMedia, changedMedia);
             
             this._priorStep(currentMedia, changedMedia);
 
@@ -56,9 +56,6 @@ class ShiftOrder {
 
     }
 
-    //```````\ 
-    //  O | O |
-    //\--\_/--/
     _precedenceCascade (affectedLayerMedia) {
 
         let changedMedia = this._timeline.getLayer(this._currentTimelinePos.layerIndex)
@@ -69,10 +66,10 @@ class ShiftOrder {
         changedMedia.timelineTime[0] = this._newTimelinePos.timelineStartTime;
         changedMedia.timelineTime[1] = this._newTimelinePos.timelineStartTime + changedMediaSize;
 
-        mediaShift.formatTimelineValue(changedMedia);
+        MediaShift.formatTimelineValue(changedMedia);
         
         if(changedMedia.timelineTime[0] < 0){
-            mediaShift.negativePush(affectedLayerMedia, changedMedia);
+            MediaShift.negativePush(affectedLayerMedia, changedMedia);
         }
 
         changedMedia.layerIndex = this._newTimelinePos.layerIndex;
@@ -130,10 +127,10 @@ class ShiftOrder {
         let affectedLayerMedia = this._timeline.getLayer(layerIndex).getAllMedia();
 
         if(direction == "forwards"){
-            mediaShift.shiftTimeMedia(affectedLayerMedia, 
+            MediaShift.shiftTimeMedia(affectedLayerMedia, 
             direction, changedMedia, timelineTime, this._sourceLoader);
         }else{
-            mediaShift.shiftTimeMedia(affectedLayerMedia, 
+            MediaShift.shiftTimeMedia(affectedLayerMedia, 
             direction, changedMedia, timelineTime, this._sourceLoader);
         }
 
@@ -172,7 +169,7 @@ class Timeline {
 
     _store = {
         layers: []
-    };
+    }
     _sourceLoader;
 
     shiftOrder;
@@ -255,7 +252,7 @@ class Timeline {
 
     }
 
-};
+}
 
 
 export default Timeline;

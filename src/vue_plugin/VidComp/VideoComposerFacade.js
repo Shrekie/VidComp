@@ -8,7 +8,7 @@ class VideoComposerFacade {
 
     _store = {
         projects: []
-    };
+    }
 
     _projectExists (projectName) {
         if(this._store.projects.find(function(element) 

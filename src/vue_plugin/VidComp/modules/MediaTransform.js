@@ -1,4 +1,6 @@
 import MotionHatch from '../../../library/dragResizeMotion/MotionHatch.js';
+import TimeTracker from './TimeTracker.js'
+import DrawStation from './DrawStation.js'
 
 class BoundingMoveBox  {
 
@@ -81,7 +83,6 @@ class MediaTransform {
     static RESIZE_OFFSET = [60, 60];
     static RESIZE_RADIAN = 60;
 
-    _timeTracker;
     _interfaceDrawer;
     _videoOutput;
     _sourceLoader;
@@ -100,7 +101,7 @@ class MediaTransform {
     _drawControlArea = function (){
 
         this._interfaceDrawer.scrubVideo(this._elapsedDateTime, 
-        this._sourceLoader, this._videoOutput, function(source){
+        function(source){
 
             this._videoOutput.ctx.beginPath();
             this._videoOutput.ctx.lineWidth = "5";
@@ -192,7 +193,7 @@ class MediaTransform {
 
         }.bind(this));
 
-    };
+    }
 
     enableTransform = function(videoOutput, sourceLoader) {
 
@@ -205,24 +206,22 @@ class MediaTransform {
 
     transformScrub = function  (elapsedDateTime) {
 
-        this._elapsedDateTime = elapsedDateTime;
-        this._timeTracker.elapsedDateTime = elapsedDateTime;
-        this._timeTracker.startTime();
-        this._timeTracker.trackTime();
-        let elapsed = this._timeTracker.elapsed;
+        this._elapsedDateTime = TimeTracker.downScaleTime(elapsedDateTime);
         this._boxBus = [];
 
         this._sourceLoader.eachSource().forEach(function(source){
 
             if(source.status == "ready"){
                 if(!source.type.includes('audio')){
-                    if( elapsed >= source.media.timelineTime[0] && elapsed <= source.media.timelineTime[1]){
+
+                    if( DrawStation.isInFrame(this._elapsedDateTime, source) ){
 
                         this._boxBus.push(new BoundingMoveBox(source.media));
 
                         this._boxBus.push(new BoundingControlResize(source.media));
 
                     }
+
                 }
             }
             
@@ -232,8 +231,7 @@ class MediaTransform {
 
     }
 
-    constructor (timeTracker, interfaceDrawer) {
-        this._timeTracker = timeTracker;
+    constructor (interfaceDrawer) {
         this._interfaceDrawer = interfaceDrawer;
     }
 

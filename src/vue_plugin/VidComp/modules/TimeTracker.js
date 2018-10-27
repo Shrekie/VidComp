@@ -22,21 +22,24 @@ class TimeTracker {
         if(this.forgetTime) {this.startTime(); this.forgetTime = false;}
 
         this.elapsedDateTime = (this._nowTime - this._startTime);
-        this.elapsed = (this.elapsedDateTime);
-        this.elapsed = (this.elapsed/100000);
+        
+        this.elapsed = TimeTracker.downScaleTime(this.elapsedDateTime);
 
     }
 
     resetTime () {
         this.elapsedDateTime = 0;
-    };
+    }
 
     startTime () {
         this._startTime = (performance.now() - (this.elapsedDateTime));
     }
 
-    //TODO: static this up
-    convertTimeInteger (time) {
+    static downScaleTime (time) {
+        return time/100000;
+    }
+
+    static upScaleTime (time) {
         var Newtime = time*100;
         return parseFloat(Newtime);
     }

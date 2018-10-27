@@ -55,10 +55,10 @@ class VideoComposer {
     videoControl (frameHookName, frameHook) {
 
         if(frameHookName == 'drawingUpdate'){
-            this.videoProjection.mediaDrawer.contextHooks
+            this.videoProjection.playbackContainer.contextHooks
             .initializeContextHook({name:frameHookName, callbackHook:frameHook});
         }
-        return this.videoProjection.mediaDrawer.contextHooks
+        return this.videoProjection.playbackContainer.contextHooks
         .registerHooks({name:frameHookName, callbackHook:frameHook});
 
     }
@@ -139,7 +139,7 @@ class VideoComposer {
         this.videoProjection.enableTransform(this.sourceLoader);
     }
 
-};
+}
 
 
 export default VideoComposer;

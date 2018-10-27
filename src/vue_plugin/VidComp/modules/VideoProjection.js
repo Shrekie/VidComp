@@ -1,6 +1,5 @@
-import TimeTracker from './TimeTracker.js';
-import MediaDrawer from './mediaDrawer.js';
-import InterfaceDrawer from './interfaceDrawer.js';
+import PlaybackContainer from './PlaybackContainer.js';
+import InterfaceDrawer from './InterfaceDrawer.js';
 import MediaTransform from './MediaTransform.js';
 import CompositionRenderer from './CompositionRenderer.js';
 
@@ -8,33 +7,33 @@ class VideoProjection {
 
     constructor(ContextHooks, sourceLoader){
 
-        this.videoOutput;
-        this.timeTracker = new TimeTracker();
-        this.mediaDrawer = new MediaDrawer(ContextHooks, this.timeTracker);
-        this.interfaceDrawer = new InterfaceDrawer(this.timeTracker);
-        this.mediaTransform = new MediaTransform(this.timeTracker,this.interfaceDrawer);
-        this.compositionRenderer = new CompositionRenderer(sourceLoader, this);
+        this.videoOutput = {};
+        this.playbackContainer = new PlaybackContainer(ContextHooks, sourceLoader, this.videoOutput);
+        this.interfaceDrawer = new InterfaceDrawer(sourceLoader, this.videoOutput);
+        this.mediaTransform = new MediaTransform(this.interfaceDrawer);
+        this.compositionRenderer = new CompositionRenderer(sourceLoader, this.videoOutput, this);
 
     }
     
     setTarget (canvas) {
-        this.videoOutput = {ctx: canvas.getContext('2d'), el: canvas};
+        this.videoOutput.ctx = canvas.getContext('2d');
+        this.videoOutput.el = canvas;
     }
 
     startPlaying (sourceLoader) {
-        this.mediaDrawer.drawSources(sourceLoader, this.videoOutput);
+        this.playbackContainer.drawSources(sourceLoader, this.videoOutput);
     }
     
     resetPlayer (sourceLoader) {
-        this.mediaDrawer.resetDrawSources(sourceLoader);
+        this.playbackContainer.resetDrawSources(sourceLoader);
     }
 
     stopPlaying (sourceLoader) {
-        this.mediaDrawer.stopDrawSources(sourceLoader);
+        this.playbackContainer.stopDrawSources(sourceLoader);
     }
 
     renderComposition () {
-        return this.compositionRenderer.render(this.videoOutput);
+        return this.compositionRenderer.render();
     }
 
     enableTransform (sourceLoader) {
@@ -46,9 +45,9 @@ class VideoProjection {
     }
 
     setTimeDelay (time) {
-        this.mediaDrawer.setTimeDelay(time);
+        this.playbackContainer.setTimeDelay(time);
     }
     
-};
+}
 
 export default VideoProjection;

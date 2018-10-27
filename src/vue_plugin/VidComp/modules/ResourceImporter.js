@@ -102,6 +102,6 @@ class ResourceImporter {
         this._proxyurl = "";
     }
 
-};
+}
 
 export default ResourceImporter;

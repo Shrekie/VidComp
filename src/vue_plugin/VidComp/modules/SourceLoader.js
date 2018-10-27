@@ -21,7 +21,7 @@ class SourceLoader {
 
     _store = {
         sources: []
-    };
+    }
 
     contextHooks;
 
@@ -124,7 +124,7 @@ class SourceLoader {
 
         }
 
-    };
+    }
 
     _decastMedia (source) {
 
@@ -144,7 +144,7 @@ class SourceLoader {
         delete source.cast;
         delete source.status;
 
-    };
+    }
 
     sortMediaLayers () {
 
@@ -212,7 +212,7 @@ class SourceLoader {
 
         mediaToDecast.forEach(function(source){
             this._decastMedia(source);
-        });
+        }.bind(this));
 
     }
 

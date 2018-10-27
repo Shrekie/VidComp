@@ -49,7 +49,7 @@ class CompositionBuilder {
     
         }
     
-    };
+    }
     
     addMedia (newMedia) {
         

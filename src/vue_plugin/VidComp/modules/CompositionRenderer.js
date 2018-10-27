@@ -89,7 +89,7 @@ class StreamRecorder {
 
     _ignoreBufferInterrupt () {
 
-        this._bufferingState = this._videoProjection.mediaDrawer.contextHooks
+        this._bufferingState = this._videoProjection.playbackContainer.contextHooks
         .registerHooks({name:'bufferInterrupt', callbackHook:function(bufferingState){    
     
             if(bufferingState.status){
@@ -110,14 +110,14 @@ class StreamRecorder {
 
     _stateStop () {
 
-        this._playFinish = this._videoProjection.mediaDrawer.contextHooks
+        this._playFinish = this._videoProjection.playbackContainer.contextHooks
         .registerHooks({name:'finished', callbackHook:function(finished){
     
             if(finished.status == this._finishState){
     
                 this._mediaRecorder.stop();
                 this._stream.getTracks().forEach(track => track.stop());
-                this._videoProjection.mediaDrawer.contextHooks
+                this._videoProjection.playbackContainer.contextHooks
                 .unregisterHook(this._bufferingState);
     
             }
@@ -146,7 +146,7 @@ class StreamRecorder {
         this._mediaRecorder.onstop = function (event){
 
             this._done(new Blob(this._recordedBlobs, {type: this._options.mimeType}), this._done);
-            this._videoProjection.mediaDrawer.contextHooks.unregisterHook(this._playFinish);
+            this._videoProjection.playbackContainer.contextHooks.unregisterHook(this._playFinish);
             
         }.bind(this);
 
@@ -356,9 +356,8 @@ class CompositionRenderer {
 
     }
 
-    render (videoOutput) {
+    render () {
 
-        this._videoOutput = videoOutput;
         this._options = StreamRecorder.encoderOptions();
         this._renderFormat = OriginTemplater.springStem(this._sourceLoader);
 
@@ -464,9 +463,10 @@ class CompositionRenderer {
 
     }
 
-    constructor (sourceLoader, videoProjection) {
+    constructor (sourceLoader, videoOutput, videoProjection) {
 
         this._sourceLoader = sourceLoader;
+        this._videoOutput = videoOutput;
         this._videoProjection = videoProjection;
 
     }

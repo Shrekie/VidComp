@@ -21,7 +21,7 @@ class Media {
 
     }
 
-};
+}
 
 class Layer {
 
@@ -74,6 +74,6 @@ class Layer {
 
     }
 
-};
+}
 
 export default Layer
