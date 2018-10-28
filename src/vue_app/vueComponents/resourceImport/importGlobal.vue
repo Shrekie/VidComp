@@ -119,7 +119,6 @@ export default {
                 timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
 
-
             this.$store.dispatch('setMedia',{name: this.projectName,
             media: this.$vcomp.project(this.projectName).getAllMedia()});
 

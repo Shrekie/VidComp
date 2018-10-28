@@ -84,6 +84,7 @@ class MediaTransform {
     static RESIZE_RADIAN = 60;
 
     _interfaceDrawer;
+    _timeline;
     _videoOutput;
     _sourceLoader;
 
@@ -152,6 +153,11 @@ class MediaTransform {
 
         this._videoOutput.el.onmousemove = null;
         this._videoOutput.el.ontouchmove = null;
+        
+        document.ontouchend = null;
+        document.onmouseup = null;
+
+        this._timeline.contextHooks.runContextHooks({name:'mediaShift'});
 
     }
 
@@ -186,8 +192,8 @@ class MediaTransform {
                 this._videoOutput.el.onmousemove = this._dragBox.bind(this);
                 this._videoOutput.el.ontouchmove = this._dragBox.bind(this);
 
-                window.addEventListener('mouseup', this._dragStop.bind(this));
-                window.addEventListener('touchend', this._dragStop.bind(this));
+                document.onmouseup = this._dragStop.bind(this);
+                document.ontouchend = this._dragStop.bind(this);
 
             }
 
@@ -231,8 +237,9 @@ class MediaTransform {
 
     }
 
-    constructor (interfaceDrawer) {
+    constructor (interfaceDrawer, timeline) {
         this._interfaceDrawer = interfaceDrawer;
+        this._timeline = timeline;
     }
 
 }

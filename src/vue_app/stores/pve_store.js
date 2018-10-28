@@ -13,6 +13,7 @@ export default {
         projects:[],
         projectsReady:false,
         authenticated: false,
+        autoSaving: false,
         zoomAmount: 10,
         mediaChange: false,
         focusArea: [0, "none"]
@@ -29,10 +30,17 @@ export default {
             });
         },
 
-        setProject ({dispatch, getters} , payload) {
-            Appapi.setProject(getters.projectByName(payload.name), (response) => {
-                dispatch('getProjects');
+        setSaving ({commit, getters} , payload) {
+
+            commit('setAutosaving', true);
+            Appapi.autoSave((response) => {
+
+                Appapi.setProject(getters.projectByName(payload.name), (response) => {
+                    commit('setAutosaving', false);
+                });
+
             });
+
         },
 
         createProject ({dispatch}, payload) {
@@ -70,25 +78,25 @@ export default {
             payload.projectId = getters.projectIdByName(payload.name);
             commit('setLayers', payload);
             commit('setMedia', payload);
-            dispatch('setProject',payload)
+            dispatch('setSaving', payload)
         },
 
         setLayers ({commit, dispatch, getters}, payload){
             payload.projectId = getters.projectIdByName(payload.name);
             commit('setLayers', payload);
-            dispatch('setProject',payload);
+            dispatch('setSaving',payload);
         },
 
         setMedia ({commit, dispatch, getters}, payload){
             payload.projectId = getters.projectIdByName(payload.name);
             commit('setMedia', payload);
-            dispatch('setProject', payload);
+            dispatch('setSaving', payload);
         },
 
         setResources ({commit, dispatch, getters}, payload){
             payload.projectId = getters.projectIdByName(payload.name);
             commit('setResources', payload);
-            dispatch('setProject', payload);
+            dispatch('setSaving', payload);
         },
 
         setSliderTime ({ commit, dispatch, getters }, payload) {
@@ -174,6 +182,10 @@ export default {
             state.mediaChange = payload
         },
 
+        setAutosaving (state, payload){
+            state.autoSaving = payload
+        },
+
         setProjectLoaded (state, payload){
             state.projects[payload.projectId].projectLoaded = true;
         },
@@ -241,6 +253,10 @@ export default {
 
         focusArea (state) {
             return state.focusArea;
+        },
+
+        autoSaving (state) {
+            return state.autoSaving;
         },
 
         mediaChange (state) {

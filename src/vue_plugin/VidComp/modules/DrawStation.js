@@ -70,9 +70,26 @@ class DrawStation  {
             Promise.all(playStarted).then(function(sources) {
 
                 this._sourceLoader.eachSource().forEach(function(source){
+
                     if(source.type == 'video' || source.type.includes('audio')){
-                        source.cast.pause();
+                       
+                        if(source.status == "staging"){
+
+                            source.cast.playPromise.then().then(_ => {
+                                source.cast.pause();
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+
+                        }else{
+
+                            source.cast.pause();
+
+                        }
+                        
                     }
+                    
                 });
 
             }.bind(this));

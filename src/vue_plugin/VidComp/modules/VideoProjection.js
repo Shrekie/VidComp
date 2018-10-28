@@ -5,12 +5,12 @@ import CompositionRenderer from './CompositionRenderer.js';
 
 class VideoProjection {
 
-    constructor(ContextHooks, sourceLoader){
+    constructor(ContextHooks, sourceLoader, timeline){
 
         this.videoOutput = {};
         this.playbackContainer = new PlaybackContainer(ContextHooks, sourceLoader, this.videoOutput);
         this.interfaceDrawer = new InterfaceDrawer(sourceLoader, this.videoOutput);
-        this.mediaTransform = new MediaTransform(this.interfaceDrawer);
+        this.mediaTransform = new MediaTransform(this.interfaceDrawer, timeline);
         this.compositionRenderer = new CompositionRenderer(sourceLoader, this.videoOutput, this);
 
     }

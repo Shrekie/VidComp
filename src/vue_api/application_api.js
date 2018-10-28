@@ -5,6 +5,7 @@
 */
 
 import Axios from 'axios';
+import SimmerSave from './../library/clientAuthentication/SimmerSave.js';
 
 export default {
 
@@ -45,6 +46,11 @@ export default {
             cb(error);
         });
 
+    },
+
+
+    autoSave(cb){
+        SimmerSave.autoSave(cb);
     },
 
     setProject(project, cb){

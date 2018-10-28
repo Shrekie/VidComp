@@ -211,11 +211,13 @@ export default {
 
             // update stored scollLeft value on scroll
             this.$refs.timeline.onscroll = function(event){
-
-                this.triggerTransform();
-
+    
                 this.$store.dispatch('setSliderTime', 
                 {name: this.projectName, timeSliderTime: this.$refs.timeline.scrollLeft});
+
+                this.$nextTick(function () {
+                    this.triggerTransform();
+                });
         
             }.bind(this);
 

@@ -16,7 +16,7 @@ class VideoComposer {
         this.sourceLoader = new SourceLoader(ContextHooks);
 
         this.timeline = new Timeline(ContextHooks, this.sourceLoader);
-        this.videoProjection = new VideoProjection(ContextHooks, this.sourceLoader);
+        this.videoProjection = new VideoProjection(ContextHooks, this.sourceLoader, this.timeline);
 
         this.trackLogger = new TrackLogger(this, this.timeline, this.sourceLoader);
         this.compositionBuilder = new CompositionBuilder(this.sourceLoader, 

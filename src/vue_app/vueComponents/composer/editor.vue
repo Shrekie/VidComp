@@ -13,8 +13,19 @@
 			</v-btn>
 
 			<v-spacer></v-spacer>
-				<v-toolbar-title style="margin-left:0px">{{this.projectName}}</v-toolbar-title>
+				<v-toolbar-title >
+				{{this.projectName}}
+				</v-toolbar-title>
 			<v-spacer></v-spacer>
+			
+			<v-progress-circular
+				indeterminate
+				color="gray"
+				:size="20"
+				:width="1"
+				class="pr-2"
+				:style="{visibility: this.autoSaving ? 'visible' : 'hidden'}"
+			></v-progress-circular>
 
 			<v-btn icon :to="'/project/' + this.projectName + '/render'">
 				<v-icon>mdi-file-download</v-icon>
@@ -91,6 +102,10 @@ export default {
 
 		focusArea (){
             return this.$store.getters.focusArea;
+		},
+
+		autoSaving (){
+            return this.$store.getters.autoSaving;
 		}
 		
 	},
