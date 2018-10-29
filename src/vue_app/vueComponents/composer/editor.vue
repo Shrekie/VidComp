@@ -16,16 +16,15 @@
 				<v-toolbar-title >
 				{{this.projectName}}
 				</v-toolbar-title>
+				<v-progress-circular
+					indeterminate
+					color="gray"
+					:size="20"
+					:width="1"
+					class="ml-2 mb-1"
+					:style="{visibility: this.autoSaving ? 'visible' : 'hidden'}"
+				></v-progress-circular>
 			<v-spacer></v-spacer>
-			
-			<v-progress-circular
-				indeterminate
-				color="gray"
-				:size="20"
-				:width="1"
-				class="pr-2"
-				:style="{visibility: this.autoSaving ? 'visible' : 'hidden'}"
-			></v-progress-circular>
 
 			<v-btn icon :to="'/project/' + this.projectName + '/render'">
 				<v-icon>mdi-file-download</v-icon>

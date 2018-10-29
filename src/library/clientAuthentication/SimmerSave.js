@@ -5,7 +5,7 @@ class SimmerSave {
     static _activeInterval = false;
     static _activeCB = false;
 
-    static AUTOSAVE_TIMER = 3000;
+    static AUTOSAVE_TIMER = 2500;
 
     static autoSave (cb) {
 

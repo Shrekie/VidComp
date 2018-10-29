@@ -117,9 +117,10 @@ const router = new VueRouter({
 Vue.prototype.$eventHub = new Vue(); // Global event bus
 
 // Vue execution
+
 new Vue({
     render: h => h(appHook),
-    el: '#app',
+    el: '#appHook',
     store,
     router
 }).$mount('#app');
