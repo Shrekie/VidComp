@@ -18,6 +18,7 @@ class VideoProjection {
     setTarget (canvas) {
         this.videoOutput.ctx = canvas.getContext('2d');
         this.videoOutput.el = canvas;
+        return this.videoOutput;
     }
 
     startPlaying (sourceLoader) {

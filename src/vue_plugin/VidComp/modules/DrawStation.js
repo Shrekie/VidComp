@@ -72,12 +72,18 @@ class DrawStation  {
                 this._sourceLoader.eachSource().forEach(function(source){
                     if(source.type == 'video' || source.type.includes('audio')){
                        
-                        source.cast.playPromise.then().then(_ => {
+                        if(source.cast.playPromise){
+
+                            source.cast.playPromise.then(_ => {
+                                source.cast.pause();
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+
+                        }else{
                             source.cast.pause();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                        }
 
                     }
                 });
@@ -185,7 +191,7 @@ class DrawStation  {
                         // video stops displaying
                         if(source.status == "staging"){
 
-                            source.cast.playPromise.then().then(_ => {
+                            source.cast.playPromise.then(_ => {
                                 source.cast.pause();
                             })
                             .catch(error => {

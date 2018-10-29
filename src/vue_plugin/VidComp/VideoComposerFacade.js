@@ -1,5 +1,7 @@
 /*
-    Stores and retrieves a cache of VideoComposer projects
+
+    Singleton Factory Facade
+
 */
 
 import VideoComposer from './VideoComposer.js';

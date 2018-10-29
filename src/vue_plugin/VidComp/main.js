@@ -1,5 +1,5 @@
 /*
-    Thomas Lindauer
+    Thomas Lindauer (github.com/Shrekie)
 
     Entry point of plugin, install to vue app space.
 */

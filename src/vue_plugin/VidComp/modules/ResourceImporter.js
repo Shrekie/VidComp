@@ -40,7 +40,7 @@ class ResourceImporter {
                 if(res.error){
 
                     alert("error retrieving media resource, is url broken?");
-                    reject();
+                    reject(res.error);
 
                 }else{
 
@@ -51,7 +51,7 @@ class ResourceImporter {
                         if(fileType == "undefined"){
 
                             alert("Could not determine file type, please report this error.");
-                            reject();
+                            reject(res.error);
                             
                         }else{
 

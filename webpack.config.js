@@ -11,7 +11,8 @@ module.exports = {
     ],
     output: {
         path: __dirname + '/public',
-        filename: 'index_bundle.js'
+        filename: 'index_bundle.js',
+        publicPath: '/'
     },
     module: {
         noParse: /ffmpeg/,

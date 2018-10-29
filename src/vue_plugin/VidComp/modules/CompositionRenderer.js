@@ -63,8 +63,10 @@ class AudioAdapter {
 
         return new Promise(function(resolve){
 
+            /* #FIXME: Reuse MediaElementSource by binding a 
+            copy of origin cast and checking at mapping */
             this._audioBridger.streamSource = audioTracks.map(cast =>
-                this._audioBridger.audioContext.createMediaElementSource(cast));
+            this._audioBridger.audioContext.createMediaElementSource(cast));
 
             var dest = this._audioBridger.audioContext.createMediaStreamDestination();
 

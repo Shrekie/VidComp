@@ -88,7 +88,7 @@ class VideoComposer {
     }
 
     setTarget (canvas) {
-        this.videoProjection.setTarget(canvas);
+        return this.videoProjection.setTarget(canvas);
     }
 
     render () {
