@@ -16,6 +16,7 @@ class PlaybackContainer {
 
         this.drawStation.railBus.finishEnd = function (status){
             this.contextHooks.runContextHooks({name: 'finished', status: status});
+            if(status == "delayed") this.stopDrawSources();
         }.bind(this);
 
         this.drawStation.railBus.bufferAction = function (loadingBuffer){

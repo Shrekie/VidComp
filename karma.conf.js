@@ -1,5 +1,3 @@
-var nodeExternals = require('webpack-node-externals');
-
 module.exports = (config) => {
   config.set({
 
@@ -37,6 +35,8 @@ module.exports = (config) => {
       }
     },
 
+    browsers: ['ChromeHeadless'],
+    
     webpackMiddleware: {
       stats: 'errors-only'
     }

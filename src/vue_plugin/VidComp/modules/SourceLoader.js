@@ -76,6 +76,8 @@ class SourceLoader {
             if(media.resource.type == 'video'){
 
                 var video = document.createElement("video");
+                video.loop = true;
+
                 video.muted = true;
                 
                 var videoCast = new Cast(media, video, media.resource.type, "loading");
@@ -87,6 +89,7 @@ class SourceLoader {
                         if(BlobAnalyzer.hasAudio(video)){
 
                             var audio = document.createElement("audio");
+                            audio.loop = true;
 
                             var audioCast = new Cast(media, audio, 'audio-throw', "loading")
 

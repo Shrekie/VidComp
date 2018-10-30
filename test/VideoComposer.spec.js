@@ -1,8 +1,8 @@
 import templates from './videoComposer.template.js';
 
 import VideoComposer from '../src/vue_plugin/VidComp/VideoComposerFacade';
-var compProject = new VideoComposer();
 
+var compProject = new VideoComposer();
 var canvasTarget = document.createElement("canvas");
 
 describe('Project initialization', () => {
@@ -11,7 +11,7 @@ describe('Project initialization', () => {
 
     expect(compProject.loadProject(templates.blankProject)).to.be.equal(true);
 
-  })
+  });
 
   describe('Return corresponding verification', () => {
 
@@ -30,7 +30,7 @@ describe('Project initialization', () => {
     })
     //TODO: More corresponding info
 
-  })
+  });
 
   describe('Connect to canvas', () => {
 
@@ -41,7 +41,7 @@ describe('Project initialization', () => {
 
     })
 
-  })
+  });
 
   describe('Add media with resource', () => {
 
@@ -59,7 +59,7 @@ describe('Project initialization', () => {
         expect(result.url).to.not.equal('fetching');
       }).then(done, done);
 
-    })
+    });
 
     it('Media length', () => {
 
@@ -68,6 +68,95 @@ describe('Project initialization', () => {
 
     })
 
+    it('Video sources length', () => {
+
+      expect(compProject.getProject(templates.blankProject.name)
+      .sourceLoader.getVideoSources().length).to.be.equal(1);
+
+    })
+
+    it('Audio sources length', () => {
+
+      expect(compProject.getProject(templates.blankProject.name)
+      .sourceLoader.getAudioSources().length).to.be.equal(0);
+
+    })
+
+  });
+
+});
+
+describe('Playback', () => {
+  
+  it('Start', () => {
+
+    expect(compProject.getProject(templates.blankProject.name)
+    .play());
+    
+  });
+
+  it('Play for 3s', (done) => {
+
+    setTimeout(function(){
+
+      expect(compProject.getProject(templates.blankProject.name)
+      .videoProjection.playbackContainer.timeTracker.elapsedDateTime).to.be.above(3000);
+      done();
+
+    }, 3500)
+
+  }).timeout(4000);
+
+  it('Stop ', () => {
+
+    expect(compProject.getProject(templates.blankProject.name)
+    .stop());
+
   })
+
+  it('Reset ', () => {
+
+    expect(compProject.getProject(templates.blankProject.name)
+    .reset());
+
+  })
+
+  it('Time head at reset', () => {
+
+    expect(compProject.getProject(templates.blankProject.name)
+    .videoProjection.playbackContainer
+    .timeTracker.elapsedDateTime).to.be.equal(0);
+
+  })
+
+});
+
+describe('Media shifting', () => {
+
+  it('Adjust media close', () => {
+
+      expect(compProject.getProject(templates.blankProject.name)
+      .adjustMediaShift({
+              layerIndex: 0, mediaIndex: 0
+          },{
+              layerIndex: 0,
+              timelineStartTime: templates.closeTimeline
+      }));
+
+  });
+
+  it('Timeline time at start', () => {
+
+    expect(compProject.getProject(templates.blankProject.name)
+    .getMedia(0,0).timelineTime[0]).to.be.equal(0.155);
+
+  });
+
+  it('Timeline time at end', () => {
+
+    expect(compProject.getProject(templates.blankProject.name)
+    .getMedia(0,0).timelineTime[1]).to.be.equal(0.455);
+
+  });
 
 });

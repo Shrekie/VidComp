@@ -65,32 +65,28 @@ class DrawStation  {
         this._loadingBuffer = false;
         this._playStateFlag = [false, false];
 
-        Promise.all(this.railBus.transitory()).then(function(playStarted) {
 
-            Promise.all(playStarted).then(function(sources) {
+        this._sourceLoader.eachSource().forEach(function(source){
+            
+            if(source.type == 'video' || source.type.includes('audio')){
+                
+                if(source.cast.playPromise){
 
-                this._sourceLoader.eachSource().forEach(function(source){
-                    if(source.type == 'video' || source.type.includes('audio')){
-                       
-                        if(source.cast.playPromise){
+                    source.cast.playPromise.then(_ => {
+                        source.cast.pause();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
 
-                            source.cast.playPromise.then(_ => {
-                                source.cast.pause();
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
+                }else{
+                    source.cast.pause();
+                }
 
-                        }else{
-                            source.cast.pause();
-                        }
+            }
 
-                    }
-                });
+        });
 
-            }.bind(this));
-
-        }.bind(this));
 
     }
 

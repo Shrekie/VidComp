@@ -167,10 +167,10 @@ export default {
             // TODO: move this behaviour more to component?
             this.$vcomp.project(this.projectName).videoControl('beforeActionStart', function(context){
                 
+                // TODO: encapsulate moving time
                 if(context.action == 'play'){
-                    var startTime = (this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000);
+                    var startTime = Math.round((this.$refs.timeline.scrollLeft * 100) / (this.zoomScale/1000));
                     context.timeTracker.elapsedDateTime = startTime;
-                    // FIXME: will probably not use scrollbars so fix these
                     this.playing = true;
                     this.$refs.timeline.style.overflow = "hidden";
                 }
