@@ -137,13 +137,10 @@ export default {
 
 		deleteLayerMedia(){
 
-			let newLayerFocus = this.focusArea[0];
-
-			let deletedLayer = this.$vcomp.project(this.projectName)
+			let newLayerPointer = this.$vcomp.project(this.projectName)
 			.deleteLayerMedia(this.focusArea[0], this.focusArea[1]);
-			if(deletedLayer) newLayerFocus-=1;
 
-            this.$store.dispatch('setFocusArea', {timelineArea: [newLayerFocus, "none"]});
+            this.$store.dispatch('setFocusArea', {timelineArea: [newLayerPointer, "none"]});
  
 		},
 		

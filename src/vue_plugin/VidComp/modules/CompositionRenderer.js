@@ -55,22 +55,33 @@ class AudioAdapter {
     }
 
     connectAudio () {
-        this._audioBridger.streamSource.forEach(source =>
-        source.connect(this._audioBridger.audioContext.destination));
+        this._audioBridger.streamSource.forEach(source => 
+            source[1].connect(this._audioBridger.audioContext.destination));
+    }
+
+    _bridgeNewSource (cast) {
+
+        let exisitingStream = this._audioBridger.streamSource
+        .find(stream => stream[0] === cast);
+
+        if(!exisitingStream){
+            return [cast, this._audioBridger.audioContext
+            .createMediaElementSource(cast)];
+        }else
+        return exisitingStream;
+
     }
 
     combineAudio = function (audioTracks){
 
         return new Promise(function(resolve){
 
-            /* #FIXME: Reuse MediaElementSource by binding a 
-            copy of origin cast and checking at mapping */
-            this._audioBridger.streamSource = audioTracks.map(cast =>
-            this._audioBridger.audioContext.createMediaElementSource(cast));
+            this._audioBridger.streamSource = audioTracks.map(cast =>{
+                return this._bridgeNewSource(cast);
+            });
 
             var dest = this._audioBridger.audioContext.createMediaStreamDestination();
-
-            this._audioBridger.streamSource.forEach(source => source.connect(dest));
+            this._audioBridger.streamSource.forEach(source => source[1].connect(dest));
 
             resolve(dest);
 

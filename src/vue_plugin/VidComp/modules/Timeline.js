@@ -33,14 +33,12 @@ class ShiftOrder {
         if(this._newTimelinePos.layerIndex == this._currentTimelinePos.layerIndex){
 
             // same layer
-            console.log(JSON.stringify(changedMedia.timelineTime));
             MediaShift.checkShift(affectedLayerMedia, changedMedia);
             this._timeline.contextHooks.runContextHooks({name:'mediaShift'});
 
         }else{
 
             // new layer, delete from old one and add to new
-            console.log(JSON.stringify(changedMedia.timelineTime));
             this._timeline.getLayer(this._newTimelinePos.layerIndex).insertMedia(changedMedia);
             this._timeline.getLayer(this._currentTimelinePos.layerIndex).deleteMedia(this._currentTimelinePos.mediaIndex);
 
@@ -228,19 +226,22 @@ class Timeline {
 
     deleteLayerMedia (layerIndex, mediaIndex) {
 
-        let layerDeleted = false;
+        let newLayerIndexPointer = layerIndex;
+
         let mediaLayer = this.getLayer(layerIndex)
+
         this._sourceLoader.deleteSourceMedia(layerIndex, mediaIndex);
         mediaLayer.deleteMedia(mediaIndex);
 
-        if(!mediaLayer.getAllMedia().length > 0 && layerIndex != 0){
+        if( !(mediaLayer.getAllMedia().length > 0) 
+        && this.getAllLayers().length > 1){
             this.deleteLayer(layerIndex);
-            layerDeleted = true;
+            if(newLayerIndexPointer > 0) newLayerIndexPointer -= 1;
         }
-
+        
         this.contextHooks.runContextHooks({name:'mediaShift'});
 
-        return layerDeleted;
+        return newLayerIndexPointer;
 
     }
 
