@@ -1,31 +1,41 @@
-<!-- 
-    Resource importer manager
-    #TODO: This file should be named resourceImporter, same with URL.
--->
-
 <template>
 <v-card flat class="mt-1">
     <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
 
-                <v-flex xs8 offset-xs2>
-                <v-text-field v-model="mediaURL" 
-                @click:append="importMedia"
-                @keyup.enter.native="importMedia"
-                append-icon="mdi-upload"
-                placeholder="Import with URL"
+            <v-flex xs8 offset-xs2>
+                <v-text-field v-model="searchTerm" 
+                @click:append="searchYoutube"
+                @keyup.enter.native="searchYoutube"
+                append-icon="mdi-magnify"
+                placeholder="Search on YouTube"
                 solo
                 light
                 >
-
                 </v-text-field>
-                </v-flex>
+            </v-flex>
 
+            <v-flex xs12>
                 <v-progress-circular v-if="loadingResource" class="mb-4"
                     :size="50"
                     color="primary"
                     indeterminate
                 ></v-progress-circular>
+            </v-flex>
+
+            <Resource v-bind:resource="ytresult"
+            v-for="ytresult in searchResults"
+            ref="mediaBox"
+            v-on:resource-select="resourceSelect"
+            :key="ytresult.id">
+            </Resource>
+
+            <v-flex xs12>
+                <v-btn icon :disabled="activeResource == 0" 
+                @click="importMedia">
+                <v-icon large>mdi-check</v-icon>
+                </v-btn>
+            </v-flex>
 
         </v-layout>
     </v-container>
@@ -34,11 +44,18 @@
 
 <script>
 
+import YoutubeSearch from 'youtube-search';
+import Resource from './resource.vue';
+
 export default {
 
     name: "importGlobal",
 
     props: ['projectName'],
+
+    components: {
+        Resource
+    },
 
     computed: {
         
@@ -58,6 +75,45 @@ export default {
 
     methods: {
         
+        /*
+        uploadFile () {
+            console.log(this.$refs.inputBox.files);
+        },
+        */
+
+        searchYoutube(){
+
+            this.loadingResource = true;
+
+            var opts = {
+                maxResults: 24,
+                key: 'AIzaSyBYWmTP9-BunEMzGEBsqvz57RiwRA4uEp0'
+            };
+
+            YoutubeSearch(this.searchTerm, opts, function(err, results) {
+                if(err) return console.log(err);
+                this.searchResults = results;
+                this.loadingResource = false;
+                console.dir(results);
+            }.bind(this));
+
+        },
+
+        resourceSelect (childRef) {
+
+            this.$refs.mediaBox.forEach(resourceComponent => {
+                if(childRef.id != resourceComponent.resource.id){
+                    resourceComponent.unselectResource();
+                    resourceComponent.resourceName = "";
+                }else{
+                    resourceComponent.selectResource();
+                    resourceComponent.resourceName = resourceComponent.resource.title;
+                    this.activeResource = resourceComponent.resource;
+                }
+            });
+
+        },
+
         importMedia() {
 
             this.loadingResource = true;
@@ -108,14 +164,19 @@ export default {
 
     },
 
+    mounted: function () {
+        
+        this.searchYoutube();
+        
+    },
+
     data() {
 
-        var mediaURL;
-        var loadingResource = false;
-
         return {
-            mediaURL,
-            loadingResource
+            searchTerm:"Cats",
+            loadingResource:false,
+            activeResource:0,
+            searchResults:[]
         }
 
     }

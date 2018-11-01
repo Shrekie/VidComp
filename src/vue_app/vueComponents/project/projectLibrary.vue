@@ -12,8 +12,7 @@
                 <v-card flat>
                     <v-container>
                         <v-layout row wrap text-xs-center>
-                            <v-card flat tile width="130px" height="130px"
-                            :to="'/new'"
+                            <v-card flat tile :to="'/new'"
                             class="mediaBox" style="text-align: center !important;"
                             >
                                 <v-icon class="addBox">mdi-plus</v-icon>

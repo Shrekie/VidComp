@@ -29,7 +29,9 @@ import editor from './vueComponents/composer/editor.vue';
 import render from './vueComponents/composer/render.vue';
 import timelineEditor from './vueComponents/timeline/timelineEditor.vue';
 import resourceLibrary from './vueComponents/resourceImport/resourceLibrary.vue';
+import importTab from './vueComponents/resourceImport/importTab.vue';
 import importGlobal from './vueComponents/resourceImport/importGlobal.vue';
+import importYoutube from './vueComponents/resourceImport/importYoutube.vue';
 import authStatus from './vueComponents/user/authStatus.vue';
 
 // Stores
@@ -89,8 +91,19 @@ const routes = [
             },{
 
                 path: '/project/:projectName/import',
-                component: importGlobal,
-                props: true
+                component: importTab,
+                props: true,
+                children: [{
+
+                    path: '/project/:projectName/import/global',
+                    component: importGlobal,
+                    props: true
+
+                },{
+                    path: '/project/:projectName/import/youtube',
+                    component: importYoutube,
+                    props: true
+                }]
 
             },{
 

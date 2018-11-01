@@ -41,8 +41,7 @@
 
                     <v-layout row wrap text-xs-center>
 
-                        <v-card flat tile width="130px" height="130px"
-                        :to="'/project/' + this.projectName + '/import'"
+                        <v-card flat tile :to="'/project/' + this.projectName + '/import/youtube'"
                         class="mediaBox" style="text-align: center !important;"
                         >
                             <v-icon class="addBox">mdi-plus</v-icon>

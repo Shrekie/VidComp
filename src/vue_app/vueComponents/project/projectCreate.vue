@@ -12,29 +12,17 @@
                 <v-flex xs12 text-xs-center align-center>
                     <v-card flat>
 
-                        <v-btn @click="createProject">
-                            <v-icon>mdi-check</v-icon>
-                        </v-btn>
-
-                        <v-flex xs8 offset-xs2>
-
-
-                            <v-text-field v-model="projectName"
-                            outline
-                            append-icon="mdi-folder-plus"
-                            >
-        
-                                <v-tooltip
-                                slot="prepend"
-                                bottom
-                                >
-                                <v-icon slot="activator">mdi-help-circle-outline</v-icon>
-                                Give your project a name
-                                </v-tooltip>
-                            
-                            </v-text-field>
-
-                        </v-flex>
+                    <v-flex xs8 offset-xs2 class="pt-5">
+                        <v-text-field v-model="projectName" 
+                        @click:append="createProject"
+                        @keyup.enter.native="createProject"
+                        append-icon="mdi-folder-plus"
+                        placeholder="Enter your project name"
+                        solo
+                        light
+                        >
+                        </v-text-field>
+                    </v-flex>
 
                     </v-card>
                 </v-flex>

@@ -33,7 +33,8 @@
     "vue-router": "^3.0.1",
     "vuetify": "^1.3.3",
     "vuex": "^3.0.1",
-    "vuex-shared-mutations": "0.0.4"
+    "vuex-shared-mutations": "0.0.4",
+    "youtube-search": "^1.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

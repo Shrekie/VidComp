@@ -8,10 +8,9 @@
     <div v-on:click="$emit('resource-select', resource)">
 
         <v-card flat tile 
-        width="130px" height="130px" 
-        class="mediaBox" ref="mediaBox">
+        class="mediaBox resourceFlair" ref="mediaBox">
             <v-card-title>
-                <p style="word-break: break-all;">{{this.resource.name}}</p>
+                <p style="word-break: break-all;">{{this.resourceName}}</p>
             </v-card-title>
         </v-card>
 
@@ -28,7 +27,6 @@ export default {
     props: ['resource'],
 
     computed: {
-
     },
 
     methods: {
@@ -43,8 +41,16 @@ export default {
 
     },
 
+    mounted: function () {
+
+        if(this.resource.thumbnails){
+            this.$refs.mediaBox.$el.style.background = `url(${this.resource.thumbnails.default.url})`;
+        }
+    },
+
 	data() {    
 		return {
+            resourceName: this.resource.name
         }
     }
     
@@ -54,11 +60,19 @@ export default {
 <style>
 
 .mediaBox{
+    width: 150px;
+    height: 150px;
     background-color: #C5C5C5 !important;
     margin-right:5px;
     margin-bottom:5px;
     text-align: left;
     overflow: hidden;
+    color: white;
+}
+.resourceFlair{
+    background-repeat: no-repeat !important;
+    background-size: 150px 150px !important;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 .mediaBox:hover{
     cursor:pointer;
