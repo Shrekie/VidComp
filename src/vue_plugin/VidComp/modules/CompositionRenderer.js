@@ -54,7 +54,7 @@ class AudioAdapter {
         streamSource: [],
     }
 
-    connectAudio () {
+    connectAudioWindow () {
         this._audioBridger.streamSource.forEach(source => 
             source[1].connect(this._audioBridger.audioContext.destination));
     }
@@ -67,8 +67,10 @@ class AudioAdapter {
         if(!exisitingStream){
             return [cast, this._audioBridger.audioContext
             .createMediaElementSource(cast)];
-        }else
-        return exisitingStream;
+        }else{
+            exisitingStream[1].disconnect()
+            return exisitingStream;
+        }
 
     }
 
@@ -409,7 +411,7 @@ class CompositionRenderer {
             return import("ffmpeg.js").then(function({ default: ffmpeg }){
 
                 this._tunePlayer(1);
-                this._audioAdapter.connectAudio();
+                this._audioAdapter.connectAudioWindow();
 
                 let ffmpegArguments = this._ffmpegArgGen(recordedRender);
 
