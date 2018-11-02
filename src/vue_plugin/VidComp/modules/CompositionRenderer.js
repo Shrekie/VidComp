@@ -100,6 +100,7 @@ class StreamRecorder {
     _finishState;
     _stream;
     _options;
+    _visibilityHandler;
     _done;
 
     _ignoreBufferInterrupt () {
@@ -132,6 +133,7 @@ class StreamRecorder {
     
                 this._mediaRecorder.stop();
                 this._stream.getTracks().forEach(track => track.stop());
+                document.removeEventListener("visibilitychange", this._visibilityHandler); 
                 this._videoProjection.playbackContainer.contextHooks
                 .unregisterHook(this._bufferingState);
     
@@ -141,11 +143,34 @@ class StreamRecorder {
 
     }
 
+    _pageHidden () {
+        
+        this._visibilityHandler = function () {
+            if(document.hidden){
+                if(this._mediaRecorder.state != "paused"){
+                    this._mediaRecorder.pause();
+                    console.log("STOP R");
+                }
+            }else{
+                if(this._mediaRecorder.state != "recording"){
+                    this._mediaRecorder.resume();
+                    console.log("START R");
+                }
+            }
+        }.bind(this)
+
+        document.addEventListener("visibilitychange", 
+        this._visibilityHandler, false);
+        
+    }
+
     _fillMediaRecorder () {
 
         this._mediaRecorder = new MediaRecorder(this._stream, this._options);
 
         this._ignoreBufferInterrupt();
+
+        //this._pageHidden();
 
         this._mediaRecorder.ondataavailable = function (event) {
 
@@ -197,7 +222,6 @@ class StreamRecorder {
         this._stream = stream;
         this._done = done;
         this._options = options;
-
 
         return this._fillMediaRecorder();
         

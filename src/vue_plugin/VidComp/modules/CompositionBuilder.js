@@ -21,7 +21,9 @@ class CompositionBuilder {
             return {
                 layerIndex:layer.layerIndex,
                 mediaIndex:mediaIndex,
-                loadedResource:newLayer.newMedia.resource.loadedResource
+
+                loadedResource:newLayer.newMedia.resource.loadedResource,
+                fetchResponse:newLayer.newMedia.resource.fetchResponse
             }
     
         }else if (newLayer.newMedia) {
@@ -64,7 +66,9 @@ class CompositionBuilder {
             
             return {
                 mediaIndex: mediaIndex,
-                loadedResource:newMedia.newMedia.resource.loadedResource
+                
+                loadedResource:newMedia.newMedia.resource.loadedResource,
+                fetchResponse:newMedia.newMedia.resource.fetchResponse
             }
     
         }else if ( newMedia.resource ) {
@@ -78,7 +82,9 @@ class CompositionBuilder {
     
             return {
                 mediaIndex: mediaIndex,
-                loadedResource:newMedia.newMedia.resource.loadedResource
+
+                loadedResource:newMedia.newMedia.resource.loadedResource,
+                fetchResponse:newMedia.newMedia.resource.fetchResponse
             }
     
         } else {

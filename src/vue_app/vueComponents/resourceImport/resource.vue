@@ -46,8 +46,10 @@ export default {
     mounted: function () {
 
         if(this.resource.thumbnails){
-            this.$refs.mediaBox.$el.style.background = `url(${this.resource.thumbnails.default.url})`;
+            this.$refs.mediaBox.$el.style.background = 
+            `url(${this.resource.thumbnails.default.url})`;
         }
+        
     },
 
 	data() {    

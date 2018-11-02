@@ -8,19 +8,21 @@ class ResourceImporter {
     }
 
     _proxyurl;
-    
+
     _fetchResource (newResource) {
 
         if(newResource.origin == "youtube"){
 
             return Axios.get('/ytStream', {
+
                 params: {
+
                     ytUrl:newResource.resourceLink
+
                 }
+
             })
             .then(function (response) {
-
-                console.log(this._proxyurl + response.data.stream);
 
                 return fetch(this._proxyurl + response.data.stream)
                 .then(res => {
@@ -39,7 +41,6 @@ class ResourceImporter {
 
         }else{
 
-            console.log(this._proxyurl + newResource.resourceLink);
             return fetch(newResource.resourceLink)
             .then(res => {
                 if (res.status === 200) {
@@ -65,8 +66,8 @@ class ResourceImporter {
     }
 
     _saveBlob (newResource, resource, sourceLoader) {
-        console.log(newResource);
-        resource.loadedResource = new Promise(function(resolve, reject){
+
+        resource.fetchResponse = new Promise(function(resolve, reject){
 
             this._fetchResource(newResource)
             .then(res => {
@@ -78,37 +79,61 @@ class ResourceImporter {
 
                 }else{
 
-                    res.blob().then(function(blob){
-
-                        var fileType = BlobAnalyzer.determineType(blob);
-
-                        if(fileType == "undefined"){
-
-                            alert("Could not determine file type, please report this error.");
-                            reject(res.error);
-                            
-                        }else{
-
-                            resource.url = URL.createObjectURL(blob);
-                            resource.type = fileType;
-                            sourceLoader.loadSelectedResource(resource);
-                            resolve(resource);
-
-                        }
-
-                    });
+                    resolve(res);
 
                 }
 
-            }); 
+            });
 
         }.bind(this));
+
+        if(newResource.origin == "youtube"){
+
+            resource.type = "video";
+
+            resource.loadedResource = resource.fetchResponse.then(function(res){
+
+                return res.blob().then(function(blob){
+                    resource.url = URL.createObjectURL(blob);
+                    sourceLoader.loadSelectedResource(resource);
+                    return resource;
+                });
+
+            });
+
+        } else {
+
+            resource.loadedResource = resource.fetchResponse.then(function(res){
+
+                return res.blob().then(function(blob){
+
+                    var fileType = BlobAnalyzer.determineType(blob);
+
+                    if(fileType == "undefined"){
+
+                        alert("Could not determine file type, please report this error.");
+                        throw new TypeError('no file type');
+
+                    }else{
+
+                        resource.url = URL.createObjectURL(blob);
+                        resource.type = fileType;
+                        sourceLoader.loadSelectedResource(resource);
+                        return resource;
+
+                    }
+
+                });
+
+            }.bind(this));
+
+        }
 
         return resource;
 
     }
 
-    importResource (newResource, sourceLoader) { 
+    importResource (newResource, sourceLoader) {
 
         var resourceExists =  this._existingResource(newResource.name);
 

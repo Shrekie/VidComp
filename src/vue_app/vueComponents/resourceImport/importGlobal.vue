@@ -89,12 +89,12 @@ export default {
                 timelineStartTime: ((this.timeSliderTime/this.zoomScale) - 0.05)
             });
 
-            this.$store.dispatch('setMedia',{name: this.projectName,
-            media: this.$vcomp.project(this.projectName).getAllMedia()});
-
             this.$vcomp.project(this.projectName).log();
 
             mediaMeta.loadedResource.then(function () {
+
+                this.$store.dispatch('setMedia',{name: this.projectName,
+                media: this.$vcomp.project(this.projectName).getAllMedia()});
 
                 this.$store.dispatch('setResources',{name: this.projectName,
                 resources: this.$vcomp.project(this.projectName).getAllResources()});
