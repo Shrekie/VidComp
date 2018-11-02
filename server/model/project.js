@@ -5,6 +5,7 @@ var Resource = new Schema({
     name: String,
     url: String,
     type: String,
+    origin: String,
     resourceLink: String
 });
 

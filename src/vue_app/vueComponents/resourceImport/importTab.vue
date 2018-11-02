@@ -8,7 +8,8 @@
 
             <v-card flat>
 
-                <v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
+                <v-btn icon :to="'/project/' + this.projectName + '/resources/video'"
+                :disabled="importing">
                     <v-icon>mdi-arrow-left-bold-circle</v-icon>
                 </v-btn>
                 
@@ -16,11 +17,13 @@
 
             <v-card flat class="mt-1">
 
-                <v-btn icon :to="'/project/' + this.projectName + '/import/youtube'">
+                <v-btn icon :to="'/project/' + this.projectName + '/import/youtube'"
+                :disabled="importing">
                     <v-icon>mdi-youtube</v-icon>
                 </v-btn>
 
-                <v-btn icon :to="'/project/' + this.projectName + '/import/global'">
+                <v-btn icon :to="'/project/' + this.projectName + '/import/global'"
+                :disabled="importing">
                     <v-icon >mdi-link-variant</v-icon>
                 </v-btn>
 
@@ -30,7 +33,7 @@
 
             </v-card>
 
-            <router-view></router-view>
+            <router-view  v-on:importing-resource="disableButtonsOnImport" ></router-view>
 
         </v-flex>
 </template>
@@ -42,6 +45,20 @@ export default {
     name: "importTab",
 
     props: ['projectName'],
+
+    methods: {
+        disableButtonsOnImport(isImporting){
+            this.importing = isImporting;
+        }
+    },
+
+    data() {
+
+        return {
+            importing:false
+        }
+
+    }
     
 };
 </script>

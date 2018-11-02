@@ -1,4 +1,5 @@
 import BlobAnalyzer from '../../../library/fileManager/BlobAnalyzer.js';
+import Axios from 'axios';
 
 class ResourceImporter {
 
@@ -8,8 +9,38 @@ class ResourceImporter {
 
     _proxyurl;
     
-    _fetchResource (resourceLink) {
-        return fetch(this._proxyurl + resourceLink)
+    _fetchResource (newResource) {
+
+        if(newResource.origin == "youtube"){
+
+            return Axios.get('/ytStream', {
+                params: {
+                    ytUrl:newResource.resourceLink
+                }
+            })
+            .then(function (response) {
+
+                console.log(this._proxyurl + response.data.stream);
+
+                return fetch(this._proxyurl + response.data.stream)
+                .then(res => {
+                    if (res.status === 200) {
+                        return res;
+                    } else {
+                        throw new Error(res.statusText);
+                    }
+                })
+                .catch(error => { return {error} });
+    
+            }.bind(this))
+            .catch(function (error) {
+                return error;
+            });
+
+        }else{
+
+            console.log(this._proxyurl + newResource.resourceLink);
+            return fetch(newResource.resourceLink)
             .then(res => {
                 if (res.status === 200) {
                     return res;
@@ -17,7 +48,10 @@ class ResourceImporter {
                     throw new Error(res.statusText);
                 }
             })
-        .catch(error => { return {error} });
+            .catch(error => { return {error} });
+
+        }
+
     }
 
     getAllResources () {
@@ -31,10 +65,10 @@ class ResourceImporter {
     }
 
     _saveBlob (newResource, resource, sourceLoader) {
-
+        console.log(newResource);
         resource.loadedResource = new Promise(function(resolve, reject){
 
-            this._fetchResource(newResource.resourceLink)
+            this._fetchResource(newResource)
             .then(res => {
 
                 if(res.error){
@@ -86,8 +120,8 @@ class ResourceImporter {
             var resource = {
                 name: newResource.name,
                 url: 'fetching',
-                type: newResource.resourceType,
-                resourceLink: newResource.resourceLink
+                resourceLink: newResource.resourceLink,
+                origin: newResource.origin
             };
 
             this._store.resources.push(resource);
@@ -99,7 +133,7 @@ class ResourceImporter {
     }
 
     constructor () {
-        this._proxyurl = "";
+        this._proxyurl = "https://cors-anywhere.herokuapp.com/";
     }
 
 }

@@ -110,7 +110,7 @@ class CompositionBuilder {
                 this._resourceImporter.importResource({
                         name: resource.name,
                         resourceLink: resource.resourceLink,
-                        resourceType: resource.type
+                        origin: resource.origin
                 }, this._sourceLoader);
 
             });

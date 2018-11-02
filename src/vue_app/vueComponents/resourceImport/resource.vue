@@ -32,12 +32,14 @@ export default {
     methods: {
 
         selectResource: function(){
+            this.selected = true;
             this.$refs.mediaBox.$el.style.border = "5px solid white";
         },
 
         unselectResource: function(){
+            this.selected = false;
             this.$refs.mediaBox.$el.style.border = "none";
-        }
+        },
 
     },
 
@@ -50,7 +52,8 @@ export default {
 
 	data() {    
 		return {
-            resourceName: this.resource.name
+            resourceName: this.resource.name,
+            selected: false
         }
     }
     

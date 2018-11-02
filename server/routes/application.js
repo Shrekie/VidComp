@@ -1,6 +1,27 @@
 var express = require('express');
 var router = express.Router();
+const ytdl = require('youtube-dl');
 const Project = require('./../model/project');
+
+router.get('/ytStream', (req, res)=>{
+
+    var ytUrl = req.param('ytUrl');
+    console.log(ytUrl);
+    
+    if(req.isAuthenticated()){
+
+        ytdl.exec(ytUrl, ['-f best','-s', '-g'], {}, 
+        function(err, output) {
+            if (err)
+            res.status(404).send({message:'error'})
+            else
+            res.json({stream:output[0]});
+        });
+
+    }
+
+});
+
 
 router.post('/newUser', (req, res)=>{
 

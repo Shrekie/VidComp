@@ -3,8 +3,8 @@
     <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
 
-            <v-flex xs8 offset-xs2>
-                <v-text-field v-model="searchTerm" 
+            <v-flex xs10 offset-xs1>
+                <v-text-field v-model="searchTerm" :disabled="loadingResource"
                 @click:append="searchYoutube"
                 @keyup.enter.native="searchYoutube"
                 append-icon="mdi-magnify"
@@ -31,7 +31,7 @@
             </Resource>
 
             <v-flex xs12>
-                <v-btn icon :disabled="activeResource == 0" 
+                <v-btn icon :disabled="activeResource == 0 || loadingResource" 
                 @click="importMedia">
                 <v-icon large>mdi-check</v-icon>
                 </v-btn>
@@ -84,9 +84,11 @@ export default {
         searchYoutube(){
 
             this.loadingResource = true;
+            this.$emit('importing-resource', this.loadingResource);
 
             var opts = {
                 maxResults: 24,
+                type:"video",
                 key: 'AIzaSyBYWmTP9-BunEMzGEBsqvz57RiwRA4uEp0'
             };
 
@@ -94,6 +96,7 @@ export default {
                 if(err) return console.log(err);
                 this.searchResults = results;
                 this.loadingResource = false;
+                this.$emit('importing-resource', this.loadingResource);
                 console.dir(results);
             }.bind(this));
 
@@ -109,14 +112,28 @@ export default {
                     resourceComponent.selectResource();
                     resourceComponent.resourceName = resourceComponent.resource.title;
                     this.activeResource = resourceComponent.resource;
+                    this.activeMediaChild = resourceComponent;
                 }
             });
 
         },
 
+        disableNotSelectedMediaBox (option) {
+            this.$refs.mediaBox.forEach(resourceComponent => {
+                if(this.activeMediaChild.resource.id != resourceComponent.resource.id){
+                    if(option)
+                    resourceComponent.$el.style.display = "none";
+                    else
+                    resourceComponent.$el.style.display = "block";
+                }
+            });
+        },
+
         importMedia() {
 
             this.loadingResource = true;
+            this.$emit('importing-resource', this.loadingResource);
+            this.disableNotSelectedMediaBox(true);
 
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
 
@@ -129,9 +146,9 @@ export default {
                 },
 
                 newResource: {
-                    name: this.mediaURL,
-                    resourceLink: this.mediaURL,
-                    resourceType: 'searching'
+                    name: this.activeResource.title,
+                    resourceLink: this.activeResource.link,
+                    origin: "youtube"
                 }
 
             });
@@ -155,6 +172,8 @@ export default {
                 resources: this.$vcomp.project(this.projectName).getAllResources()});
 
                 this.loadingResource = false;
+                this.$emit('importing-resource', this.loadingResource);
+                this.disableNotSelectedMediaBox(false);
 
                 this.$router.push({ path: `/project/${this.projectName}`});
 
@@ -176,6 +195,8 @@ export default {
             searchTerm:"Cats",
             loadingResource:false,
             activeResource:0,
+            activeMediaChild:0,
+            mediaUrl:0,
             searchResults:[]
         }
 

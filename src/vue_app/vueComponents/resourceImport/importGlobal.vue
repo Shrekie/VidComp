@@ -8,8 +8,8 @@
     <v-container grid-list-md text-xs-center>
         <v-layout row wrap>
 
-                <v-flex xs8 offset-xs2>
-                <v-text-field v-model="mediaURL" 
+                <v-flex xs10 offset-xs1>
+                <v-text-field v-model="mediaURL" :disabled="loadingResource"
                 @click:append="importMedia"
                 @keyup.enter.native="importMedia"
                 append-icon="mdi-upload"
@@ -61,6 +61,7 @@ export default {
         importMedia() {
 
             this.loadingResource = true;
+            this.$emit('importing-resource', this.loadingResource);
 
             var mediaMeta = this.$vcomp.project(this.projectName).addMedia({
 
@@ -75,7 +76,7 @@ export default {
                 newResource: {
                     name: this.mediaURL,
                     resourceLink: this.mediaURL,
-                    resourceType: 'searching'
+                    origin: "global"
                 }
 
             });
@@ -99,6 +100,7 @@ export default {
                 resources: this.$vcomp.project(this.projectName).getAllResources()});
 
                 this.loadingResource = false;
+                this.$emit('importing-resource', this.loadingResource);
 
                 this.$router.push({ path: `/project/${this.projectName}`});
 

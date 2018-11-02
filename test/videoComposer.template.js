@@ -22,7 +22,7 @@ var templates = {
         newResource: {
             name: 'https://i.imgur.com/Cd08zcw.mp4',
             resourceLink: 'https://i.imgur.com/Cd08zcw.mp4',
-            resourceType: 'video'
+            origin: "global",
         }
 
     },
