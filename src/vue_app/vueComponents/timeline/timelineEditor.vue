@@ -263,9 +263,9 @@ export default {
     background-color: #C5C5C5;
     margin: 10px auto;
     width: 100%;
-    height: 30vh;
+    height: 100%;
     position: relative;
-    overflow:hidden;
+    overflow: hidden;
     transform: translateZ(0);
     
 }

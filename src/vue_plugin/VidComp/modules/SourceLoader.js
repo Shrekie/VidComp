@@ -45,7 +45,7 @@ class SourceLoader {
                     imageCast.status = "ready";
                 };
 
-                image.src = 'https://i.imgur.com/7plojL3.png';
+                image.src = 'https://i.imgur.com/wWv5kKf.png';
 
             });
 

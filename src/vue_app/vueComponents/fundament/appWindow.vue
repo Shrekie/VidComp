@@ -5,7 +5,7 @@
 <template>
 <v-app dark>
 <v-content>
-	<v-container grid-list-md text-xs-center>
+	<v-container grid-list-md text-xs-center fluid>
 		<Authenticate>
 		</Authenticate>
 		<router-view v-if="this.projectsReady"></router-view>

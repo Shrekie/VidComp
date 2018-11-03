@@ -8,13 +8,13 @@
             </canvas>
 		</div>
 		
-		<v-btn icon @click="playVideo" v-if="!playcontrolsHidden">
+		<v-btn icon @click="playVideo" v-if="!playcontrolsHidden" exact>
 			<v-icon>mdi-play</v-icon>
 		</v-btn>
-		<v-btn icon @click="stopVideo" v-if="!playcontrolsHidden">
+		<v-btn icon @click="stopVideo" v-if="!playcontrolsHidden" exact>
 			<v-icon>mdi-pause</v-icon>
 		</v-btn>
-		<v-btn icon @click="resetVideo" v-if="!playcontrolsHidden">
+		<v-btn icon @click="resetVideo" v-if="!playcontrolsHidden" exact>
 			<v-icon>mdi-skip-backward</v-icon>
 		</v-btn>
 

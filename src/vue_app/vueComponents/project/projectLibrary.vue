@@ -7,34 +7,45 @@
 
     <v-flex xs12 text-xs-center>
 
+        <v-toolbar app dense flat>
+
+            <v-spacer></v-spacer>
+
+            <v-btn icon :to="'/new'">
+                <v-icon large>mdi-plus-box</v-icon>
+            </v-btn>
+
+            <v-spacer></v-spacer>
+
+        </v-toolbar>
+
         <v-layout>
             <v-flex xs12 text-xs-center>
                 <v-card flat>
                     <v-container>
                         <v-layout row wrap text-xs-center>
-                            <v-card flat tile :to="'/new'"
-                            class="mediaBox" style="text-align: center !important;"
-                            >
-                                <v-icon class="addBox">mdi-plus</v-icon>
-                            </v-card>
 
                             <Resource v-bind:resource="resource"
                             v-for="resource in allProjects"
                             :key="resource.name"
                             ref="mediaBox" v-on:resource-select="resourceSelect">
                             </Resource>
+
                         </v-layout>
                     </v-container>
                 </v-card>
             </v-flex>
         </v-layout>
 
-        <v-card flat>
+        <v-bottom-nav
+        :value="true"
+        app
+        >
             <v-btn icon :disabled="activeProject == 0" 
             @click="getMedia">
-                <v-icon>mdi-check</v-icon>
+            <v-icon large>mdi-check</v-icon>
             </v-btn>
-        </v-card>
+        </v-bottom-nav>
 
     </v-flex>
         
@@ -68,7 +79,6 @@ export default {
             this.$refs.mediaBox.forEach(projectComponent => {
                 if(childRef.name != projectComponent.resource.name){
                     projectComponent.unselectResource();
-                    console.log(projectComponent);
                 }else{
                     projectComponent.selectResource();
                     this.activeProject = projectComponent.resource;

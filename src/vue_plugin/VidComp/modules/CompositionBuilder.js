@@ -66,7 +66,7 @@ class CompositionBuilder {
             
             return {
                 mediaIndex: mediaIndex,
-                
+
                 loadedResource:newMedia.newMedia.resource.loadedResource,
                 fetchResponse:newMedia.newMedia.resource.fetchResponse
             }
@@ -109,7 +109,8 @@ class CompositionBuilder {
                 this.createLayer({layerIndex:layer.layerIndex});
             });
         }
-    
+
+        /*
         if(project.resources.length > 0){
             project.resources.forEach(resource => {
 
@@ -121,7 +122,8 @@ class CompositionBuilder {
 
             });
         }
-    
+        */
+
         if(project.media.length > 0){
             project.media.forEach(media => {
                 this.addMedia({
@@ -134,8 +136,11 @@ class CompositionBuilder {
                         videoStartTime: media.videoStartTime
                     },
     
-                    resource: {
-                        name: media.resource.name
+                    newResource: {
+                        name: media.resource.name,
+                        resourceLink: media.resource.resourceLink,
+                        origin: media.resource.origin,
+                        type: media.resource.type
                     }
     
                 });

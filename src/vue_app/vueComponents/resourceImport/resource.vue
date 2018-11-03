@@ -5,16 +5,16 @@
 
 <template>
 
-    <div v-on:click="$emit('resource-select', resource)">
 
-        <v-card flat tile 
+
+        <v-card flat tile @click.native="$emit('resource-select', resource)"
         class="mediaBox resourceFlair" ref="mediaBox">
             <v-card-title>
                 <p style="word-break: break-all;">{{this.resourceName}}</p>
             </v-card-title>
         </v-card>
 
-    </div>
+
 
 </template>
 
@@ -46,10 +46,8 @@ export default {
     mounted: function () {
 
         if(this.resource.thumbnails){
-            this.$refs.mediaBox.$el.style.background = 
-            `url(${this.resource.thumbnails.default.url})`;
+            this.$refs.mediaBox.$el.style.background = `url(${this.resource.thumbnails.default.url})`;
         }
-        
     },
 
 	data() {    
@@ -68,7 +66,8 @@ export default {
     width: 150px;
     height: 150px;
     background-color: #C5C5C5 !important;
-    margin-right:5px;
+    margin-right:auto;
+    margin-left:auto;
     margin-bottom:5px;
     text-align: left;
     overflow: hidden;

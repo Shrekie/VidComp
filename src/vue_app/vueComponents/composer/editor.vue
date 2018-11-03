@@ -53,9 +53,10 @@
 		<router-view>
 
 		</router-view>
-		<!--#TODO: put into own component-->
-		<v-card flat>
-
+		<v-bottom-nav
+        :value="true"
+        app
+        >
 			<v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
 				<v-icon>mdi-plus-circle</v-icon>
 			</v-btn>
@@ -64,7 +65,7 @@
 				<v-icon>mdi-delete</v-icon>
 			</v-btn>
 
-		</v-card>
+        </v-bottom-nav>
 
 	</v-flex>
 

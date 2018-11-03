@@ -6,17 +6,20 @@
 <template>
 
     <v-flex xs12 text-xs-center>
-        
-        <v-card flat>
-            <v-btn icon :to="'/project/' + this.projectName">
-                <v-icon>mdi-arrow-left-bold-circle</v-icon>
+
+        <v-toolbar app dense flat>
+
+            <v-btn icon :to="'/project/' + this.projectName" exact>
+                <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
-        </v-card>
 
-        <v-layout>
+            <v-spacer></v-spacer>
 
-            <v-flex xs12 text-xs-center>
-            <v-card flat>
+            <v-toolbar-items>
+
+                <v-btn icon :to="'/project/' + this.projectName + '/import/youtube'" exact>
+                    <v-icon large>mdi-plus-box</v-icon>
+                </v-btn>
 
                 <v-btn icon 
                 :to="'/project/' + this.projectName + '/resources/video'" 
@@ -37,15 +40,21 @@
                     <v-icon>mdi-volume-high</v-icon>
                 </v-btn>
 
+            </v-toolbar-items>
+
+            <v-spacer></v-spacer>
+
+		</v-toolbar>
+
+        <v-layout>
+
+            <v-flex xs12 text-xs-center>
+            <v-card flat>
+
+
                 <v-container>
 
                     <v-layout row wrap text-xs-center>
-
-                        <v-card flat tile :to="'/project/' + this.projectName + '/import/youtube'"
-                        class="mediaBox" style="text-align: center !important;"
-                        >
-                            <v-icon class="addBox">mdi-plus</v-icon>
-                        </v-card>
 
                         <Resource v-bind:resource="resource"
                         v-for="resource in allResources"
@@ -64,20 +73,19 @@
             
         </v-layout>
 
-        <v-card flat>
+        <v-bottom-nav
+        :value="true"
+        app
+        >
+
             <v-btn icon :disabled="activeResource == 0" 
-            @click="getMedia">
-                <v-icon>mdi-check</v-icon>
+                @click="getMedia">
+                <v-icon large>mdi-check</v-icon>
             </v-btn>
-            <v-btn icon :disabled="activeResource == 0" 
-            :to="'/project/' + this.projectName">
-                <v-icon>mdi-delete</v-icon>
-            </v-btn>
-            <v-btn icon :disabled="activeResource == 0" 
-            :to="'/project/' + this.projectName">
-                <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-        </v-card>
+
+        </v-bottom-nav>
+
+
 
     </v-flex>
         
@@ -125,7 +133,6 @@ export default {
             this.$refs.mediaBox.forEach(resourceComponent => {
                 if(childRef.name != resourceComponent.resource.name){
                     resourceComponent.unselectResource();
-                    console.log(resourceComponent);
                 }else{
                     resourceComponent.selectResource();
                     this.activeResource = resourceComponent.resource;
@@ -144,8 +151,10 @@ export default {
                     position: [0, 0],
                     videoStartTime: 0,
                 },
-                resource: {
-                    name: this.activeResource.name
+                newResource: {
+                    name: this.activeResource.name,
+                    resourceLink: this.activeResource.resourceLink,
+                    origin: this.activeResource.origin
                 }
             });
 

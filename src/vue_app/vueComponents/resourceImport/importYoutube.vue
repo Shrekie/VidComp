@@ -30,12 +30,17 @@
             :key="ytresult.id">
             </Resource>
 
-            <v-flex xs12>
-                <v-btn icon :disabled="activeResource == 0 || loadingResource" 
+            <v-bottom-nav
+            :value="true"
+            app
+            >
+
+            <v-btn icon :disabled="activeResource == 0" 
                 @click="importMedia">
                 <v-icon large>mdi-check</v-icon>
-                </v-btn>
-            </v-flex>
+            </v-btn>
+
+        </v-bottom-nav>
 
         </v-layout>
     </v-container>
@@ -87,7 +92,7 @@ export default {
             this.$emit('importing-resource', this.loadingResource);
 
             var opts = {
-                maxResults: 24,
+                maxResults: 21,
                 type:"video",
                 key: 'AIzaSyBYWmTP9-BunEMzGEBsqvz57RiwRA4uEp0'
             };

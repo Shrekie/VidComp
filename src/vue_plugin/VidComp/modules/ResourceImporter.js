@@ -74,7 +74,7 @@ class ResourceImporter {
 
                 if(res.error){
 
-                    alert("error retrieving media resource, is url broken?");
+                    alert(res.error);
                     reject(res.error);
 
                 }else{
@@ -146,7 +146,8 @@ class ResourceImporter {
                 name: newResource.name,
                 url: 'fetching',
                 resourceLink: newResource.resourceLink,
-                origin: newResource.origin
+                origin: newResource.origin,
+                type: newResource.type
             };
 
             this._store.resources.push(resource);

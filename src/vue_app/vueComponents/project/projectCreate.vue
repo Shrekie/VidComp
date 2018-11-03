@@ -1,12 +1,12 @@
 <template>
         <v-flex xs12 text-xs-center>
 
-            <v-card flat>
-                <v-btn icon :to="'/'">
-                    <v-icon>mdi-arrow-left-bold-circle</v-icon>
+
+            <v-toolbar app dense flat>
+                <v-btn icon :to="'/'" exact>
+                    <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
-                
-            </v-card>
+            </v-toolbar>
 
             <v-layout>
                 <v-flex xs12 text-xs-center align-center>
@@ -17,7 +17,7 @@
                         @click:append="createProject"
                         @keyup.enter.native="createProject"
                         append-icon="mdi-folder-plus"
-                        placeholder="Enter your project name"
+                        placeholder="Project name"
                         solo
                         light
                         >
