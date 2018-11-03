@@ -95,7 +95,6 @@ class AudioAdapter {
 class StreamRecorder {
 
     _recordedBlobs = [];
-    _mediaRecorder;
     _videoProjection;
     _finishState;
     _stream;
@@ -109,15 +108,9 @@ class StreamRecorder {
         .registerHooks({name:'bufferInterrupt', callbackHook:function(bufferingState){    
     
             if(bufferingState.status){
-                if(this._mediaRecorder.state != "paused"){
-                    this._mediaRecorder.pause();
-                    console.log("STOP R");
-                }
+                this.pauseRecording();
             } else {
-                if(this._mediaRecorder.state != "recording"){
-                    this._mediaRecorder.resume();
-                    console.log("START R");
-                }
+                this.resumeRecording();
             }
     
         }.bind(this)});
@@ -131,9 +124,8 @@ class StreamRecorder {
     
             if(finished.status == this._finishState){
     
-                this._mediaRecorder.stop();
+                this.mediaRecorder.stop();
                 this._stream.getTracks().forEach(track => track.stop());
-                document.removeEventListener("visibilitychange", this._visibilityHandler); 
                 this._videoProjection.playbackContainer.contextHooks
                 .unregisterHook(this._bufferingState);
     
@@ -143,36 +135,29 @@ class StreamRecorder {
 
     }
 
-    _pageHidden () {
-        
-        this._visibilityHandler = function () {
-            if(document.hidden){
-                if(this._mediaRecorder.state != "paused"){
-                    this._mediaRecorder.pause();
-                    console.log("STOP R");
-                }
-            }else{
-                if(this._mediaRecorder.state != "recording"){
-                    this._mediaRecorder.resume();
-                    console.log("START R");
-                }
-            }
-        }.bind(this)
+    pauseRecording () {
+        if(this.mediaRecorder.state != "paused" && 
+        this.mediaRecorder.state != "inactive"){
+            this.mediaRecorder.pause();
+            console.log("STOP R");
+        }
+    }
 
-        document.addEventListener("visibilitychange", 
-        this._visibilityHandler, false);
-        
+    resumeRecording () {
+        if(this.mediaRecorder.state != "recording" && 
+        this.mediaRecorder.state != "inactive"){
+            this.mediaRecorder.resume();
+            console.log("START R");
+        }
     }
 
     _fillMediaRecorder () {
 
-        this._mediaRecorder = new MediaRecorder(this._stream, this._options);
+        this.mediaRecorder = new MediaRecorder(this._stream, this._options);
 
         this._ignoreBufferInterrupt();
 
-        //this._pageHidden();
-
-        this._mediaRecorder.ondataavailable = function (event) {
+        this.mediaRecorder.ondataavailable = function (event) {
 
             if(!event || !event.data || !event.data.size) 
             console.log('%c NOTHING IN STREAM ', 'background: yellow; color: orange');
@@ -183,7 +168,7 @@ class StreamRecorder {
 
         }.bind(this);
 
-        this._mediaRecorder.onstop = function (event){
+        this.mediaRecorder.onstop = function (event){
 
             this._done(new Blob(this._recordedBlobs, {type: this._options.mimeType}), this._done);
             this._videoProjection.playbackContainer.contextHooks.unregisterHook(this._playFinish);
@@ -192,9 +177,7 @@ class StreamRecorder {
 
         this._stateStop();
 
-        this._mediaRecorder.ignoreMutedMedia = true;
-
-        return this._mediaRecorder;
+        this.mediaRecorder.ignoreMutedMedia = true;
 
     }
 
@@ -371,7 +354,7 @@ class CompositionRenderer {
         this._recorders.forEach(function(recorder, index){
             if(recorder){
                 startedRecording[index] = new Promise(function(resolve, reject)
-                {recorder.onstart = function() {
+                {recorder.mediaRecorder.onstart = function() {
                     resolve();
                 }});
             } else {
@@ -383,7 +366,7 @@ class CompositionRenderer {
 
         this._recorders.forEach(function(recorder){
             if(recorder){
-                recorder.start(5);
+                recorder.mediaRecorder.start(5);
             }
         });
 
@@ -392,6 +375,42 @@ class CompositionRenderer {
             return renderBuilds;
 
         });
+
+    }
+
+    _blurReacter = function () {
+        if(document.hidden){
+
+            this._videoProjection.stopPlaying();
+            this._recorders.forEach(function(recorder, index){
+                if(recorder)
+                recorder.pauseRecording();
+            });
+
+        }else{
+
+            this._videoProjection.startPlaying();
+            this._recorders.forEach(function(recorder, index){
+                if(recorder)
+                recorder.resumeRecording();
+            });
+
+        }
+    }.bind(this)
+
+    _blurRender(enableThread) {
+
+        if(enableThread){
+
+            document.addEventListener("visibilitychange", 
+            this._blurReacter, false);
+
+        } else {
+
+            document.removeEventListener("visibilitychange", 
+            this._blurReacter); 
+
+        }
 
     }
 
@@ -422,11 +441,16 @@ class CompositionRenderer {
 
         }.bind(this)).then(function(renderTracks){
 
-            return Promise.all(renderTracks).then(function(recordedRender) {
-                return recordedRender
-            });
+            this._blurRender(true);
 
-        });
+            return Promise.all(renderTracks).then(function(recordedRender) {
+
+                this._blurRender(false);
+                return recordedRender
+
+            }.bind(this));
+
+        }.bind(this));
 
         this._renderStages.renderDone = renderDone;
 
