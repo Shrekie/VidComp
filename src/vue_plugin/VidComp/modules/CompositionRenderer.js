@@ -379,7 +379,8 @@ class CompositionRenderer {
     }
 
     _blurReacter = function () {
-        if(document.hidden){
+        console.log(document.visibilityState);
+        if(document.visibilityState != "visible"){
 
             this._videoProjection.stopPlaying();
             this._recorders.forEach(function(recorder, index){
@@ -403,12 +404,12 @@ class CompositionRenderer {
         if(enableThread){
 
             document.addEventListener("visibilitychange", 
-            this._blurReacter, false);
+            this._blurReacter, true);
 
         } else {
 
             document.removeEventListener("visibilitychange", 
-            this._blurReacter); 
+            this._blurReacter, true); 
 
         }
 

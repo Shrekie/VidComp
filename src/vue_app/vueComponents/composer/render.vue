@@ -6,15 +6,16 @@
 
 <v-flex xs12 text-xs-center>
  
-        <v-card flat>
-            
-            <v-btn icon :to="'/project/' + this.projectName"
-            :disabled="loadingRender || loadingffmpeg">
-                <v-icon>mdi-arrow-left-bold-circle</v-icon>
-            </v-btn>
-            
-        </v-card>
+    <v-toolbar app dense flat>
 
+        <v-toolbar-items>
+        <v-btn icon :to="'/project/' + this.projectName"
+        :disabled="loadingRender || loadingffmpeg" exact>
+            <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        </v-toolbar-items>
+
+    </v-toolbar>
 
     <v-container>
         <Playback v-bind:project-name="projectName" ref="playback">

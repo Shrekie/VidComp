@@ -26,6 +26,7 @@
     "ffmpeg.js": "^3.1.9001",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.7",
+    "node-fetch": "^2.2.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "undo-redo-js": "^1.2.7",

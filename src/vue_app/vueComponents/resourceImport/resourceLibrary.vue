@@ -1,17 +1,16 @@
-<!-- 
-    Resource importer manager
-    #TODO: This file should be named resourceImporter, same with URL.
--->
-
 <template>
 
     <v-flex xs12 text-xs-center>
 
-        <v-toolbar app dense flat>
+        <v-toolbar app >
+
+            <v-toolbar-items>
 
             <v-btn icon :to="'/project/' + this.projectName" exact>
                 <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
+
+            </v-toolbar-items>
 
             <v-spacer></v-spacer>
 
@@ -42,8 +41,6 @@
 
             </v-toolbar-items>
 
-            <v-spacer></v-spacer>
-
 		</v-toolbar>
 
         <v-layout>
@@ -63,6 +60,12 @@
                         v-if="resource.type == resourceTypeView">
                         
                         </Resource>
+
+                        <v-container v-if="allResources.length == 0">
+                            <v-btn icon :to="'/project/' + this.projectName + '/import/youtube'" exact>
+                                <v-icon large>mdi-plus-box</v-icon>
+                            </v-btn>
+                        </v-container>
 
                     </v-layout>
 

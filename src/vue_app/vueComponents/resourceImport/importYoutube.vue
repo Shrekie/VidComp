@@ -35,7 +35,7 @@
             app
             >
 
-            <v-btn icon :disabled="activeResource == 0" 
+            <v-btn icon :disabled="activeResource == 0 || loadingResource" 
                 @click="importMedia">
                 <v-icon large>mdi-check</v-icon>
             </v-btn>

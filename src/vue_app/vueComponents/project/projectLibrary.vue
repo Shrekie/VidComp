@@ -7,15 +7,13 @@
 
     <v-flex xs12 text-xs-center>
 
-        <v-toolbar app dense flat>
+        <v-toolbar app>
 
             <v-spacer></v-spacer>
 
             <v-btn icon :to="'/new'">
                 <v-icon large>mdi-plus-box</v-icon>
             </v-btn>
-
-            <v-spacer></v-spacer>
 
         </v-toolbar>
 
@@ -30,6 +28,12 @@
                             :key="resource.name"
                             ref="mediaBox" v-on:resource-select="resourceSelect">
                             </Resource>
+
+                            <v-container  v-if="allProjects.length == 0">
+                                <v-btn icon :to="'/new'">
+                                    <v-icon large>mdi-plus-box</v-icon>
+                                </v-btn>
+                            </v-container>
 
                         </v-layout>
                     </v-container>
@@ -100,7 +104,7 @@ export default {
         var activeProject = 0;
 
 		return {
-            activeProject
+            activeProject,
         }
         
     }

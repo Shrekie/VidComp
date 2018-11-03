@@ -146,7 +146,7 @@ class DrawStation  {
                 }
             }.bind(this));
 
-            this._animationBridge = requestAnimationFrame(this._animationConnect.bind(this));
+            this._animationBridge = window.requestAnimationFrame(this._animationConnect.bind(this));
 
         }
 
@@ -310,7 +310,7 @@ class DrawStation  {
 
         if(this._timeTracker.isPlaying){
 
-            cancelAnimationFrame(this._animationBridge);
+            window.cancelAnimationFrame(this._animationBridge);
             this._stopContent();
             this._timeTracker.isPlaying = false;
 
@@ -320,7 +320,7 @@ class DrawStation  {
 
     reset () {
 
-        cancelAnimationFrame(this._animationBridge);
+        window.cancelAnimationFrame(this._animationBridge);
         this._stopContent();
         this._timeTracker.resetTime();
         this._timeTracker.isPlaying = false;
@@ -340,7 +340,7 @@ class DrawStation  {
             this._timeTracker.isPlaying = true;
             this._endTime = this._sourceLoader.getEndTime();
             this._timeTracker.startTime();
-            this._animationBridge = requestAnimationFrame(this._animationConnect.bind(this));
+            this._animationBridge = window.requestAnimationFrame(this._animationConnect.bind(this));
 
         }
 

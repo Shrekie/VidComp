@@ -13,7 +13,11 @@
                     <v-card flat>
 
                     <v-flex xs8 offset-xs2 class="pt-5">
-                        <v-text-field v-model="projectName" 
+                        <v-form v-model="validProject" onSubmit="return false;">
+                        <v-text-field v-model="projectName"
+                        :rules="[rules.required, rules.min, rules.max, 
+                        rules.unixFile]"
+                        required
                         @click:append="createProject"
                         @keyup.enter.native="createProject"
                         append-icon="mdi-folder-plus"
@@ -22,6 +26,7 @@
                         light
                         >
                         </v-text-field>
+                        </v-form>
                     </v-flex>
 
                     </v-card>
@@ -46,26 +51,33 @@ export default {
     methods: {
 
         createProject() {
+            if(this.validProject){
+                this.$store.dispatch('createProject', { name: this.projectName }).then(response => {
 
-            this.$store.dispatch('createProject', { name: this.projectName }).then(response => {
+                    this.$router.push({ path: `/project/${this.projectName}`});
 
-                this.$router.push({ path: `/project/${this.projectName}`});
-
-            }, error => {
-                console.log(err);
-			});
-
+                }, error => {
+                    console.log(err);
+                });
+            }
         }
 
     },
 
     data() {
 
-        var projectName;
-
         return {
-
-            projectName
+            projectName:"",
+            validProject:false,
+            rules: {
+                required: value => !!value || 'Required.',
+                min: value => value.length >= 6 || 'Minimum 6 characters',
+                max: value => value.length <= 60 || 'Max 60 characters',
+                unixFile: value => {
+                    const pattern = /[^-_.A-Za-z0-9 ]/
+                    return !pattern.test(value) || 'Illegal character'
+                }
+            }
 
         }
 

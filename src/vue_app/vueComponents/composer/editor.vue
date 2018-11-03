@@ -8,11 +8,14 @@
 
 		<v-toolbar app dense flat>
 
+			<v-toolbar-items>
 			<v-btn icon :to="'/'">
 				<v-icon>mdi-arrow-left</v-icon>
 			</v-btn>
+			</v-toolbar-items>
 
 			<v-spacer></v-spacer>
+
 				<v-toolbar-title >
 				{{this.projectName}}
 				</v-toolbar-title>
@@ -24,11 +27,14 @@
 					class="ml-2 mb-1"
 					:style="{visibility: this.autoSaving ? 'visible' : 'hidden'}"
 				></v-progress-circular>
+
 			<v-spacer></v-spacer>
 
+			<v-toolbar-items>
 			<v-btn icon :to="'/project/' + this.projectName + '/render'">
 				<v-icon>mdi-file-download</v-icon>
 			</v-btn>
+			</v-toolbar-items>
 
 		</v-toolbar>
 
@@ -57,12 +63,12 @@
         :value="true"
         app
         >
-			<v-btn icon :to="'/project/' + this.projectName + '/resources/video'">
-				<v-icon>mdi-plus-circle</v-icon>
+			<v-btn icon color="white" :to="'/project/' + this.projectName + '/resources/video'">
+				<v-icon large>mdi-plus-box</v-icon>
 			</v-btn>
 
 			<v-btn icon v-if="this.selectedMenu" @click="deleteLayerMedia">
-				<v-icon>mdi-delete</v-icon>
+				<v-icon large>mdi-delete</v-icon>
 			</v-btn>
 
         </v-bottom-nav>
