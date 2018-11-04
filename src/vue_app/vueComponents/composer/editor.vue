@@ -59,6 +59,7 @@
 		<router-view>
 
 		</router-view>
+		
 		<v-bottom-nav
         :value="true"
         app

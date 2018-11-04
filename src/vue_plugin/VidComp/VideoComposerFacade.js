@@ -13,9 +13,15 @@ class VideoComposerFacade {
     }
 
     _projectExists (projectName) {
-        if(this._store.projects.find(function(element) 
-        {return element.name == projectName;})) return true;
-        else return false;
+        return this._store.projects.find(function(element) 
+        {return element.name == projectName})
+    }
+
+    removeProject (projectName) {
+        this._store.projects = this._store.projects
+        .filter(function( project ) {
+            return project.name != projectName;
+        });
     }
 
     getProject (projectName) {
@@ -28,7 +34,7 @@ class VideoComposerFacade {
     }
 
     loadProject (project) {
-        
+
         if(this._projectExists(project.name)) return true;
 
         this.newProject(project.name);

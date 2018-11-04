@@ -3,20 +3,11 @@
 		<v-card app flat color="grey darken-3" v-if="this.authenticated == false">
 
 			<v-container>
+				<h1>please log in using google lel ayy lemo</h1>
 				<v-btn  large round @click="googleLogin" color="grey darken-2">
 					<v-icon large >mdi-google</v-icon>
 					<v-icon large flip>mdi-content-save</v-icon>
 				</v-btn>
-			</v-container>
-
-			<v-container>
-				<v-tooltip
-				bottom
-				>
-				<v-icon slot="activator">mdi-help-circle-outline</v-icon>
-				Press the button to login with Google, <br>
-				which is used to save your progress
-				</v-tooltip>
 			</v-container>
 
 		</v-card>

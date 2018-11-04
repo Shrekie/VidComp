@@ -61,7 +61,8 @@ router.get('/checkLogin', (req, res)=>{
 
 router.get('/logout', function(req, res){
 	req.logout();
-    req.session.destroy();
+	req.session.destroy();
+	res.json({data:req.isAuthenticated()});
 });
 
 // Serialize user information <->

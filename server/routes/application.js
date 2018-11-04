@@ -118,4 +118,30 @@ router.post('/setProject', (req, res)=>{
 	
 });
 
+router.post('/removeProject', (req, res)=>{
+
+    const projectName = req.body.projectName;
+    const profileID = req.user.profileID;
+    
+    if(req.isAuthenticated()){
+
+        var searchQuery = {
+            'name': projectName,
+            'profileID': profileID
+        };
+
+        Project.deleteOne(searchQuery, function (err, project) {
+            if (err){
+                console.log(err);
+                res.status(404).send(err);
+            } else {
+                console.log(project);
+                res.json(project);
+            }
+        });
+
+    };
+	
+});
+
 module.exports = router;

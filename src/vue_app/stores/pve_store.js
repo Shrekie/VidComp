@@ -74,6 +74,31 @@ export default {
 
         },
 
+        removeProject({dispatch}, projectName){
+                
+            Appapi.removeProject(projectName, (response) => {
+
+                dispatch('getProjects').then(response => {
+                    console.log(response);
+                }, error => {
+                    console.log(error);
+                });
+
+            });
+
+        },
+
+        logout(){
+
+            return new Promise((resolve, reject) => {
+                Appapi.logout((response) => {
+                    console.log(response);
+                    resolve();
+                });
+            });
+
+        },
+
         setLayersAndMedia({commit, dispatch, getters}, payload){
             payload.projectId = getters.projectIdByName(payload.name);
             commit('setLayers', payload);

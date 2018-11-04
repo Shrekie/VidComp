@@ -12,6 +12,10 @@ var videoProject =  {
     project: (projectName) => {
         return videoComposerFacade.getProject(projectName)
     },
+
+    removeProject: (projectName) => {
+        return videoComposerFacade.removeProject(projectName)
+    },
     
     new: (projectName) => {
         videoComposerFacade.newProject(projectName);

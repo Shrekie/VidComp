@@ -8,6 +8,10 @@
     <v-flex xs12 text-xs-center>
 
         <v-toolbar app>
+            
+            <v-btn icon @click="logout">
+				<v-icon>mdi-arrow-left</v-icon>
+			</v-btn>
 
             <v-spacer></v-spacer>
 
@@ -49,6 +53,12 @@
             @click="getMedia">
                 <v-icon large>mdi-check</v-icon>
             </v-btn>
+
+            <v-btn icon v-if="this.activeProject" 
+            @click="removeProject">
+				<v-icon large>mdi-delete</v-icon>
+			</v-btn>
+
         </v-bottom-nav>
 
     </v-flex>
@@ -91,6 +101,22 @@ export default {
 
         },
 
+        logout(){
+
+            this.$store.dispatch('logout').then(function(){
+                location.reload()
+            }.bind(this))
+
+        },
+
+        removeProject() {
+
+            this.$store.dispatch('removeProject', this.activeProject.name);
+            this.$vcomp.removeProject(this.activeProject.name);
+            this.activeProject = false;
+
+        },
+
         getMedia () {
 
             this.$router.push({ path: `project/${this.activeProject.name}`});
@@ -101,10 +127,8 @@ export default {
 
 	data() {
 
-        var activeProject = 0;
-
 		return {
-            activeProject,
+            activeProject: false,
         }
         
     }

@@ -35,6 +35,10 @@ export default {
 
     },
 
+    autoSave(cb){
+        SimmerSave.autoSave(cb);
+    },
+
     getProjects(cb){
 
         Axios.get('/projects',{})
@@ -48,11 +52,6 @@ export default {
 
     },
 
-
-    autoSave(cb){
-        SimmerSave.autoSave(cb);
-    },
-
     setProject(project, cb){
 
         Axios.post('/setProject', {
@@ -60,6 +59,33 @@ export default {
         })
         .then(function (response) {
             console.log(response);
+            cb(response.data);
+        })
+        .catch(function (error) {
+            cb(error);
+        });
+
+    },
+
+    removeProject(projectName, cb){
+
+        Axios.post('/removeProject', {
+            projectName
+        })
+        .then(function (response) {
+            console.log(response);
+            cb(response.data);
+        })
+        .catch(function (error) {
+            cb(error);
+        });
+
+    },
+
+    logout(cb){
+
+        Axios.get('/logout')
+        .then(function (response) {
             cb(response.data);
         })
         .catch(function (error) {

@@ -2,15 +2,19 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Resource = new Schema({
+
     name: String,
     url: String,
     type: String,
     origin: String,
     resourceLink: String
+
 });
 
 var Layers = new Schema({
+
     layerIndex: Number
+
 });
 
 var Media = new Schema({
@@ -26,6 +30,7 @@ var Media = new Schema({
 });
 
 var Project = new Schema({
+
     profileID: Number,
     name: String,
     timeSliderTime: Number,
@@ -33,6 +38,7 @@ var Project = new Schema({
     layers: [Layers],
     media: [Media],
     resources: [Resource]
+    
 });
 
 module.exports = mongoose.model('Project', Project);
