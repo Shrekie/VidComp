@@ -63,6 +63,10 @@ class ResourceImporter {
         return this._store.resources;
     }
 
+    getResourceLoad () {
+        return this._store.resources.map(resource => resource.loadedResource);
+    }
+
     _existingResource (name) {
         return this._store.resources.find(function(element){
             return element.name == name;

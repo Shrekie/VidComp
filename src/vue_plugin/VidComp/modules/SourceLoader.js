@@ -236,6 +236,10 @@ class SourceLoader {
         return this._store.sources.find(source => source.media === media ).cast;
     }
 
+    getCastLoading () {
+        return this._store.sources.map(source => source.loadedCast);
+    }
+
     loadMedia (media) {
 
         this._castMedia(media);

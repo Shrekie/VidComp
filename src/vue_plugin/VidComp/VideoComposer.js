@@ -119,6 +119,10 @@ class VideoComposer {
         return this.timeline.deleteLayerMedia(layerIndex, mediaIndex);
     }
 
+    preparedSources () {
+        return this.compositionBuilder.preparedSources();
+    }
+
     stop () {
         this.videoProjection.stopPlaying(this.sourceLoader);
     }

@@ -206,7 +206,7 @@ class StreamRecorder {
         this._done = done;
         this._options = options;
 
-        return this._fillMediaRecorder();
+        this._fillMediaRecorder();
         
     }
 

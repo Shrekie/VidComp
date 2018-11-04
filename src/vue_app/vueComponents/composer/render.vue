@@ -10,7 +10,7 @@
 
         <v-toolbar-items>
         <v-btn icon :to="'/project/' + this.projectName"
-        :disabled="loadingRender || loadingffmpeg" exact>
+        :disabled="loadingRender || loadingResource" exact>
             <v-icon>mdi-arrow-left</v-icon>
         </v-btn>
         </v-toolbar-items>
@@ -27,11 +27,11 @@
     <v-card flat>
             
         <v-btn fab icon round @click="renderVideo" 
-        :disabled="loadingRender || loadingffmpeg">
+        :disabled="loadingRender || loadingResource">
             <v-icon large>mdi-file-download</v-icon>
         </v-btn>
 
-        <v-progress-circular v-if="loadingffmpeg"
+        <v-progress-circular v-if="loadingResource"
             :size="35"
             color="primary"
             indeterminate
@@ -60,7 +60,7 @@ export default {
 	data() {
 		return {
             loadingRender:false,
-            loadingffmpeg:false,
+            loadingResource:false,
             loadedProject:false
 		}
     },
@@ -69,23 +69,31 @@ export default {
 
         renderVideo(){
 
-            var renderStages = this.$vcomp.project(this.projectName).render();
+            this.loadingResource = true;
 
-            this.loadingRender = true;
+            this.$vcomp.project(this.projectName).preparedSources().then(function(){
 
-            this.$refs.playback.playcontrolsHidden = true;
+                var renderStages = this.$vcomp.project(this.projectName).render();
 
-            renderStages.renderDone.then(function(){
+                this.loadingResource = false;
 
-                this.loadingRender = false;
-                this.loadingffmpeg = true;
-                
-            }.bind(this));
+                this.loadingRender = true;
 
-            renderStages.loadffmpeg.then(function(){
+                this.$refs.playback.playcontrolsHidden = true;
 
-                this.loadingffmpeg = false;
-                this.$refs.playback.playcontrolsHidden = false;
+                renderStages.renderDone.then(function(){
+
+                    this.loadingRender = false;
+                    this.loadingResource = true;
+                    
+                }.bind(this));
+
+                renderStages.loadffmpeg.then(function(){
+
+                    this.loadingResource = false;
+                    this.$refs.playback.playcontrolsHidden = false;
+
+                }.bind(this));
 
             }.bind(this));
  

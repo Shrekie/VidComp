@@ -146,6 +146,8 @@ class DrawStation  {
                 }
             }.bind(this));
 
+            this._bufferCheck();
+
             this._animationBridge = window.requestAnimationFrame(this._animationConnect.bind(this));
 
         }
@@ -207,8 +209,6 @@ class DrawStation  {
             }
 
         }.bind(this));
-        
-        this._bufferCheck();
 
         if(this._loadingBuffer){
 
@@ -242,6 +242,8 @@ class DrawStation  {
             }.bind(this));
             
         }
+
+        this._bufferCheck();
 
         if(this.railBus.transitory().length > 0){
             
@@ -284,18 +286,12 @@ class DrawStation  {
                 this._loadingBuffer = false;
                 this._timeTracker.forgetTime = true;
 
-                this._bufferCheck();
-
                 this._tickFrame();
 
             }.bind(this));
 
         }.bind(this));
-
-        }else if (this.railBus.passengers() > 0) {
-
-            this._tickFrame();
-
+        
         } else {
 
             this._tickFrame();

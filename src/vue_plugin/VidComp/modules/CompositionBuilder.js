@@ -102,6 +102,13 @@ class CompositionBuilder {
     
     }
 
+    preparedSources () {
+        return Promise.all(this._resourceImporter.getResourceLoad())
+        .then(function(){
+            return Promise.all(this._sourceLoader.getCastLoading());
+        }.bind(this));
+    }
+
     constructProject (project) {
 
         if(project.layers.length > 0){
