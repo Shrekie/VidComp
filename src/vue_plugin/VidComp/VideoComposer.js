@@ -145,5 +145,4 @@ class VideoComposer {
 
 }
 
-
 export default VideoComposer;

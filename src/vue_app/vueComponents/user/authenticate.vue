@@ -3,8 +3,9 @@
 		<v-card app flat color="grey darken-3" v-if="this.authenticated == false">
 
 			<v-container>
-				<h1>Please log in</h1>
-				<v-btn  large round @click="googleLogin" color="grey darken-2">
+				<h1 class="display-2" style="text-decoration: underline;">VidComp</h1>
+				<p class="subheading mt-1">Press the button to sign in and continue</p>
+				<v-btn large round @click="googleLogin" color="grey darken-2">
 					<v-icon large >mdi-google</v-icon>
 					<v-icon large flip>mdi-content-save</v-icon>
 				</v-btn>

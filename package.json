@@ -1,5 +1,5 @@
 {
-  "name": "pve_application",
+  "name": "vidcomp",
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",
@@ -14,7 +14,7 @@
     "npm": "5.6.0"
   },
   "author": "Thomas Lindauer",
-  "license": "ISC",
+  "license": "GNU v2.0",
   "dependencies": {
     "@mdi/font": "^2.8.94",
     "axios": "^0.18.0",
