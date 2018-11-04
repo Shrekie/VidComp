@@ -2,7 +2,13 @@ var express = require('express');
 var router = express.Router();
 const ytdl = require('youtube-dl');
 const Project = require('./../model/project');
-const Fetch = require('node-fetch');
+var cors_proxy = require('cors-anywhere');
+
+let proxy = cors_proxy.createServer({
+    originWhitelist: [],
+    requireHeader: ['origin', 'x-requested-with'],
+    removeHeaders: [] 
+});
 
 router.get('/ytStream', (req, res)=>{
 
@@ -23,22 +29,12 @@ router.get('/ytStream', (req, res)=>{
 
 });
 
-/*
-router.get('/fetchStream', (req, res)=>{
-
-    var ytUrl = req.param('streamUrl');
-    console.log(ytUrl);
-    
+router.get('/proxy/:proxyUrl*', (req, res) => {
     if(req.isAuthenticated()){
-
-        fetch('https://github.com/')
-        .then(res => res.json({}))
-        .then(body => console.log(body));
-
+        req.url = req.url.replace('/proxy/', '/');
+        proxy.emit('request', req, res);
     }
-
 });
-*/
 
 router.post('/newUser', (req, res)=>{
 

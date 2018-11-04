@@ -207,6 +207,8 @@ class DrawStation  {
             }
 
         }.bind(this));
+        
+        this._bufferCheck();
 
         if(this._loadingBuffer){
 
@@ -240,8 +242,6 @@ class DrawStation  {
             }.bind(this));
             
         }
-
-        this._bufferCheck();
 
         if(this.railBus.transitory().length > 0){
             

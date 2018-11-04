@@ -24,7 +24,11 @@ class ResourceImporter {
             })
             .then(function (response) {
 
-                return fetch(this._proxyurl + response.data.stream)
+                return fetch(this._proxyurl + response.data.stream, {
+                    headers: {
+                        "X-Requested-With": "origin"
+                    }
+                })
                 .then(res => {
                     if (res.status === 200) {
                         return res;
@@ -159,7 +163,7 @@ class ResourceImporter {
     }
 
     constructor () {
-        this._proxyurl = "https://cors-anywhere.herokuapp.com/";
+        this._proxyurl = "/proxy/";
     }
 
 }

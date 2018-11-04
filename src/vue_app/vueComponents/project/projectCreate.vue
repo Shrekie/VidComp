@@ -14,18 +14,18 @@
 
                     <v-flex xs8 offset-xs2 class="pt-5">
                         <v-form v-model="validProject" onSubmit="return false;">
-                        <v-text-field v-model="projectName"
-                        :rules="[rules.required, rules.min, rules.max, 
-                        rules.unixFile]"
-                        required
-                        @click:append="createProject"
-                        @keyup.enter.native="createProject"
-                        append-icon="mdi-folder-plus"
-                        placeholder="Project name"
-                        solo
-                        light
-                        >
-                        </v-text-field>
+                            <v-text-field v-model="projectName"
+                            :rules="[rules.required, rules.min, rules.max, 
+                            rules.unixFile]"
+                            required
+                            @click:append="createProject"
+                            @keyup.enter.native="createProject"
+                            append-icon="mdi-folder-plus"
+                            placeholder="Project name"
+                            solo
+                            light
+                            >
+                            </v-text-field>
                         </v-form>
                     </v-flex>
 

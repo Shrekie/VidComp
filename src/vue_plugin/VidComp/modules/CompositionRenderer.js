@@ -289,7 +289,7 @@ class CompositionRenderer {
 
     }
 
-    _buildRecording (recordingType) {
+    _buildRecording () {
 
         return [ new Promise((resolve, reject) => {
 
@@ -351,6 +351,8 @@ class CompositionRenderer {
 
         let startedRecording = [];
 
+        this._videoProjection.startPlaying(this._sourceLoader);
+
         this._recorders.forEach(function(recorder, index){
             if(recorder){
                 startedRecording[index] = new Promise(function(resolve, reject)
@@ -361,8 +363,6 @@ class CompositionRenderer {
                 startedRecording[index] = Promise.resolve();
             }
         })
-
-        this._videoProjection.startPlaying(this._sourceLoader);
 
         this._recorders.forEach(function(recorder){
             if(recorder){
@@ -404,12 +404,12 @@ class CompositionRenderer {
         if(enableThread){
 
             document.addEventListener("visibilitychange", 
-            this._blurReacter, true);
+            this._blurReacter, false);
 
         } else {
 
             document.removeEventListener("visibilitychange", 
-            this._blurReacter, true); 
+            this._blurReacter, false); 
 
         }
 
@@ -424,7 +424,8 @@ class CompositionRenderer {
         this._renderFormat.renderAudio) || !this._options){
             return this._cancelRender();
         }
- 
+
+        this._blurRender(true);
         this._tunePlayer(0.3);
 
         if(!this._renderFormat.renderAudio){
@@ -442,11 +443,8 @@ class CompositionRenderer {
 
         }.bind(this)).then(function(renderTracks){
 
-            this._blurRender(true);
-
             return Promise.all(renderTracks).then(function(recordedRender) {
 
-                this._blurRender(false);
                 return recordedRender
 
             }.bind(this));
@@ -460,6 +458,7 @@ class CompositionRenderer {
             return import("ffmpeg.js").then(function({ default: ffmpeg }){
 
                 this._tunePlayer(1);
+                this._blurRender(false);
                 this._audioAdapter.connectAudioWindow();
 
                 let ffmpegArguments = this._ffmpegArgGen(recordedRender);

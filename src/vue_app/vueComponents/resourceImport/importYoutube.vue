@@ -79,12 +79,6 @@ export default {
     },
 
     methods: {
-        
-        /*
-        uploadFile () {
-            console.log(this.$refs.inputBox.files);
-        },
-        */
 
         searchYoutube(){
 

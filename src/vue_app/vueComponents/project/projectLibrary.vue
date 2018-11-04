@@ -47,7 +47,7 @@
         >
             <v-btn icon :disabled="activeProject == 0" 
             @click="getMedia">
-            <v-icon large>mdi-check</v-icon>
+                <v-icon large>mdi-check</v-icon>
             </v-btn>
         </v-bottom-nav>
 
