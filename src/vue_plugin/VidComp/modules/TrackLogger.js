@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import UndoRedo from 'undo-redo-js';
+import UndoRedo from '../../../library/contextHook/UndoRedo.min.js';
 
 class TrackLogger {
 
