@@ -5,7 +5,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-    mode: 'development',
+    node: {
+    __dirname: true,
+    __filename: true,
+    },
+    devtool: 'source-map',
     entry: [
         './src/vue_app/main.js'
     ],
@@ -56,10 +60,13 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name].css",
+            chunkFilename: "[id].css"
+          }),
         new HtmlWebpackPlugin({
             template: 'src/template/index.html'
         }),
-        new CompressionPlugin({test: /\.(js|jsx)$/, deleteOriginalAssets: true})
+        new CompressionPlugin({test: /\.(js|jsx)$/})
     ]
 }

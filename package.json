@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "build": "webpack --build --config webpack.config.js",
+    "build": "webpack --config webpack.config.js",
     "heroku-postbuild": "webpack --build --config webpack.config.js",
     "start": "node server/server.js",
     "hotreload": "node server/server.js & webpack --watch",

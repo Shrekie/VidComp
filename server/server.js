@@ -72,6 +72,6 @@ if(env_config.env == 'development'){
     });
 }else{
 	app.listen(process.env.PORT, '0.0.0.0', () => {
-	    console.log('Started on port ', process.env.PORT);
+	    console.log('Started on port 1. ', process.env.PORT);
 	});
 }
