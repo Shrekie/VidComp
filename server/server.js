@@ -24,7 +24,7 @@ app.set('trust proxy', true);
 //Session storage settings
 var store = new MongoDBStore({
     uri: process.env.MONGO_URL,
-    databaseName: 'vidcomp-app',
+    databaseName: 'vidcomp-mongo',
     collection: 'mySessions'
 });
 
