@@ -54,11 +54,10 @@ app.use(application);
 app.use(history({
     verbose: true
 }));
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.use("/", expressStaticGzip("public", { index: false }));
 
-
-app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Initialize server
 if(env_config.env == 'development'){
