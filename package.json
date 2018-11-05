@@ -4,10 +4,10 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "build": "webpack --build",
+    "build": "webpack --build --config webpack.config.js",
     "heroku-postbuild": "webpack --build",
     "start": "node server/server.js",
-    "hotreload": "nodemon & webpack --watch --mode development",
+    "hotreload": "node server/server.js & webpack --watch",
     "test": "mocha-webpack -w --webpack-config webpack.test.config.js --require test/setup.js test/**/*.spec.js"
   },
   "engines": {
