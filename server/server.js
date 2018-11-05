@@ -11,7 +11,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 var expressStaticGzip = require("express-static-gzip");
-var fallback = require('express-history-api-fallback')
+var history = require('connect-history-api-fallback');
 const session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
 
@@ -49,9 +49,7 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var root = __dirname + '/public'
-app.use(express.static(root))
-app.use(fallback('index.html', { root: root }))
+app.use(express.static( __dirname + '/public'))
 app.use("/", expressStaticGzip("./public"));
 
 // Register application routes
@@ -67,6 +65,7 @@ app.get('/*', (req, res) => {
     res.sendFile(path.resolve('./public', 'index.html'));
 })
 
+app.use(history());
 // Initialize server
 if(env_config.env == 'development'){
 	require('./config/development.js').createDevServer(app).listen(process.env.PORT, () => {
