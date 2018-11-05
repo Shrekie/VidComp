@@ -1,16 +1,13 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
+var nodeExternals = require('webpack-node-externals');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+
 module.exports = {
-    mode:"development",
-    node: {
-    __dirname: true,
-    __filename: true,
-    },
-    devtool: 'source-map',
+    mode: "production",
     entry: [
         './src/vue_app/main.js'
     ],
@@ -40,7 +37,7 @@ module.exports = {
               ]
             },
             {
-                test: /\.m?js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /(node_modules|ffmpeg)/,
                 use: {
                     loader: 'babel-loader',
@@ -58,6 +55,9 @@ module.exports = {
                 use: 'gzip-loader'
             }
         ]
+    },
+    optimization: {
+        minimize: false,
     },
     plugins: [
         new VueLoaderPlugin(),
