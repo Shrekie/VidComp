@@ -14,9 +14,8 @@ if(env == 'development'){
 
 
 if(env === 'development'){
-	process.env.MONGO_URL = 'mongodb://mongodb:27017/pve-application';
+    process.env.MONGO_URL = 'mongodb://mongodb:27017/pve-application';
+    process.env.PORT = 8000;
 }
-
-process.env.PORT = 8000;
 
 module.exports = {env};
