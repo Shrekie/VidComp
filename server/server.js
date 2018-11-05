@@ -46,25 +46,19 @@ app.use(session({
 
 // Middleware
 // Parse requests as json and encode urls
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(google_oauth);
 app.use(application);
+app.use(history({
+    verbose: true
+}));
 
-app.use(history());
+app.use("/", expressStaticGzip("public", { index: false }));
 
-//app.use(express.static(path.join(__dirname, 'public')));
-app.use(expressStaticGzip("public"));
 
-// Register application routes
-
-// Static routes
-app.get('/error', (req, res) => {
-    res.send('Something went wrong.');
-});
-
-app.use("/", expressStaticGzip("public"));
-//app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Initialize server
 if(env_config.env == 'development'){
