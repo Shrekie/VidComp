@@ -63,7 +63,8 @@ app.get('/error', (req, res) => {
     res.send('Something went wrong.');
 });
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use("/", expressStaticGzip("public"));
+//app.use('/', express.static(path.join(__dirname, 'public')));
 
 // Initialize server
 if(env_config.env == 'development'){
