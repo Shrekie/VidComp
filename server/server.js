@@ -48,24 +48,23 @@ app.use(session({
 // Parse requests as json and encode urls
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(express.static( __dirname + '/public'))
-app.use("/", expressStaticGzip("./public"));
-
-// Register application routes
 app.use(google_oauth);
 app.use(application);
+
+app.use(history());
+
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressStaticGzip("public"));
+
+// Register application routes
 
 // Static routes
 app.get('/error', (req, res) => {
     res.send('Something went wrong.');
 });
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.resolve('./public', 'index.html'));
-})
+app.use('/', express.static(path.join(__dirname, 'public')));
 
-app.use(history());
 // Initialize server
 if(env_config.env == 'development'){
 	require('./config/development.js').createDevServer(app).listen(process.env.PORT, () => {
