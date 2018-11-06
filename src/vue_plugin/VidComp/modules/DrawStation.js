@@ -232,8 +232,8 @@ class DrawStation  {
 
                     source.cast.canPlayPromise = new Promise(resolve => {
 
-                        source.cast.oncanplaythrough = function() {
-                            source.cast.oncanplaythrough = null;
+                        source.cast.oncanplay = function() {
+                            source.cast.oncanplay = null;
                             resolve(source);
                         };
                         
