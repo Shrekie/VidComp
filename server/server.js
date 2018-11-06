@@ -41,7 +41,8 @@ app.use(session({
     store: store,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: env_config.env != 'development' }
+    cookie: { secure: false }
+    //cookie: { secure: env_config.env != 'development' }
 }));
 
 // Middleware
