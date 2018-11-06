@@ -212,6 +212,8 @@ class DrawStation  {
 
         }.bind(this));
 
+        this._bufferCheck();
+
         if(this._loadingBuffer){
 
             this.railBus.passengers().forEach(function(source){
@@ -244,8 +246,6 @@ class DrawStation  {
             }.bind(this));
             
         }
-
-        this._bufferCheck();
 
         if(this.railBus.transitory().length > 0){
             
