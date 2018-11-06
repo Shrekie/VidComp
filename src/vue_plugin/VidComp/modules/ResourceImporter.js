@@ -146,9 +146,10 @@ class ResourceImporter {
         var resourceExists =  this._existingResource(newResource.name);
 
         if(resourceExists){
+            
             return resourceExists;
-        }
-        else{
+
+        } else {
 
             var resource = {
                 name: newResource.name,

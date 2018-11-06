@@ -3,9 +3,10 @@
 	<v-flex xs12 text-xs-center>
 
 		<div id="canvasLockAspectContainer">
-			<canvas v-project-composition=this.projectName width="1280" height="720">
-                
+			
+			<canvas v-project-composition=this.projectName width="1280" height="720">   
             </canvas>
+
 		</div>
 		
 		<v-btn icon @click="playVideo" v-if="!playcontrolsHidden" exact>
