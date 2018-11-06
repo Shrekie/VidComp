@@ -147,10 +147,10 @@ class DrawStation  {
             }.bind(this));
 
             this.railBus.bridgedFrame(this._timeTracker);
+            
+            this._bufferCheck();
 
             this._animationBridge = window.requestAnimationFrame(this._animationConnect.bind(this));
-
-            this._bufferCheck();
 
         }
 
