@@ -133,7 +133,7 @@ class DrawStation  {
 
         if( (!this._loadingBuffer) && this._timeTracker.isPlaying ){
             
-            this._bufferCheck();
+            //this._bufferCheck();
 
             this._videoOutput.ctx.clearRect(0,0, 
             this._videoOutput.el.width, this._videoOutput.el.height);
@@ -233,8 +233,8 @@ class DrawStation  {
                     source.cast.canPlayPromise = new Promise(resolve => {
 
                         source.cast.oncanplaythrough = function() {
-                            source.cast.oncanplaythrough = null;
                             resolve(source);
+                            source.cast.oncanplaythrough = null;
                         };
                         
                     });
