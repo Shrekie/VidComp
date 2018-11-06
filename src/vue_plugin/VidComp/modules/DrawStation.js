@@ -212,8 +212,6 @@ class DrawStation  {
 
         }.bind(this));
 
-        this._bufferCheck();
-
         if(this._loadingBuffer){
 
             this.railBus.passengers().forEach(function(source){
@@ -232,8 +230,8 @@ class DrawStation  {
 
                     source.cast.canPlayPromise = new Promise(resolve => {
 
-                        source.cast.oncanplay = function() {
-                            source.cast.oncanplay = null;
+                        source.cast.oncanplaythrough = function() {
+                            source.cast.oncanplaythrough = null;
                             resolve(source);
                         };
                         
@@ -246,6 +244,8 @@ class DrawStation  {
             }.bind(this));
             
         }
+
+        this._bufferCheck();
 
         if(this.railBus.transitory().length > 0){
             
