@@ -4,6 +4,7 @@
 
 			<v-container>
 				<h1 class="display-2" style="text-decoration: underline;">VidComp</h1>
+				<p class="subheading">Online Video Editor</p>
 				<p class="subheading mt-1">Press the button to sign in and continue</p>
 				<v-btn large round @click="googleLogin" color="grey darken-2">
 					<v-icon large >mdi-google</v-icon>

@@ -133,6 +133,8 @@ class DrawStation  {
 
         if( (!this._loadingBuffer) && this._timeTracker.isPlaying ){
             
+            this._bufferCheck();
+
             this._videoOutput.ctx.clearRect(0,0, 
             this._videoOutput.el.width, this._videoOutput.el.height);
 
@@ -147,8 +149,6 @@ class DrawStation  {
             }.bind(this));
 
             this.railBus.bridgedFrame(this._timeTracker);
-
-            this._bufferCheck();
 
             this._animationBridge = window.requestAnimationFrame(this._animationConnect.bind(this));
 

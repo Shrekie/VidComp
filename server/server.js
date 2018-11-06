@@ -47,15 +47,19 @@ app.use(session({
 
 // Middleware
 // Parse requests as json and encode urls
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Routes
 app.use(google_oauth);
 app.use(application);
+
+// Index fallback
 app.use(history({
     verbose: true
 }));
-app.use('/', express.static(path.join(__dirname, 'public')));
+
+//app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.use("/", expressStaticGzip("public", { index: false }));
 

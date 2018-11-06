@@ -8,7 +8,7 @@ class TimeTracker {
         this._startTime = 0;
         this._nowTime = 0;
         this.timeDelay = 1;
-        this.elapsed = 0.1;
+        this.elapsed = 0;
         this.elapsedDateTime = 0;
         this.forgetTime = false;
         this.isPlaying = false;
