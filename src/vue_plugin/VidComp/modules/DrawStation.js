@@ -23,7 +23,7 @@ class RailBus {
     }
 
     transitory () {
-        return this._playBus;
+        return this._playBus.map(source => source.cast.canPlayPromise);
     }
 
     finishEnd (status) {
@@ -248,7 +248,7 @@ class DrawStation  {
         }
 
         if(this.railBus.transitory().length > 0){
-            
+        
         Promise.all(this.railBus.transitory())
         .then(function(sources) {
 
