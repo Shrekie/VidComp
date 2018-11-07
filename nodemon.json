@@ -9,7 +9,8 @@
         "src/*",
         "test/*",
         "nodemon.json",
-        "data/"
+        "data/",
+        "static/"
     ],
     "ext": "js json css styl jade vue"
   }

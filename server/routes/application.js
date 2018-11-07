@@ -2,10 +2,18 @@ var express = require('express');
 var router = express.Router();
 const ytdl = require('youtube-dl');
 const Project = require('./../model/project');
+var cors_proxy = require('cors-anywhere');
+
+let proxy = cors_proxy.createServer({
+    originWhitelist: [],
+    requireHeader: ['origin', 'x-requested-with'],
+    removeHeaders: [] 
+});
 
 router.get('/ytStream', (req, res)=>{
 
     var ytUrl = req.param('ytUrl');
+    console.log(ytUrl);
     
     if(req.isAuthenticated()){
 
@@ -19,6 +27,13 @@ router.get('/ytStream', (req, res)=>{
 
     }
 
+});
+
+router.get('/proxy/:proxyUrl*', (req, res) => {
+    if(req.isAuthenticated()){
+        req.url = req.url.replace('/proxy/', '/');
+        proxy.emit('request', req, res);
+    }
 });
 
 router.post('/newUser', (req, res)=>{

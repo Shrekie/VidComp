@@ -379,7 +379,7 @@ class CompositionRenderer {
     }
 
     _blurReacter = function () {
-        console.log(document.visibilityState);
+
         if(document.visibilityState != "visible"){
 
             this._videoProjection.stopPlaying();

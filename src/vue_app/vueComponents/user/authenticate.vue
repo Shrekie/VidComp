@@ -10,7 +10,6 @@
 					<v-icon large >mdi-google</v-icon>
 					<v-icon large flip>mdi-content-save</v-icon>
 				</v-btn>
-				<p>v.1.1</p>
 			</v-container>
 
 		</v-card>
