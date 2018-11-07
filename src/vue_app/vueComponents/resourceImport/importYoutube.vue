@@ -88,6 +88,7 @@ export default {
             var opts = {
                 maxResults: 21,
                 type:"video",
+                videoDuration: "short",
                 key: 'AIzaSyBYWmTP9-BunEMzGEBsqvz57RiwRA4uEp0'
             };
 
