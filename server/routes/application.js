@@ -6,14 +6,13 @@ const Project = require('./../model/project');
 router.get('/ytStream', (req, res)=>{
 
     var ytUrl = req.param('ytUrl');
-    console.log(ytUrl);
     
     if(req.isAuthenticated()){
 
         ytdl.exec(ytUrl, ['-f best','-s', '-g'], {}, 
         function(err, output) {
             if (err)
-            res.status(404).send({message:'error'})
+            res.status(404).send({message: err})
             else
             res.json({stream:output[0]});
         });

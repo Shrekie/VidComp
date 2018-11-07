@@ -22,7 +22,6 @@
     "body-parser": "^1.18.2",
     "connect-history-api-fallback": "^1.5.0",
     "connect-mongodb-session": "^2.0.3",
-    "cors-anywhere": "^0.4.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-static-gzip": "^1.1.3",
