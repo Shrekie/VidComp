@@ -29,14 +29,14 @@ class ResourceImporter {
                         "X-Requested-With": "origin"
                     }
                 })
+                .catch(error => { return {error} })
                 .then(res => {
                     if (res.status === 200) {
                         return res;
                     } else {
                         throw new Error(res.statusText);
                     }
-                })
-                .catch(error => { return {error} });
+                });
     
             }.bind(this))
             .catch(function (error) {
@@ -105,9 +105,10 @@ class ResourceImporter {
                     resource.url = URL.createObjectURL(blob);
                     sourceLoader.loadSelectedResource(resource);
                     return resource;
-                });
+                })
 
-            });
+            })
+            .catch(error => { alert("Could not create video from YT URL");});
 
         } else {
 
