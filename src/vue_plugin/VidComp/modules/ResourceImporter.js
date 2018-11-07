@@ -24,23 +24,13 @@ class ResourceImporter {
             })
             .then(function (response) {
 
-                return fetch(this._proxyurl + response.data.stream, {
-                    headers: {
-                        "X-Requested-With": "origin"
-                    }
-                })
-                .then(res => {
-                    if (res.status === 200) {
-                        return res;
-                    } else {
-                        throw new Error(res.statusText);
-                    }
-                })
-                .catch(error => { return {error} });
+                return response;
     
             }.bind(this))
             .catch(function (error) {
+
                 return error;
+                
             });
 
         }else{
@@ -101,8 +91,8 @@ class ResourceImporter {
 
             resource.loadedResource = resource.fetchResponse.then(function(res){
 
-                return res.blob().then(function(blob){
-                    resource.url = URL.createObjectURL(blob);
+                return new Promise(function() {
+                    resource.url = res.data.stream;
                     sourceLoader.loadSelectedResource(resource);
                     return resource;
                 });
