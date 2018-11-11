@@ -25,25 +25,28 @@ export default {
             leftDirection:0
 		}
     },
+
     computed: {
         zoomScale (){
             return this.$store.getters.zoomScale(this.projectName);
         }
     },
+    
     methods: {
 
         setDirection () {
+
             if(this.direction == "right"){
                 this.leftDirection = "unset";
                 this.rightDirection = "0px";
-                this.$refs.rimPoint.style.left = this.leftDirection;
-                this.$refs.rimPoint.style.right = this.rightDirection;
             }else{ 
                 this.leftDirection = "0px";
                 this.rightDirection = "unset";
-                this.$refs.rimPoint.style.left = this.leftDirection;
-                this.$refs.rimPoint.style.right = this.rightDirection;
             }
+
+            this.$refs.rimPoint.style.left = this.leftDirection;
+            this.$refs.rimPoint.style.right = this.rightDirection;
+
         }
 
     },

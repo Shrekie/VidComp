@@ -6,6 +6,7 @@ import SourceLoader from './modules/SourceLoader.js';
 import TrackLogger from './modules/TrackLogger.js';
 import CompositionBuilder from './modules/CompositionBuilder.js';
 
+//#TODO: make dependecy
 import ContextHooks from '../../library/contextHook/ContextHook.js';
 
 class VideoComposer {

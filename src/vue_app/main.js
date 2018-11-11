@@ -27,7 +27,7 @@ import projectLibrary from './vueComponents/project/projectLibrary.vue';
 import projectCreate from './vueComponents/project/projectCreate.vue';
 import editor from './vueComponents/composer/editor.vue';
 import render from './vueComponents/composer/render.vue';
-import timelineEditor from './vueComponents/timeline/timelineEditor.vue';
+import editorPort from './vueComponents/timeline/editorPort.vue';
 import resourceLibrary from './vueComponents/resourceImport/resourceLibrary.vue';
 import importTab from './vueComponents/resourceImport/importTab.vue';
 import importGlobal from './vueComponents/resourceImport/importGlobal.vue';
@@ -77,7 +77,7 @@ const routes = [
                 children: [{
 
                     path: '',
-                    component: timelineEditor,
+                    component: editorPort,
                     props: true
 
                 },]
