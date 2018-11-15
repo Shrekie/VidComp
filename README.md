@@ -1,7 +1,8 @@
 # VidComp
-VidComp is a full featured video editor, powered by your browser.
 
-All processing by the editor occurs at the client.
+VidComp is a full featured video editor, powered by your browser
+
+All processing by the editor occurs at the client
 
 **Currently VidComp works best with Chrome be it mobile or desktop**
 
