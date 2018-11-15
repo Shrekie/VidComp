@@ -1,1 +1,1 @@
-<img src="./documentation/screenshot.png"/>
+<img src="https://i.imgur.com/nodkHgh.png"/>
