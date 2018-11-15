@@ -1,6 +1,7 @@
 <h1>VidComp</h1>
 <p>VidComp is a full featured video editor, powered by your browser.</p>
 <p>All processing by the editor occurs at the client</p>
+<p>Currently VidComp works best with Chrome be it mobile or desktop</p>
 <br>
 <img src="https://i.imgur.com/nodkHgh.png"/>
 <h4>Editing</h4>
