@@ -6,8 +6,6 @@ All processing by the editor occurs at the client
 
 **Currently VidComp works best with Chrome be it mobile or desktop**
 
-<img src="https://i.imgur.com/nodkHgh.png"/>
-
 ## Editing
 <img src="documentation/layercontroldemo.gif"/>
 
